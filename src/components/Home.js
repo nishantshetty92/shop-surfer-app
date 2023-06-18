@@ -1,16 +1,14 @@
 import React from "react";
 import { Container, Card, Col, Row, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { CartState } from "../context/Context";
 import Rating from "./Rating";
 
 const Home = () => {
-  const products = [...Array(10)].map((_, i) => ({
-    id: i,
-    name: "Product 4",
-    price: "19.00",
-    rating: 2,
-    image: "http://placeimg.com/640/480/cats",
-    fastDelivery: true,
-  }));
+  const {
+    state: { products },
+  } = CartState();
+
   return (
     <>
       <Container fluid>
@@ -18,7 +16,9 @@ const Home = () => {
           <Card.Body>
             <Card.Title>Welcome to ShopSurfer</Card.Title>
             <Card.Text>Discover amazing products and shop with ease.</Card.Text>
-            <Button variant="primary">Shop Now</Button>
+            <Button variant="primary" as={Link} to="/products">
+              Shop Now
+            </Button>
           </Card.Body>
         </Card>
       </Container>
@@ -31,7 +31,7 @@ const Home = () => {
                 <Card.Body>
                   <Card.Title>{prod.name}</Card.Title>
                   <Card.Subtitle style={{ paddingBottom: 10 }}>
-                    <span>₹ {prod.price.split(".")[0]}</span>
+                    <span>₹ {prod.price}</span>
                   </Card.Subtitle>
                   <Card.Subtitle>
                     <span>

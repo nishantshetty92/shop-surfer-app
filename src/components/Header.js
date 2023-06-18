@@ -9,16 +9,19 @@ import {
 } from "react-bootstrap";
 import { RiShoppingCartLine, RiUserLine, RiStore2Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { CartState } from "../context/Context";
 
 const Header = () => {
+  const {
+    state: { cart },
+    filterDispatch,
+  } = CartState();
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Link to="/">
-        <Navbar.Brand className="d-flex align-items-center">
-          <RiShoppingCartLine className="navbar-icon" />
-          <span className="ml-2">ShopSurfer</span>
-        </Navbar.Brand>
-      </Link>
+      <Navbar.Brand className="d-flex align-items-center" as={Link} to="/">
+        <RiShoppingCartLine className="navbar-icon" />
+        <span className="ml-2">ShopSurfer</span>
+      </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
@@ -29,13 +32,21 @@ const Header = () => {
               placeholder="Search products"
               className="mr-2"
               aria-label="Search"
+              onChange={(e) => {
+                filterDispatch({
+                  type: "FILTER_BY_SEARCH",
+                  payload: e.target.value,
+                });
+              }}
             />
           </Form>
-          <Nav.Link className="d-flex align-items-center">
-            <Link to="/products">
-              <RiStore2Line className="navbar-icon" />
-              <span className="link-text ml-2">Products</span>
-            </Link>
+          <Nav.Link
+            className="d-flex align-items-center"
+            as={Link}
+            to="/products"
+          >
+            <RiStore2Line className="navbar-icon" />
+            <span className="link-text ml-2">Products</span>
           </Nav.Link>
 
           <Dropdown>
@@ -56,10 +67,10 @@ const Header = () => {
           </Dropdown>
         </Nav>
         <Nav className="align-items-center">
-          <Nav.Link href="cart" className="d-flex align-items-center">
+          <Nav.Link className="d-flex align-items-center" as={Link} to="/cart">
             <RiShoppingCartLine />
             <span className="link-text ml-2 mr-1">Cart</span>
-            <Badge variant="info">{5}</Badge>
+            <Badge variant="info">{cart.length}</Badge>
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>

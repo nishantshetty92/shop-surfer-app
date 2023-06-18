@@ -1,8 +1,13 @@
 import React from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import Rating from "./Rating";
+import { CartState } from "../context/Context";
 
 const ProductFilter = () => {
+  const {
+    filterState: { byStock, byFastDelivery, byPrice, byRating },
+    filterDispatch,
+  } = CartState();
   return (
     <div className="pt-3">
       <Container fluid className="p-4 bg-dark text-light">
@@ -14,8 +19,13 @@ const ProductFilter = () => {
               name="group1"
               type="radio"
               id={`inline-1`}
-              onChange={() => {}}
-              checked={false}
+              onChange={() =>
+                filterDispatch({
+                  type: "SORT_BY_PRICE",
+                  payload: "lowToHigh",
+                })
+              }
+              checked={byPrice === "lowToHigh" ? true : false}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -24,8 +34,13 @@ const ProductFilter = () => {
               name="group1"
               type="radio"
               id={`inline-2`}
-              onChange={() => {}}
-              checked={true}
+              onChange={() =>
+                filterDispatch({
+                  type: "SORT_BY_PRICE",
+                  payload: "highToLow",
+                })
+              }
+              checked={byPrice === "highToLow" ? true : false}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -34,8 +49,12 @@ const ProductFilter = () => {
               name="group2"
               type="checkbox"
               id={`inline-3`}
-              onChange={() => {}}
-              checked={true}
+              onChange={() =>
+                filterDispatch({
+                  type: "FILTER_BY_STOCK",
+                })
+              }
+              checked={byStock}
             />
           </Form.Group>
           <Form.Group className="mb-3">
@@ -44,19 +63,36 @@ const ProductFilter = () => {
               name="group2"
               type="checkbox"
               id={`inline-4`}
-              onChange={() => {}}
-              checked={false}
+              onChange={() =>
+                filterDispatch({
+                  type: "FILTER_BY_DELIVERY",
+                })
+              }
+              checked={byFastDelivery}
             />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Rating:</Form.Label>
             <Rating
-              rating={4}
-              onClick={(i) => {}}
+              rating={byRating}
+              onClick={(i) =>
+                filterDispatch({
+                  type: "FILTER_BY_RATING",
+                  payload: i + 1,
+                })
+              }
               style={{ cursor: "pointer" }}
             />
           </Form.Group>
-          <Button variant="light" className="w-100 mt-4">
+          <Button
+            variant="light"
+            className="w-100 mt-4"
+            onClick={() =>
+              filterDispatch({
+                type: "CLEAR_FILTERS",
+              })
+            }
+          >
             Clear Filters
           </Button>
         </Form>
