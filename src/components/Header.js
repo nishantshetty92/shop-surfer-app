@@ -62,7 +62,9 @@ const Header = () => {
               <Dropdown.Item href="#profile">Profile</Dropdown.Item>
               <Dropdown.Item href="#orders">Orders</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item href="#logout">Logout</Dropdown.Item>
+              <Dropdown.Item as={Link} to="/login">
+                Logout
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Nav>

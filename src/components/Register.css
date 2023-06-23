@@ -1,0 +1,125 @@
+.register-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem 0.5rem;
+  /* font-family: "Nunito", sans-serif;
+  font-size: 22px; */
+}
+
+.register-container > * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.register-section {
+  width: 100%;
+  max-width: 420px;
+  min-height: 470px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  background-color: white;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+.form-header {
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+  color: gray;
+  font-weight: bold;
+  font-size: 30px;
+  margin-bottom: 25px;
+}
+
+.form-subheader {
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+  color: rgb(82, 81, 81);
+  font-size: 16px;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.register-container > a,
+.register-container > a:visited {
+  color: #fff;
+}
+
+.register-container > input[type="text"],
+.register-container > input[type="password"],
+.register-container > button,
+.register-container > textarea {
+  font-family: "Nunito", sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.register-container > label,
+.register-container > button {
+  margin-top: 1rem;
+}
+
+.register-container > button {
+  padding: 0.5rem;
+}
+
+.register-container > .instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.register-container > .instructions > svg {
+  margin-right: 0.25rem;
+}
+
+.register-container > .offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.register-container > .hide {
+  display: none;
+}
+
+.register-container > .valid {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.register-container > .invalid {
+  color: red;
+  margin-left: 0.25rem;
+}
+
+.register-container > .errmsg {
+  background-color: lightpink;
+  color: firebrick;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.register-container > .line {
+  display: inline-block;
+}

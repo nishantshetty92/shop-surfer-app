@@ -1,0 +1,129 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    color: #fff;
+}
+
+body {
+    min-height: 100vh;
+    background-color: dodgerblue;
+} */
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem 0.5rem;
+}
+
+.login-section {
+  width: 100%;
+  max-width: 420px;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 1rem;
+  background-color: white;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  flex-grow: 1;
+  padding-bottom: 1rem;
+}
+
+.form-header {
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+  color: gray;
+  font-weight: bold;
+  font-size: 34px;
+}
+
+.form-subheader {
+  font-family: "Nunito", sans-serif;
+  text-align: center;
+  color: rgb(82, 81, 81);
+  font-size: 16px;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.login-container > a,
+.login-container > a:visited {
+  color: #fff;
+}
+
+/* .login-container > input[type="text"],
+.login-container > input[type="password"],
+.login-container > button,
+.login-container > textarea {
+  font-family: "Nunito", sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+} */
+
+/* .login-container > label,
+.login-container > button {
+  margin-top: 1rem;
+} */
+
+/* .login-container > button {
+  padding: 0.5rem;
+} */
+
+.login-container > .instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.login-container > .instructions > svg {
+  margin-right: 0.25rem;
+}
+
+.login-container > .offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+.login-container > .hide {
+  display: none;
+}
+
+.login-container > .valid {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.login-container > .invalid {
+  color: red;
+  margin-left: 0.25rem;
+}
+
+.login-container > .errmsg {
+  background-color: lightpink;
+  color: firebrick;
+  font-weight: bold;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
