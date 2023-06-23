@@ -1,13 +1,13 @@
 import { React } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import Product from "./Product";
-import { CartState } from "../context/Context";
+import useAuth from "../hooks/useAuth";
 
 const ProductList = () => {
   const {
     state: { products },
     filterState: { byPrice, byStock, byFastDelivery, byRating, searchQuery },
-  } = CartState();
+  } = useAuth();
 
   // console.log(byPrice, byStock, byFastDelivery, byRating, searchQuery);
   // console.log(products);

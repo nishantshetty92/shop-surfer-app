@@ -2,13 +2,13 @@ import React from "react";
 import { ListGroup, Row, Col, Button, Image, Form } from "react-bootstrap";
 import Rating from "./Rating";
 import { AiFillDelete } from "react-icons/ai";
-import { CartState } from "../context/Context";
+import useAuth from "../hooks/useAuth";
 
 const CartList = () => {
   const {
     state: { cart },
     dispatch,
-  } = CartState();
+  } = useAuth();
   return (
     <ListGroup>
       {cart?.length === 0 ? (

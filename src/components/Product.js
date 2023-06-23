@@ -1,13 +1,13 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
-import { CartState } from "../context/Context";
+import useAuth from "../hooks/useAuth";
 import Rating from "./Rating";
 
 const Product = ({ prod }) => {
   const {
     state: { cart },
     dispatch,
-  } = CartState();
+  } = useAuth();
   return (
     <Card className="mb-4">
       <Card.Img variant="top" src={prod.image} alt={prod.name} />

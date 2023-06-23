@@ -10,13 +10,15 @@ import Confirmation from "./components/Confirmation";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import "./App.css";
+import Missing from "./components/Missing";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
         <Route path="/*" element={<MainLayout />} />
       </Routes>
     </BrowserRouter>
@@ -30,10 +32,15 @@ const MainLayout = () => {
       <div className="content-container">
         <Routes>
           <Route path="/" element={<Home />} exact />
-          <Route path="/products" element={<Products />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/confirmation" element={<Confirmation />} />
+          <Route path="products" element={<Products />} />
+          <Route path="cart" element={<Cart />} />
+
+          <Route element={<RequireAuth />}>
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="confirmation" element={<Confirmation />} />
+          </Route>
+
+          <Route path="*" element={<Missing />} />
         </Routes>
       </div>
       <Footer />

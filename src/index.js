@@ -4,12 +4,13 @@ import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./components/components.css";
 import Context from "./context/Context";
+import { AuthProvider } from "./context/AuthProvider";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Context>
+    <AuthProvider>
       <App />
-    </Context>
+    </AuthProvider>
   </React.StrictMode>
 );

@@ -8,14 +8,30 @@ import {
   Badge,
 } from "react-bootstrap";
 import { RiShoppingCartLine, RiUserLine, RiStore2Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { CartState } from "../context/Context";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const Header = () => {
   const {
     state: { cart },
+    setAuth,
     filterDispatch,
-  } = CartState();
+  } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const logout = async () => {
+    // if used in more components, this should be in context
+    // axios to /logout endpoint
+    setAuth({});
+    navigate("/login", { state: { location }, replace: true });
+  };
+
+  // const {
+  //   state: { cart },
+  //   filterDispatch,
+  // } = CartState();
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Navbar.Brand className="d-flex align-items-center" as={Link} to="/">
@@ -62,9 +78,7 @@ const Header = () => {
               <Dropdown.Item href="#profile">Profile</Dropdown.Item>
               <Dropdown.Item href="#orders">Orders</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item as={Link} to="/login">
-                Logout
-              </Dropdown.Item>
+              <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Nav>

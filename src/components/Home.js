@@ -1,13 +1,13 @@
 import React from "react";
 import { Container, Card, Col, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { CartState } from "../context/Context";
+import useAuth from "../hooks/useAuth";
 import Rating from "./Rating";
 
 const Home = () => {
   const {
     state: { products },
-  } = CartState();
+  } = useAuth();
 
   return (
     <>

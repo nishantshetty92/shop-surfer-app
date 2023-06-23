@@ -1,13 +1,13 @@
 import React from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import Rating from "./Rating";
-import { CartState } from "../context/Context";
+import useAuth from "../hooks/useAuth";
 
 const ProductFilter = () => {
   const {
     filterState: { byStock, byFastDelivery, byPrice, byRating },
     filterDispatch,
-  } = CartState();
+  } = useAuth();
   return (
     <div className="pt-3">
       <Container fluid className="p-4 bg-dark text-light">

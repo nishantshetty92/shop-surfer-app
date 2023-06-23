@@ -1,12 +1,12 @@
 import { React, useState, useEffect } from "react";
 import { Container, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { CartState } from "../context/Context";
+import useAuth from "../hooks/useAuth";
 
 const CartTotal = ({ products }) => {
   const {
     state: { cart },
-  } = CartState();
+  } = useAuth();
   const [total, setTotal] = useState();
 
   useEffect(() => {
