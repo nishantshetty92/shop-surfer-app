@@ -12,6 +12,7 @@ import Register from "./components/Register";
 import "./App.css";
 import Missing from "./components/Missing";
 import RequireAuth from "./components/RequireAuth";
+import PersistLogin from "./components/PersistLogin";
 
 function App() {
   return (
@@ -31,16 +32,18 @@ const MainLayout = () => {
       <Header />
       <div className="content-container">
         <Routes>
-          <Route path="/" element={<Home />} exact />
-          <Route path="products" element={<Products />} />
-          <Route path="cart" element={<Cart />} />
+          <Route element={<PersistLogin />}>
+            <Route path="/" element={<Home />} exact />
+            <Route path="products" element={<Products />} />
+            <Route path="cart" element={<Cart />} />
 
-          <Route element={<RequireAuth />}>
-            <Route path="checkout" element={<Checkout />} />
-            <Route path="confirmation" element={<Confirmation />} />
+            <Route element={<RequireAuth />}>
+              <Route path="checkout" element={<Checkout />} />
+              <Route path="confirmation" element={<Confirmation />} />
+            </Route>
+
+            <Route path="*" element={<Missing />} />
           </Route>
-
-          <Route path="*" element={<Missing />} />
         </Routes>
       </div>
       <Footer />

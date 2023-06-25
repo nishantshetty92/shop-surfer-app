@@ -1,16 +1,39 @@
-import { React } from "react";
+import { React, useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import Product from "./Product";
 import useAuth from "../hooks/useAuth";
+import axios from "../api/axios";
 
 const ProductList = () => {
   const {
-    state: { products },
-    filterState: { byPrice, byStock, byFastDelivery, byRating, searchQuery },
+    filter: { byPrice, byStock, byFastDelivery, byRating, searchQuery },
   } = useAuth();
 
-  // console.log(byPrice, byStock, byFastDelivery, byRating, searchQuery);
-  // console.log(products);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const getProducts = async () => {
+      try {
+        const response = await axios.get("/api/products/1/", {
+          signal: controller.signal,
+        });
+        console.log(response.data);
+        isMounted && setProducts(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getProducts();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
 
   const transformProducts = () => {
     let sortedProducts = products;
@@ -22,11 +45,11 @@ const ProductList = () => {
     }
 
     if (!byStock) {
-      sortedProducts = sortedProducts.filter((prod) => prod.inStock);
+      sortedProducts = sortedProducts.filter((prod) => prod.in_stock);
     }
 
     if (byFastDelivery) {
-      sortedProducts = sortedProducts.filter((prod) => prod.fastDelivery);
+      sortedProducts = sortedProducts.filter((prod) => prod.fast_delivery);
     }
 
     if (byRating) {

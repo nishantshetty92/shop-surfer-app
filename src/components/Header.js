@@ -10,28 +10,22 @@ import {
 import { RiShoppingCartLine, RiUserLine, RiStore2Line } from "react-icons/ri";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import useLogout from "../hooks/useLogout";
 
 const Header = () => {
-  const {
-    state: { cart },
-    setAuth,
-    filterDispatch,
-  } = useAuth();
+  const { cart, user, filterDispatch } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
+  const logOut = useLogout();
 
-  const logout = async () => {
+  const signOut = async () => {
     // if used in more components, this should be in context
     // axios to /logout endpoint
-    setAuth({});
+    await logOut();
     navigate("/login", { state: { location }, replace: true });
   };
 
-  // const {
-  //   state: { cart },
-  //   filterDispatch,
-  // } = CartState();
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Navbar.Brand className="d-flex align-items-center" as={Link} to="/">
@@ -62,30 +56,42 @@ const Header = () => {
             to="/products"
           >
             <RiStore2Line className="navbar-icon" />
-            <span className="link-text ml-2">Products</span>
+            <span className="link-text ml-1">Products</span>
           </Nav.Link>
 
-          <Dropdown>
-            <Dropdown.Toggle
-              variant="dark"
-              id="profile-dropdown"
+          {user?.email ? (
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="dark"
+                id="profile-dropdown"
+                className="d-flex align-items-center"
+              >
+                <RiUserLine className="mr-1" />
+                <span className="link-text">{user?.name}</span>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item href="#profile">Profile</Dropdown.Item>
+                <Dropdown.Item href="#orders">Orders</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={signOut}>Logout</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <Nav.Link
               className="d-flex align-items-center"
+              as={Link}
+              to="/login"
             >
-              <RiUserLine className="mr-1" />
-              <span className="link-text">Account</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#profile">Profile</Dropdown.Item>
-              <Dropdown.Item href="#orders">Orders</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+              <RiUserLine className="navbar-icon" />
+              <span className="link-text ml-1">Sign In</span>
+            </Nav.Link>
+          )}
         </Nav>
+
         <Nav className="align-items-center">
           <Nav.Link className="d-flex align-items-center" as={Link} to="/cart">
             <RiShoppingCartLine />
-            <span className="link-text ml-2 mr-1">Cart</span>
+            <span className="link-text ml-1 mr-1">Cart</span>
             <Badge variant="info">{cart.length}</Badge>
           </Nav.Link>
         </Nav>

@@ -3,15 +3,28 @@ import { Container, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-const CartTotal = ({ products }) => {
-  const {
-    state: { cart },
-  } = useAuth();
+const CartTotal = () => {
+  const { cart } = useAuth();
   const [total, setTotal] = useState();
+  const [subItems, setSubItems] = useState();
 
   useEffect(() => {
     setTotal(
-      cart.reduce((acc, curr) => acc + Number(curr.price) * curr.qty, 0)
+      cart.reduce(
+        (acc, cartItem) =>
+          cartItem.is_selected
+            ? acc + Number(cartItem.product.price) * cartItem.quantity
+            : acc,
+        0
+      )
+    );
+
+    setSubItems(
+      cart.reduce(
+        (acc, cartItem) =>
+          cartItem.is_selected ? acc + cartItem.quantity : acc,
+        0
+      )
     );
   }, [cart]);
   return (
@@ -21,11 +34,11 @@ const CartTotal = ({ products }) => {
         style={{ border: "none" }}
       >
         <Card.Body>
-          <Card.Title>Subtotal ({cart.length}) items</Card.Title>
+          <Card.Title>Subtotal ({subItems}) items</Card.Title>
           <Card.Text>Total: ₹ {total}</Card.Text>
           <Button
             type="button"
-            disabled={cart.length === 0}
+            disabled={total === 0}
             className="w-100"
             as={Link}
             to="/checkout"

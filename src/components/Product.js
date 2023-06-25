@@ -1,21 +1,25 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
+import useCartData from "../hooks/useCartData";
 import Rating from "./Rating";
 
 const Product = ({ prod }) => {
-  const {
-    state: { cart },
-    dispatch,
-  } = useAuth();
+  const { cart, cartDispatch } = useAuth();
+
+  const getCartData = useCartData();
   return (
     <Card className="mb-4">
-      <Card.Img variant="top" src={prod.image} alt={prod.name} />
+      <Card.Img
+        variant="top"
+        src="http://placeimg.com/640/480/cats"
+        alt={prod.name}
+      />
       <Card.Body>
         <Card.Title>{prod.name}</Card.Title>
         <Card.Subtitle style={{ paddingBottom: 10 }}>
           <span>₹ {prod.price}</span>
-          {prod.fastDelivery ? (
+          {prod.fast_delivery ? (
             <div>Fast Delivery</div>
           ) : (
             <div>4 days delivery</div>
@@ -26,14 +30,19 @@ const Product = ({ prod }) => {
             style={{ cursor: "pointer" }}
           />
         </Card.Subtitle>
-        {cart.some((p) => p.id === prod.id) ? (
+        {cart.some((cartItem) => cartItem.product.id === prod.id) ? (
           <Button
             variant="danger"
-            onClick={() =>
-              dispatch({
-                type: "REMOVE_FROM_CART",
-                payload: prod,
-              })
+            onClick={
+              () =>
+                getCartData({
+                  type: "REMOVE_FROM_CART",
+                  payload: prod,
+                })
+              // dispatch({
+              //   type: "REMOVE_FROM_CART",
+              //   payload: prod,
+              // })
             }
             className="mt-3"
           >
@@ -41,16 +50,21 @@ const Product = ({ prod }) => {
           </Button>
         ) : (
           <Button
-            onClick={() =>
-              dispatch({
-                type: "ADD_TO_CART",
-                payload: prod,
-              })
+            onClick={
+              () =>
+                getCartData({
+                  type: "ADD_TO_CART",
+                  payload: prod,
+                })
+              // dispatch({
+              //   type: "ADD_TO_CART",
+              //   payload: prod,
+              // })
             }
-            disabled={!prod.inStock}
+            disabled={!prod.in_stock}
             className="mt-3"
           >
-            {!prod.inStock ? "Out of Stock" : "Add to Cart"}
+            {!prod.in_stock ? "Out of Stock" : "Add to Cart"}
           </Button>
         )}
       </Card.Body>

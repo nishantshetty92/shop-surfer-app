@@ -4,12 +4,13 @@ import axios from "../api/axios";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import jwt_decode from "jwt-decode";
 import "./Login.css";
 
 const LOGIN_URL = "/user/login/";
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, setUser } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +31,17 @@ const Login = () => {
     setErrMsg("");
   }, [email, pwd]);
 
+  const decodeAccessToken = (token) => {
+    try {
+      const decodedToken = jwt_decode(token);
+      console.log(decodedToken);
+      return decodedToken;
+    } catch (error) {
+      console.log("Failed to decode JWT:", error.message);
+    }
+    return;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -44,10 +56,18 @@ const Login = () => {
       );
       console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.access_token;
-      // const roles = response?.data?.roles;
-      setAuth({ email, accessToken });
+      const decodedToken = decodeAccessToken(accessToken);
+      // const roles = response?.data?.roles
+      setAuth({ accessToken });
       setEmail("");
       setPwd("");
+      const user = {
+        email: decodedToken.email,
+        name: decodedToken.name,
+        phoneNumber: decodedToken.phone_number,
+      };
+      setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
       navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {

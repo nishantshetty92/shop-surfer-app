@@ -5,7 +5,7 @@ import useAuth from "../hooks/useAuth";
 
 const ProductFilter = () => {
   const {
-    filterState: { byStock, byFastDelivery, byPrice, byRating },
+    filter: { byStock, byFastDelivery, byPrice, byRating },
     filterDispatch,
   } = useAuth();
   return (

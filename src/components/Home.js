@@ -1,13 +1,48 @@
 import React from "react";
 import { Container, Card, Col, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 import Rating from "./Rating";
+import uuid from "react-uuid";
 
 const Home = () => {
-  const {
-    state: { products },
-  } = useAuth();
+  const products = [
+    {
+      id: uuid(),
+      name: "laptop",
+      price: 80,
+      image: "http://placeimg.com/640/480/cats",
+      inStock: 1,
+      fastDelivery: false,
+      rating: 2,
+    },
+    {
+      id: uuid(),
+      name: "mobile",
+      price: 20,
+      image: "http://placeimg.com/640/480/cats",
+      inStock: 3,
+      fastDelivery: true,
+      rating: 4,
+    },
+    {
+      id: uuid(),
+      name: "television",
+      price: 1000,
+      image: "http://placeimg.com/640/480/cats",
+      inStock: 50,
+      fastDelivery: false,
+      rating: 3,
+    },
+    {
+      id: uuid(),
+      name: "earphones",
+      price: 200,
+      image: "http://placeimg.com/640/480/cats",
+      inStock: 10,
+      fastDelivery: true,
+      rating: 4,
+    },
+  ];
 
   return (
     <>
