@@ -2,7 +2,7 @@ import axios from "../api/axios";
 import useAuth from "./useAuth";
 
 const useLogout = () => {
-  const { setAuth, setUser } = useAuth();
+  const { setAuth, setUser, cartDispatch } = useAuth();
 
   const logout = async () => {
     setAuth({});
@@ -11,6 +11,8 @@ const useLogout = () => {
         withCredentials: true,
       });
       setUser({});
+      cartDispatch({ type: "RESET_CART" });
+
       localStorage.removeItem("user");
       localStorage.removeItem("cart");
     } catch (err) {

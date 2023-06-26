@@ -2,6 +2,8 @@ import { createContext, useReducer, useState, useEffect } from "react";
 import { cartReducer, productReducer } from "./Reducers";
 
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useCartData from "../hooks/useCartData";
+
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -14,11 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   const [cart, cartDispatch] = useReducer(
     cartReducer,
-    JSON.parse(localStorage.getItem("cart")) || {
-      cart: [],
-      selectedCount: 0,
-      selectAll: false,
-    }
+    JSON.parse(localStorage.getItem("cart")) || []
   );
 
   const [filter, filterDispatch] = useReducer(productReducer, {
@@ -30,12 +28,15 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (user?.email) {
+      console.log(user);
+      if (user?.email && user?.newLogin) {
         console.log("User Logged In ");
         let isMounted = true;
         const controller = new AbortController();
+        // const getCartData = useCartData();
+        console.log("CURRENT CART: ", cart);
 
-        const getCartData = async () => {
+        const getCart = async () => {
           try {
             const response = await axiosPrivate.get("/api/cart/", {
               signal: controller.signal,
@@ -57,7 +58,30 @@ export const AuthProvider = ({ children }) => {
           }
         };
 
-        isMounted && getCartData();
+        const mergeCart = async () => {
+          try {
+            const response = await axiosPrivate.post("/api/cart/merge/", cart, {
+              signal: controller.signal,
+              withCredentials: true,
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${auth?.accessToken}`,
+              },
+            });
+
+            isMounted &&
+              cartDispatch({
+                type: "UPDATE_CART",
+                payload: response.data,
+              });
+          } catch (err) {
+            console.error(err);
+            // navigate("/login", { state: { from: location }, replace: true });
+          }
+        };
+
+        isMounted && (cart?.length > 0 ? mergeCart() : getCart());
+        setUser({ ...user, newLogin: false });
 
         return () => {
           isMounted = false;
@@ -69,7 +93,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     fetchData();
-  }, [user?.email, axiosPrivate]);
+  }, [user?.email, user?.newLogin, axiosPrivate]);
 
   return (
     <AuthContext.Provider

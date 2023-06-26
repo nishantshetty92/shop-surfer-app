@@ -37,6 +37,10 @@ export const cartReducer = (state, action) => {
       state = action.payload;
       saveCart(state);
       return state;
+    case "RESET_CART":
+      state = [];
+      saveCart(state);
+      return state;
     default:
       saveCart(state);
       return state;

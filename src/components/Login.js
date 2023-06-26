@@ -65,6 +65,7 @@ const Login = () => {
         email: decodedToken.email,
         name: decodedToken.name,
         phoneNumber: decodedToken.phone_number,
+        newLogin: true,
       };
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));

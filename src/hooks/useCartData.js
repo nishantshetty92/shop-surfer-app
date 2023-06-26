@@ -26,6 +26,24 @@ const useCartData = (cartData) => {
     }
   };
 
+  const addCartItems = async (data) => {
+    try {
+      const response = await axiosPrivate.post(
+        "/api/cart/add_items/",
+        data
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${auth?.accessToken}`,
+        //   },
+        // }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
+      return;
+    }
+  };
+
   const updateCartItem = async (data) => {
     try {
       let format_payload = data;
@@ -79,6 +97,8 @@ const useCartData = (cartData) => {
     if (auth?.accessToken) {
       if (cartData.type === "ADD_TO_CART") {
         response = await addCartItem(cartData.payload);
+      } else if (cartData.type === "ADD_CART_ITEMS") {
+        response = await addCartItems(cartData.payload);
       } else if (
         cartData.type === "CHANGE_CART_QTY" ||
         cartData.type === "SELECT_ITEM" ||

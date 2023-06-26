@@ -40,14 +40,19 @@ const CartList = () => {
   }, [cart]);
   return (
     <>
-      {cart.reduce(
-        (acc, cartItem) => (cartItem.is_selected ? acc + 1 : acc),
-        0
-      ) === 0 && <span>No items selected. </span>}
+      {cart?.length > 0 && (
+        <span>
+          {cart.reduce(
+            (acc, cartItem) => (cartItem.is_selected ? acc + 1 : acc),
+            0
+          ) === 0 && <span>No items selected. </span>}
 
-      <a href="#" onClick={updateSelectAll}>
-        {selectAll ? "Select All" : "Deselect All"}
-      </a>
+          <a href="#" onClick={updateSelectAll}>
+            {selectAll ? "Select All" : "Deselect All"}
+          </a>
+        </span>
+      )}
+
       <ListGroup>
         {cart?.length === 0 ? (
           <span>Cart is empty!</span>
