@@ -1,32 +1,22 @@
-import { React, useState, useEffect } from "react";
+import { React } from "react";
 import { Container, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const CartTotal = () => {
   const { cart } = useAuth();
-  const [total, setTotal] = useState();
-  const [subItems, setSubItems] = useState();
+  const total = cart.reduce(
+    (acc, cartItem) =>
+      cartItem.is_selected
+        ? acc + Number(cartItem.product.price) * cartItem.quantity
+        : acc,
+    0
+  );
+  const subItems = cart.reduce(
+    (acc, cartItem) => (cartItem.is_selected ? acc + cartItem.quantity : acc),
+    0
+  );
 
-  useEffect(() => {
-    setTotal(
-      cart.reduce(
-        (acc, cartItem) =>
-          cartItem.is_selected
-            ? acc + Number(cartItem.product.price) * cartItem.quantity
-            : acc,
-        0
-      )
-    );
-
-    setSubItems(
-      cart.reduce(
-        (acc, cartItem) =>
-          cartItem.is_selected ? acc + cartItem.quantity : acc,
-        0
-      )
-    );
-  }, [cart]);
   return (
     <Container className="bg-dark">
       <Card
@@ -35,7 +25,7 @@ const CartTotal = () => {
       >
         <Card.Body>
           <Card.Title>Subtotal ({subItems}) items</Card.Title>
-          <Card.Text>Total: ₹ {total}</Card.Text>
+          <Card.Text>Total: ₹ {total.toFixed(2)}</Card.Text>
           <Button
             type="button"
             disabled={total === 0}

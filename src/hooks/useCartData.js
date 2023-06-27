@@ -65,7 +65,7 @@ const useCartData = (cartData) => {
 
   const deleteCartItem = async (data) => {
     try {
-      const format_payload = { product_id: data.id };
+      const format_payload = { product_ids: data };
       const response = await axiosPrivate.delete("/api/cart/delete/", {
         data: format_payload,
 

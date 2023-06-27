@@ -20,6 +20,9 @@ function App() {
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route element={<RequireAuth />}>
+          <Route path="checkout" element={<Checkout />} />
+        </Route>
         <Route path="/*" element={<MainLayout />} />
       </Routes>
     </BrowserRouter>
@@ -38,7 +41,6 @@ const MainLayout = () => {
             <Route path="cart" element={<Cart />} />
 
             <Route element={<RequireAuth />}>
-              <Route path="checkout" element={<Checkout />} />
               <Route path="confirmation" element={<Confirmation />} />
             </Route>
 
@@ -49,6 +51,10 @@ const MainLayout = () => {
       <Footer />
     </div>
   );
+};
+
+const checkout = () => {
+  return;
 };
 
 export default App;

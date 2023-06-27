@@ -8,7 +8,7 @@ export const cartReducer = (state, action) => {
       saveCart(state);
       return state;
     case "REMOVE_FROM_CART":
-      state = state.filter((c) => c.product.id !== action.payload.id);
+      state = state.filter((c) => c.product.id !== action.payload[0]);
       saveCart(state);
       return state;
     case "CHANGE_CART_QTY":

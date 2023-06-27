@@ -37,7 +37,7 @@ const Product = ({ prod }) => {
               () =>
                 getCartData({
                   type: "REMOVE_FROM_CART",
-                  payload: prod,
+                  payload: [prod.id],
                 })
               // dispatch({
               //   type: "REMOVE_FROM_CART",

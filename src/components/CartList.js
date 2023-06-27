@@ -125,7 +125,7 @@ const CartList = () => {
                       () =>
                         getCartData({
                           type: "REMOVE_FROM_CART",
-                          payload: cartItem.product,
+                          payload: [cartItem.product.id],
                         })
                       // dispatch({
                       //   type: "REMOVE_FROM_CART",

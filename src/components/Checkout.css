@@ -1,0 +1,43 @@
+.navbar-container {
+  max-width: 100%;
+}
+
+.navbar-icon {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+@media (max-width: 767px) {
+  .navbar-container {
+    padding: 15px;
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-container {
+    padding: 15px 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-container {
+    padding: 15px 50px;
+  }
+}
+
+.radio-button {
+  margin-right: 0.5rem;
+}
+
+.address-item {
+  display: flex;
+  align-items: center;
+}
+
+.address-card:hover {
+  cursor: pointer;
+}
+
+.address-card.selected {
+  background-color: #eaececef;
+}
