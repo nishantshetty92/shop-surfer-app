@@ -1,4 +1,5 @@
-import { React, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import React from "react";
 import {
   Container,
   ListGroup,
@@ -7,61 +8,28 @@ import {
   Col,
   Row,
   Navbar,
-  Form,
 } from "react-bootstrap";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useCartData from "../hooks/useCartData";
+import AddressPicker from "./AddressPicker";
 
 import "./Checkout.css";
 
 const Checkout = () => {
   const navigate = useNavigate();
 
-  const { cart } = useAuth();
+  const { cart, addressList } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const [addressList, setAddressList] = useState([]);
-  const [selectedAddressId, setSelectedAddressId] = useState(1);
   const [errMsg, setErrMsg] = useState("");
   const getCartData = useCartData();
 
   useEffect(() => {
     const selectCount = cart.filter((item) => item.is_selected).length;
     selectCount === 0 && navigate("/cart", { replace: true });
-
-    setAddressList([
-      {
-        id: 1,
-        name: "Nishant Shetty",
-        mobile_number: "9833166313",
-        pincode: "421202",
-        address1: "403, Sundara Palace, Bldg No.2",
-        address2: "Near Railway Crossing",
-        city: "Dombivli(W)",
-        state: "Maharashtra",
-      },
-      {
-        id: 2,
-        name: "Deepak Singh",
-        mobile_number: "9833166313",
-        pincode: "421202",
-        address1: "1106, Balaji Residency, Bldg No.2",
-        address2: "Near Railway Crossing",
-        city: "Dombivli(E)",
-        state: "Maharashtra",
-      },
-    ]);
   }, []);
-
-  const updateAddress = (addressId) => {
-    setSelectedAddressId(addressId);
-  };
-
-  const selectedAddress = addressList.find(
-    (addr) => addr.id === selectedAddressId
-  );
 
   const subTotal = cart.reduce(
     (acc, item) =>
@@ -73,12 +41,9 @@ const Checkout = () => {
   const total = subTotal + tax;
   const paymentMethod = "Credit Card";
 
-  console.log(selectedAddressId);
-  console.log(selectedAddress);
-
   const placeOrder = async () => {
-    const shippingAddress = `${selectedAddress.name}, ${selectedAddress.address1}, ${selectedAddress.address2},
-     ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pincode}, Phone number: ${selectedAddress.mobile_number}`;
+    const selectedAddress = addressList.find((addr) => addr.is_selected);
+    const shippingAddress = `${selectedAddress.full_name}, ${selectedAddress.address1}, ${selectedAddress.address2}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pin_code}, Phone number: ${selectedAddress.mobile_number}`;
 
     const orderItems = cart
       .filter((item) => item.is_selected)
@@ -142,44 +107,7 @@ const Checkout = () => {
       <Container className="mt-3">
         <Row>
           <Col lg={8} md={12}>
-            <ListGroup className="mb-4">
-              <ListGroup.Item className="fw-bold" variant="primary">
-                Shipping Address
-              </ListGroup.Item>
-              <ListGroup.Item>
-                {addressList.map((addr) => (
-                  <Card
-                    className={`address-card mb-3 ${
-                      selectedAddressId === Number(addr.id) ? "selected" : ""
-                    }`}
-                    key={addr.id}
-                    onClick={() => updateAddress(addr.id)}
-                  >
-                    <Card.Body>
-                      <div className="address-item">
-                        <Form.Check
-                          type="radio"
-                          name="shippingAddress"
-                          id={`shippingAddress${addr.id}`}
-                          value={addr.id}
-                          label=""
-                          className="radio-button"
-                          checked={selectedAddressId === Number(addr.id)}
-                          onChange={() => {}}
-                        />
-                        <Card.Text>
-                          <span className="mb-0">
-                            <b>{addr.name}</b>, {addr.address1}, {addr.address2}
-                            , {addr.city}, {addr.state}, {addr.pincode}, Phone
-                            number: {addr.mobile_number}
-                          </span>
-                        </Card.Text>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                ))}
-              </ListGroup.Item>
-            </ListGroup>
+            <AddressPicker />
             <ListGroup className="mb-4">
               <ListGroup.Item className="fw-bold" variant="primary">
                 Payment Method
@@ -204,25 +132,19 @@ const Checkout = () => {
                 {cart.map(
                   (item) =>
                     item.is_selected && (
-                      <>
-                        <div
-                          className="d-flex justify-content-between mb-2"
-                          key={item.product.id}
-                        >
+                      <React.Fragment key={item.product.id}>
+                        <div className="d-flex justify-content-between mb-2">
                           <span>{item.product.name}</span>
                           <span>
                             ₹ {(item.quantity * item.product.price).toFixed(2)}
                           </span>
                         </div>
-                        <div
-                          className="d-flex justify-content-between mb-2"
-                          key={item.product.id}
-                        >
+                        <div className="d-flex justify-content-between mb-2">
                           <span>Quantity:</span>
                           <span>{item.quantity}</span>
                         </div>
                         <hr />
-                      </>
+                      </React.Fragment>
                     )
                 )}
 
@@ -265,8 +187,7 @@ const Checkout = () => {
                 </ListGroup>
                 <div className="text-center">
                   <Button
-                    // as={Link}
-                    // to="/confirmation"
+                    disabled={addressList?.length === 0}
                     variant="primary"
                     className="mt-3"
                     onClick={placeOrder}

@@ -12,7 +12,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
-  const axiosPrivate = useAxiosPrivate();
+
+  const [addressList, setAddressList] = useState([]);
 
   const [cart, cartDispatch] = useReducer(
     cartReducer,
@@ -25,6 +26,8 @@ export const AuthProvider = ({ children }) => {
     byRating: 0,
     searchQuery: "",
   });
+
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,6 +109,8 @@ export const AuthProvider = ({ children }) => {
         cartDispatch,
         filter,
         filterDispatch,
+        addressList,
+        setAddressList,
       }}
     >
       {children}

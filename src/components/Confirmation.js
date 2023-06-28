@@ -52,21 +52,21 @@ const Confirmation = () => {
 
           <ul className="order-details-list">
             {orderDetails?.order_items.map((item) => (
-              <>
+              <React.Fragment key={item.product_id}>
                 <li>
                   <span>Product:</span>
                   <span>{item.product_name}</span>
                 </li>
                 <li>
                   <span>Price:</span>
-                  <span>$ {Number(item.price).toFixed(2)}</span>
+                  <span>₹ {Number(item.price).toFixed(2)}</span>
                 </li>
                 <li>
                   <span>Quantity:</span>
                   <span>{item.quantity}</span>
                 </li>
                 <hr />
-              </>
+              </React.Fragment>
             ))}
 
             <li>
