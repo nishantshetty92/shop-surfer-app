@@ -4,7 +4,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../api/axios";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Register.css";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -13,10 +13,9 @@ const PHONE_REGEX = /^[789]\d{9}$/;
 const REGISTER_URL = "/user/register/";
 
 const Register = () => {
-  const navigate = useNavigate();
-
   const emailRef = useRef();
   const errRef = useRef();
+  const successRef = useRef();
 
   const [email, setEmail] = useState("");
   const [validEmail, setValidEmail] = useState(false);
@@ -37,7 +36,9 @@ const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
+  const [successMsg, setSuccessMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [showResend, setShowResend] = useState(false);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -57,7 +58,9 @@ const Register = () => {
   }, [pwd, matchPwd]);
 
   useEffect(() => {
-    setErrMsg("");
+    // setSuccessMsg("");
+    // setErrMsg("");
+    setShowResend(false);
   }, [email, pwd, matchPwd, phone]);
 
   const handleSubmit = async (e) => {
@@ -89,12 +92,17 @@ const Register = () => {
       setPhone("");
       setFirstName("");
       setLastName("");
-      navigate("/login", { replace: true });
+      setSuccessMsg(
+        "We have sent you an email. Please click on the verification link to activate your account."
+      );
+      setErrMsg("");
     } catch (err) {
+      setSuccessMsg("");
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 409) {
-        setErrMsg("Email ID Taken");
+        err.response?.data?.resend && setShowResend(true);
+        setErrMsg(err.response?.data?.message);
       } else {
         setErrMsg("Registration Failed");
       }
@@ -102,9 +110,36 @@ const Register = () => {
     }
   };
 
+  const resendVerification = async () => {
+    try {
+      setSuccessMsg("");
+      setErrMsg("");
+      if (email) {
+        const response = await axios.post("/user/resend/register/", {
+          email,
+        });
+        setSuccessMsg(response?.data?.message);
+      }
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else {
+        setErrMsg(err.response?.data?.message);
+      }
+    }
+  };
+
   return (
     <Container className="d-flex justify-content-center register-container">
       <section className="register-section">
+        <Alert
+          ref={successRef}
+          variant={successMsg ? "success" : "secondary"}
+          className={successMsg ? "" : "offscreen"}
+          role="alert"
+        >
+          {successMsg}
+        </Alert>
         <Alert
           ref={errRef}
           variant={errMsg ? "danger" : "secondary"}
@@ -236,10 +271,25 @@ const Register = () => {
           <Button
             variant="primary"
             type="submit"
-            disabled={!validEmail || !validPwd || !validMatch || !validPhone}
+            disabled={
+              !validEmail ||
+              !validPwd ||
+              !validMatch ||
+              !validPhone ||
+              showResend
+            }
           >
             Sign Up
           </Button>
+          {showResend && (
+            <Button
+              variant="primary"
+              onClick={resendVerification}
+              className="mt-3"
+            >
+              Resend Verification Email
+            </Button>
+          )}
         </Form>
         <span className="form-subheader">
           Already registered? <Link to="/login">Sign In</Link>

@@ -13,6 +13,7 @@ import "./App.css";
 import Missing from "./components/Missing";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
+import VerifyUser from "./components/VerifyUser";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="verify" element={<VerifyUser />} />
         <Route element={<RequireAuth />}>
           <Route path="checkout" element={<Checkout />} />
         </Route>
@@ -51,10 +53,6 @@ const MainLayout = () => {
       <Footer />
     </div>
   );
-};
-
-const checkout = () => {
-  return;
 };
 
 export default App;

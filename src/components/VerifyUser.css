@@ -1,0 +1,52 @@
+.verify-user-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ebedef;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: rgb(128, 127, 127);
+}
+
+.verify-card {
+  text-align: center;
+  padding: 2rem;
+  display: flex;
+}
+
+.icon-container {
+  margin-bottom: 1.5rem;
+}
+
+.icon-container > .danger-icon {
+  color: rgba(235, 16, 16, 0.753);
+}
+
+.icon-container > .success-icon {
+  color: rgb(74, 173, 74);
+}
+
+.message-container {
+  font-size: 20px;
+  margin-bottom: 1.5rem;
+  color: rgb(128, 127, 127);
+  font-weight: bold;
+}
+
+.button-container {
+  width: 100%;
+  padding-left: 20%;
+  padding-right: 20%;
+  margin-bottom: 1.5rem;
+}
+
+.alert-message {
+  display: flex;
+  justify-content: center;
+}
