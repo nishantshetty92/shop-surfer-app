@@ -5,12 +5,13 @@ import { RiShoppingCartLine } from "react-icons/ri";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import jwt_decode from "jwt-decode";
+import { useGoogleOneTapLogin } from "@react-oauth/google";
 import "./Login.css";
 
 const LOGIN_URL = "/user/login/";
 
 const Login = () => {
-  const { setAuth, setUser } = useAuth();
+  const { setAuth, setUser, setLoginType } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,7 +35,8 @@ const Login = () => {
   const decodeAccessToken = (token) => {
     try {
       const decodedToken = jwt_decode(token);
-      console.log(decodedToken);
+      console.log(token);
+      console.log(JSON.stringify(decodedToken));
       return decodedToken;
     } catch (error) {
       console.log("Failed to decode JWT:", error.message);
@@ -69,6 +71,7 @@ const Login = () => {
       };
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
+      setLoginType("regular");
       navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {
@@ -77,12 +80,64 @@ const Login = () => {
         setErrMsg("Missing Email or Password");
       } else if (err.response?.status === 401) {
         setErrMsg("Unauthorized");
+      } else if (err.response?.status === 403) {
+        setErrMsg(err.response?.data?.message);
       } else {
         setErrMsg("Login Failed");
       }
       errRef.current.focus();
     }
   };
+
+  useGoogleOneTapLogin({
+    onSuccess: async (credentialResponse) => {
+      setLoginType("google");
+      const decodedCred = decodeAccessToken(credentialResponse?.credential);
+      try {
+        const response = await axios.post(
+          "/user/google/login/",
+          JSON.stringify(decodedCred),
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+        console.log(JSON.stringify(response?.data));
+        const accessToken = response?.data?.access_token;
+        const decodedToken = decodeAccessToken(accessToken);
+        // const roles = response?.data?.roles
+        setAuth({ accessToken });
+        setEmail("");
+        setPwd("");
+        const user = {
+          email: decodedToken.email,
+          name: decodedToken.name,
+          phoneNumber: decodedToken.phone_number,
+          newLogin: true,
+        };
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
+        setLoginType("google");
+        navigate(from, { replace: true });
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg("No Server Response");
+        } else if (err.response?.status === 400) {
+          setErrMsg("Missing Email or Password");
+        } else if (err.response?.status === 401) {
+          setErrMsg("Unauthorized");
+        } else if (err.response?.status === 409) {
+          setErrMsg(err.response?.data?.message);
+        } else {
+          setErrMsg("Login Failed");
+        }
+        errRef.current.focus();
+      }
+    },
+    onError: () => {
+      console.log("Login Failed");
+    },
+  });
 
   return (
     <Container className="d-flex justify-content-center login-container">
@@ -127,6 +182,16 @@ const Login = () => {
           Need an Account? <Link to="/register">Sign Up</Link>
         </span>
       </section>
+      {/* <GoogleLogin
+        onSuccess={(credentialResponse) => {
+          const decodedCred = decodeAccessToken(credentialResponse?.credential);
+          console.log(decodedCred);
+        }}
+        onError={() => {
+          console.log("Login Failed");
+        }}
+        useOneTap
+      /> */}
     </Container>
   );
 };

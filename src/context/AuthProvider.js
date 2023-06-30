@@ -27,6 +27,8 @@ export const AuthProvider = ({ children }) => {
     searchQuery: "",
   });
 
+  const [loginType, setLoginType] = useState(null);
+
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
@@ -105,6 +107,8 @@ export const AuthProvider = ({ children }) => {
         setAuth,
         user,
         setUser,
+        loginType,
+        setLoginType,
         cart,
         cartDispatch,
         filter,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Navbar,
   Nav,
@@ -11,9 +11,10 @@ import { RiShoppingCartLine, RiUserLine, RiStore2Line } from "react-icons/ri";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useLogout from "../hooks/useLogout";
+import { googleLogout } from "@react-oauth/google";
 
 const Header = () => {
-  const { cart, user, filterDispatch } = useAuth();
+  const { cart, user, filterDispatch, loginType, setLoginType } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,6 +24,8 @@ const Header = () => {
     // if used in more components, this should be in context
     // axios to /logout endpoint
     await logOut();
+    loginType === "google" && googleLogout();
+    setLoginType(null);
     navigate("/login", { state: { location }, replace: true });
   };
 

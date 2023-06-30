@@ -14,20 +14,25 @@ import Missing from "./components/Missing";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import VerifyUser from "./components/VerifyUser";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
+  const oAuthClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="verify" element={<VerifyUser />} />
-        <Route element={<RequireAuth />}>
-          <Route path="checkout" element={<Checkout />} />
-        </Route>
-        <Route path="/*" element={<MainLayout />} />
-      </Routes>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={oAuthClientId}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="verify" element={<VerifyUser />} />
+          <Route element={<RequireAuth />}>
+            <Route path="checkout" element={<Checkout />} />
+          </Route>
+          <Route path="/*" element={<MainLayout />} />
+        </Routes>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   );
 }
 

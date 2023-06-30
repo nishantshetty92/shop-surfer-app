@@ -4,7 +4,10 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../api/axios";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { useGoogleOneTapLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 import "./Register.css";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -13,6 +16,12 @@ const PHONE_REGEX = /^[789]\d{9}$/;
 const REGISTER_URL = "/user/register/";
 
 const Register = () => {
+  const { setAuth, setUser, setLoginType } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const emailRef = useRef();
   const errRef = useRef();
   const successRef = useRef();
@@ -62,6 +71,18 @@ const Register = () => {
     // setErrMsg("");
     setShowResend(false);
   }, [email, pwd, matchPwd, phone]);
+
+  const decodeAccessToken = (token) => {
+    try {
+      const decodedToken = jwt_decode(token);
+      console.log(token);
+      console.log(JSON.stringify(decodedToken));
+      return decodedToken;
+    } catch (error) {
+      console.log("Failed to decode JWT:", error.message);
+    }
+    return;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -128,6 +149,55 @@ const Register = () => {
       }
     }
   };
+
+  useGoogleOneTapLogin({
+    onSuccess: async (credentialResponse) => {
+      setLoginType("google");
+      const decodedCred = decodeAccessToken(credentialResponse?.credential);
+      try {
+        const response = await axios.post(
+          "/user/google/login/",
+          JSON.stringify(decodedCred),
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        );
+        console.log(JSON.stringify(response?.data));
+        const accessToken = response?.data?.access_token;
+        const decodedToken = decodeAccessToken(accessToken);
+        // const roles = response?.data?.roles
+        setAuth({ accessToken });
+        const user = {
+          email: decodedToken.email,
+          name: decodedToken.name,
+          phoneNumber: decodedToken.phone_number,
+          newLogin: true,
+        };
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
+        setLoginType("google");
+        navigate(from, { replace: true });
+      } catch (err) {
+        setSuccessMsg("");
+        if (!err?.response) {
+          setErrMsg("No Server Response");
+        } else if (err.response?.status === 400) {
+          setErrMsg("Missing Email or Password");
+        } else if (err.response?.status === 401) {
+          setErrMsg("Unauthorized");
+        } else if (err.response?.status === 409) {
+          setErrMsg(err.response?.data?.message);
+        } else {
+          setErrMsg("Login Failed");
+        }
+        errRef.current.focus();
+      }
+    },
+    onError: () => {
+      console.log("Login Failed");
+    },
+  });
 
   return (
     <Container className="d-flex justify-content-center register-container">
