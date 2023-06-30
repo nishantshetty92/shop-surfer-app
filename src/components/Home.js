@@ -1,48 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Card, Col, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Rating from "./Rating";
-import uuid from "react-uuid";
+import axios from "../api/axios";
+import "./Category.css";
 
 const Home = () => {
-  const products = [
-    {
-      id: uuid(),
-      name: "laptop",
-      price: 80,
-      image: "http://placeimg.com/640/480/cats",
-      inStock: 1,
-      fastDelivery: false,
-      rating: 2,
-    },
-    {
-      id: uuid(),
-      name: "mobile",
-      price: 20,
-      image: "http://placeimg.com/640/480/cats",
-      inStock: 3,
-      fastDelivery: true,
-      rating: 4,
-    },
-    {
-      id: uuid(),
-      name: "television",
-      price: 1000,
-      image: "http://placeimg.com/640/480/cats",
-      inStock: 50,
-      fastDelivery: false,
-      rating: 3,
-    },
-    {
-      id: uuid(),
-      name: "earphones",
-      price: 200,
-      image: "http://placeimg.com/640/480/cats",
-      inStock: 10,
-      fastDelivery: true,
-      rating: 4,
-    },
-  ];
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const getCategories = async () => {
+      try {
+        const response = await axios.get("/api/categories/", {
+          signal: controller.signal,
+        });
+        setLoading(false);
+        console.log(response.data);
+        isMounted && setCategories(response.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    getCategories();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
 
   return (
     <>
@@ -58,14 +47,25 @@ const Home = () => {
         </Card>
       </Container>
       <Container fluid className="pt-4">
-        <Row>
-          {products.map((prod) => (
-            <Col md={4} key={prod.id}>
-              <Card className="mb-4">
-                <Card.Img variant="top" src={prod.image} alt={prod.name} />
-                <Card.Body>
-                  <Card.Title>{prod.name}</Card.Title>
-                  <Card.Subtitle style={{ paddingBottom: 10 }}>
+        {loading ? (
+          <Col className="text-center">Loading Categories...</Col>
+        ) : (
+          <Row>
+            {categories.map((category) => (
+              <Col md={4} key={category.id} className="mb-4">
+                <Card className="category-card">
+                  <div className="category-image-container">
+                    <Card.Img
+                      variant="top"
+                      src={category.image}
+                      alt={category.name}
+                      className="category-image"
+                    />
+                  </div>
+
+                  <Card.Body>
+                    <Card.Title>{category.name}</Card.Title>
+                    {/* <Card.Subtitle style={{ paddingBottom: 10 }}>
                     <span>₹ {prod.price}</span>
                   </Card.Subtitle>
                   <Card.Subtitle>
@@ -76,12 +76,13 @@ const Home = () => {
                         style={{ cursor: "pointer" }}
                       />
                     </span>
-                  </Card.Subtitle>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+                  </Card.Subtitle> */}
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        )}
       </Container>
     </>
   );

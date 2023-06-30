@@ -10,6 +10,7 @@ const ProductList = () => {
   } = useAuth();
 
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -17,9 +18,10 @@ const ProductList = () => {
 
     const getProducts = async () => {
       try {
-        const response = await axios.get("/api/products/1/", {
+        const response = await axios.get("/api/products/2/", {
           signal: controller.signal,
         });
+        setLoading(false);
         console.log(response.data);
         isMounted && setProducts(response.data);
       } catch (err) {
@@ -66,17 +68,21 @@ const ProductList = () => {
   };
   return (
     <Container fluid className="pt-4">
-      <Row>
-        {transformProducts()?.length === 0 ? (
-          <span>No Products Found</span>
-        ) : (
-          transformProducts().map((prod) => (
-            <Col md={4} key={prod.id}>
-              <Product prod={prod} />
-            </Col>
-          ))
-        )}
-      </Row>
+      {loading ? (
+        <Col>Loading Products...</Col>
+      ) : (
+        <Row>
+          {transformProducts()?.length === 0 ? (
+            <span>No Products Found</span>
+          ) : (
+            transformProducts().map((prod) => (
+              <Col md={4} key={prod.id} className="mb-4">
+                <Product prod={prod} />
+              </Col>
+            ))
+          )}
+        </Row>
+      )}
     </Container>
   );
 };

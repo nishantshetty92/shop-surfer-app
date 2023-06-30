@@ -1,0 +1,16 @@
+.product-card {
+  height: 100%;
+}
+
+.product-image-container {
+  /* height: 300px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}

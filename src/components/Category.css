@@ -1,0 +1,16 @@
+.category-card {
+  height: 100%;
+}
+
+.category-image-container {
+  /* height: 400px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-image {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}

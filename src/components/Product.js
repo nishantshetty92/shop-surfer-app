@@ -3,18 +3,23 @@ import { Card, Button } from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
 import Rating from "./Rating";
+import "./Product.css";
 
 const Product = ({ prod }) => {
   const { cart, cartDispatch } = useAuth();
 
   const getCartData = useCartData();
   return (
-    <Card className="mb-4">
-      <Card.Img
-        variant="top"
-        src="http://placeimg.com/640/480/cats"
-        alt={prod.name}
-      />
+    <Card className="product-card">
+      <div className="product-image-container">
+        <Card.Img
+          variant="top"
+          src={prod.image}
+          alt={prod.name}
+          className="product-image"
+        />
+      </div>
+
       <Card.Body>
         <Card.Title>{prod.name}</Card.Title>
         <Card.Subtitle style={{ paddingBottom: 10 }}>

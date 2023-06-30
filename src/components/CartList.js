@@ -77,7 +77,7 @@ const CartList = () => {
                 </Col>
                 <Col md={2}>
                   <Image
-                    src="http://placeimg.com/640/480/cats"
+                    src={cartItem.product.image}
                     alt={cartItem.product.name}
                     fluid
                     rounded
