@@ -33,6 +33,7 @@ body {
   justify-content: flex-start;
   padding: 1rem;
   background-color: white;
+  /* border: #000 solid 1px; */
 }
 
 .login-form {

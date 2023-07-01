@@ -6,7 +6,7 @@ import axios from "../api/axios";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { useGoogleOneTapLogin } from "@react-oauth/google";
+import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
 import "./Register.css";
 
@@ -150,52 +150,53 @@ const Register = () => {
     }
   };
 
-  useGoogleOneTapLogin({
-    onSuccess: async (credentialResponse) => {
-      setLoginType("google");
-      const decodedCred = decodeAccessToken(credentialResponse?.credential);
-      try {
-        const response = await axios.post(
-          "/user/google/login/",
-          JSON.stringify(decodedCred),
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        );
-        console.log(JSON.stringify(response?.data));
-        const accessToken = response?.data?.access_token;
-        const decodedToken = decodeAccessToken(accessToken);
-        // const roles = response?.data?.roles
-        setAuth({ accessToken });
-        const user = {
-          email: decodedToken.email,
-          name: decodedToken.name,
-          phoneNumber: decodedToken.phone_number,
-          newLogin: true,
-        };
-        setUser(user);
-        localStorage.setItem("user", JSON.stringify(user));
-        setLoginType("google");
-        navigate(from, { replace: true });
-      } catch (err) {
-        setSuccessMsg("");
-        if (!err?.response) {
-          setErrMsg("No Server Response");
-        } else if (err.response?.status === 400) {
-          setErrMsg("Missing Email or Password");
-        } else if (err.response?.status === 401) {
-          setErrMsg("Unauthorized");
-        } else if (err.response?.status === 409) {
-          setErrMsg(err.response?.data?.message);
-        } else {
-          setErrMsg("Login Failed");
+  const googleSubmit = async (credentialResponse) => {
+    setLoginType("google");
+    const decodedCred = decodeAccessToken(credentialResponse?.credential);
+    try {
+      const response = await axios.post(
+        "/user/google/login/",
+        JSON.stringify(decodedCred),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
         }
-        errRef.current.focus();
+      );
+      console.log(JSON.stringify(response?.data));
+      const accessToken = response?.data?.access_token;
+      const decodedToken = decodeAccessToken(accessToken);
+      // const roles = response?.data?.roles
+      setAuth({ accessToken });
+      const user = {
+        email: decodedToken.email,
+        name: decodedToken.name,
+        phoneNumber: decodedToken.phone_number,
+        newLogin: true,
+      };
+      setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
+      setLoginType("google");
+      navigate(from, { replace: true });
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Email or Password");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
+      } else if (err.response?.status === 409) {
+        setErrMsg(err.response?.data?.message);
+      } else {
+        setErrMsg("Login Failed");
       }
-    },
+      errRef.current.focus();
+    }
+  };
+
+  useGoogleOneTapLogin({
+    onSuccess: googleSubmit,
     onError: () => {
-      console.log("Login Failed");
+      console.log("Google Login Failed");
     },
   });
 
@@ -364,7 +365,20 @@ const Register = () => {
         <span className="form-subheader">
           Already registered? <Link to="/login">Sign In</Link>
         </span>
+        <div
+          className="form-subheader mt-2 mb-0"
+          style={{ color: "gray", fontWeight: "bold" }}
+        >
+          Or
+        </div>
       </section>
+      <GoogleLogin
+        onSuccess={googleSubmit}
+        onError={() => {
+          console.log("Login Failed");
+        }}
+        useOneTap
+      />
     </Container>
   );
 };
