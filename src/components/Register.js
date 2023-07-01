@@ -167,6 +167,7 @@ const Register = () => {
       const decodedToken = decodeAccessToken(accessToken);
       // const roles = response?.data?.roles
       setAuth({ accessToken });
+      localStorage.setItem("auth", JSON.stringify({ accessToken }));
       const user = {
         email: decodedToken.email,
         name: decodedToken.name,

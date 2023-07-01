@@ -9,12 +9,12 @@ import Checkout from "./components/Checkout";
 import Confirmation from "./components/Confirmation";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import "./App.css";
 import Missing from "./components/Missing";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import VerifyUser from "./components/VerifyUser";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import "./App.css";
 
 function App() {
   const oAuthClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -26,6 +26,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="verify" element={<VerifyUser />} />
+
           <Route element={<RequireAuth />}>
             <Route path="checkout" element={<Checkout />} />
           </Route>

@@ -13,6 +13,7 @@ const useLogout = () => {
       setUser({});
       cartDispatch({ type: "RESET_CART" });
 
+      localStorage.removeItem("auth");
       localStorage.removeItem("user");
       localStorage.removeItem("cart");
     } catch (err) {

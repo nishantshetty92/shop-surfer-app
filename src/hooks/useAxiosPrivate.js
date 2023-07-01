@@ -5,14 +5,17 @@ import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
-  const { auth } = useAuth();
+  // const { auth, setAuth } = useAuth();
+  const auth = JSON.parse(localStorage.getItem("auth"));
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          console.log("REQUEST INTERCEPT: " + auth + "__" + auth?.accessToken);
-          config.headers["Authorization"] = `Bearer ${auth?.accessToken}`;
+          console.log("REQUEST INTERCEPT CALLED");
+          config.headers["Authorization"] = `Bearer ${
+            JSON.parse(localStorage.getItem("auth"))?.accessToken
+          }`;
         }
         return config;
       },
@@ -24,10 +27,12 @@ const useAxiosPrivate = () => {
       async (error) => {
         const prevRequest = error?.config;
         if (error?.response?.status === 401 && !prevRequest?.sent) {
+          console.log("RESPONSE INTERCEPT CALLED");
           prevRequest.sent = true;
           const newAccessToken = await refresh();
-          console.log("RESPONSE INTERCEPT: " + newAccessToken);
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+          prevRequest.headers["Authorization"] = `Bearer ${
+            JSON.parse(localStorage.getItem("auth"))?.accessToken
+          }`;
           return axiosPrivate(prevRequest);
         }
         return Promise.reject(error);

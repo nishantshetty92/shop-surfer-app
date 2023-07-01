@@ -16,7 +16,8 @@ const Cart = () => {
   //   qty: 0,
   // }));
 
-  const { auth } = useAuth();
+  // const { auth } = useAuth();
+  const auth = JSON.parse(localStorage.getItem("auth"));
   const getCartData = useCartData();
 
   useEffect(() => {

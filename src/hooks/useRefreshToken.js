@@ -10,12 +10,17 @@ const useRefreshToken = () => {
     });
     console.log("setAuth: " + setAuth);
 
-    setAuth((prev) => {
-      return { ...prev, accessToken: response.data.access_token };
-    });
+    localStorage.setItem(
+      "auth",
+      JSON.stringify({ accessToken: response.data.access_token })
+    );
+    // setAuth((prev) => {
+    //   return { ...prev, accessToken: response.data.access_token };
+    // });
     console.log("ACCESS TOKEN UPDATED: " + response.data.access_token);
     return response.data.accessToken;
   };
+
   return refresh;
 };
 

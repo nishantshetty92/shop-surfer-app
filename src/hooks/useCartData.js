@@ -3,7 +3,9 @@ import useAxiosPrivate from "./useAxiosPrivate";
 import axios from "../api/axios";
 
 const useCartData = (cartData) => {
-  const { auth, cartDispatch } = useAuth();
+  // const { auth, cartDispatch } = useAuth();
+  const { cartDispatch } = useAuth();
+  const auth = JSON.parse(localStorage.getItem("auth"));
 
   const axiosPrivate = useAxiosPrivate();
 

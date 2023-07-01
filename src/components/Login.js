@@ -35,8 +35,6 @@ const Login = () => {
   const decodeAccessToken = (token) => {
     try {
       const decodedToken = jwt_decode(token);
-      console.log(token);
-      console.log(JSON.stringify(decodedToken));
       return decodedToken;
     } catch (error) {
       console.log("Failed to decode JWT:", error.message);
@@ -44,7 +42,7 @@ const Login = () => {
     return;
   };
 
-  const handleSubmit = async (e) => {
+  const useHandleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -56,11 +54,12 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      console.log(JSON.stringify(response?.data));
+      // console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.access_token;
       const decodedToken = decodeAccessToken(accessToken);
       // const roles = response?.data?.roles
       setAuth({ accessToken });
+      localStorage.setItem("auth", JSON.stringify({ accessToken }));
       setEmail("");
       setPwd("");
       const user = {
@@ -106,6 +105,7 @@ const Login = () => {
       const decodedToken = decodeAccessToken(accessToken);
       // const roles = response?.data?.roles
       setAuth({ accessToken });
+      localStorage.setItem("auth", JSON.stringify({ accessToken }));
       setEmail("");
       setPwd("");
       const user = {
@@ -155,7 +155,7 @@ const Login = () => {
         <span className="form-header">
           <RiShoppingCartLine className="navbar-icon" /> ShopSurfer
         </span>
-        <Form onSubmit={handleSubmit} className="login-form">
+        <Form onSubmit={useHandleSubmit} className="login-form">
           <Form.Group controlId="username">
             <Form.Control
               type="text"

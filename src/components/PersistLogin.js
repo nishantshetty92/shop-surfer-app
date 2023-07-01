@@ -6,8 +6,9 @@ import useAuth from "../hooks/useAuth";
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
   // console.log("PERSIST LOGIN");
-  const { auth } = useAuth();
+  // const { auth } = useAuth();
   const refresh = useRefreshToken();
+  const auth = JSON.parse(localStorage.getItem("auth"));
 
   useEffect(() => {
     let isMounted = true;
