@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Container, Card, Col, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
+import useUserLogged from "../hooks/useUserLogged";
 import "./Category.css";
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const isLogged = useUserLogged();
 
   useEffect(() => {
+    isLogged();
     let isMounted = true;
     const controller = new AbortController();
 

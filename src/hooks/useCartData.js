@@ -1,13 +1,32 @@
 import useAuth from "./useAuth";
 import useAxiosPrivate from "./useAxiosPrivate";
-import axios from "../api/axios";
 
-const useCartData = (cartData) => {
+const useCartData = () => {
   // const { auth, cartDispatch } = useAuth();
-  const { cartDispatch } = useAuth();
-  const auth = JSON.parse(localStorage.getItem("auth"));
+  const { cartDispatch, user, setUser } = useAuth();
 
   const axiosPrivate = useAxiosPrivate();
+
+  const isLogged = () => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    console.log(auth?.accessToken);
+    console.log(!auth?.accessToken && user?.email);
+
+    if (!auth?.accessToken && user?.email) {
+      console.log("useCartData SESSION EXPIRED");
+      setUser({});
+      cartDispatch({ type: "RESET_CART" });
+    } else if (auth?.accessToken && !user?.email) {
+      console.log("UPDATE DATA");
+      setUser(JSON.parse(localStorage.getItem("user")));
+    }
+  };
+
+  const handleUnauthorized = () => {
+    console.log("HANDLEUNAUTHORIZED");
+    localStorage.removeItem("auth");
+    isLogged();
+  };
 
   const addCartItem = async (data) => {
     try {
@@ -15,34 +34,25 @@ const useCartData = (cartData) => {
       const response = await axiosPrivate.post(
         "/api/cart/add/",
         format_payload
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${auth?.accessToken}`,
-        //   },
-        // }
       );
       return response.data;
     } catch (error) {
       console.error("Error fetching cart data:", error);
-      return;
+      if (error?.response?.status === 401) {
+        handleUnauthorized();
+      }
     }
   };
 
   const addCartItems = async (data) => {
     try {
-      const response = await axiosPrivate.post(
-        "/api/cart/add_items/",
-        data
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${auth?.accessToken}`,
-        //   },
-        // }
-      );
+      const response = await axiosPrivate.post("/api/cart/add_items/", data);
       return response.data;
     } catch (error) {
+      if (error?.response?.status === 401) {
+        handleUnauthorized();
+      }
       console.error("Error fetching cart data:", error);
-      return;
     }
   };
 
@@ -60,8 +70,10 @@ const useCartData = (cartData) => {
       );
       return response.data;
     } catch (error) {
+      if (error?.response?.status === 401) {
+        handleUnauthorized();
+      }
       console.error("Error fetching cart data:", error);
-      return;
     }
   };
 
@@ -70,15 +82,13 @@ const useCartData = (cartData) => {
       const format_payload = { product_ids: data };
       const response = await axiosPrivate.delete("/api/cart/delete/", {
         data: format_payload,
-
-        // headers: {
-        //   Authorization: `Bearer ${auth?.accessToken}`,
-        // },
       });
       return response.data;
     } catch (error) {
+      if (error?.response?.status === 401) {
+        handleUnauthorized();
+      }
       console.error("Error fetching cart data:", error);
-      return;
     }
   };
 
@@ -88,13 +98,16 @@ const useCartData = (cartData) => {
       return response.data;
     } catch (error) {
       console.error("Error fetching cart data:", error);
-      return;
+      if (error?.response?.status === 401) {
+        handleUnauthorized();
+      }
     }
   };
 
   const getCartData = async (cartData) => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
     console.log("getCartData: " + auth?.accessToken);
-    console.log("access is there");
+    isLogged();
     let response;
     if (auth?.accessToken) {
       if (cartData.type === "ADD_TO_CART") {

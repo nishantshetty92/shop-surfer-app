@@ -10,21 +10,38 @@ import {
   Navbar,
 } from "react-bootstrap";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useCartData from "../hooks/useCartData";
 import AddressPicker from "./AddressPicker";
-
 import "./Checkout.css";
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { cart, addressList } = useAuth();
+  const { cart, addressList, user } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [errMsg, setErrMsg] = useState("");
   const getCartData = useCartData();
+
+  const isLogged = () => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+
+    if (!auth?.accessToken && user?.email) {
+      console.log("CHECKOUT SESSION EXPIRED");
+      navigate("/login", { state: { from: location }, replace: true });
+    } else {
+      return true;
+    }
+    return false;
+  };
+
+  const handleUnauthorized = () => {
+    localStorage.removeItem("auth");
+    isLogged();
+  };
 
   useEffect(() => {
     const selectCount = cart.filter((item) => item.is_selected).length;
@@ -42,58 +59,61 @@ const Checkout = () => {
   const paymentMethod = "Credit Card";
 
   const placeOrder = async () => {
-    const selectedAddress = addressList.find((addr) => addr.is_selected);
-    const shippingAddress = `${selectedAddress.full_name}, ${selectedAddress.address1}, ${selectedAddress.address2}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pin_code}, Phone number: ${selectedAddress.mobile_number}`;
+    const result = isLogged();
+    if (result) {
+      const selectedAddress = addressList.find((addr) => addr.is_selected);
+      const shippingAddress = `${selectedAddress.full_name}, ${selectedAddress.address1}, ${selectedAddress.address2}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pin_code}, Phone number: ${selectedAddress.mobile_number}`;
 
-    const orderItems = cart
-      .filter((item) => item.is_selected)
-      .map((item) => ({
-        product_id: item.product.id,
-        price: item.product.price,
-        quantity: item.quantity,
-      }));
+      const orderItems = cart
+        .filter((item) => item.is_selected)
+        .map((item) => ({
+          product_id: item.product.id,
+          price: item.product.price,
+          quantity: item.quantity,
+        }));
 
-    const orderPayload = {
-      order: {
-        total_amount: Number(total.toFixed(2)),
-        shipping_address: shippingAddress,
-        payment_method: paymentMethod,
-      },
-      order_items: orderItems,
-    };
-    console.log(JSON.stringify(orderPayload));
+      const orderPayload = {
+        order: {
+          total_amount: Number(total.toFixed(2)),
+          shipping_address: shippingAddress,
+          payment_method: paymentMethod,
+        },
+        order_items: orderItems,
+      };
+      console.log(JSON.stringify(orderPayload));
 
-    try {
-      const orderResponse = await axiosPrivate.post(
-        "/api/order/place/",
-        JSON.stringify(orderPayload)
-      );
-      console.log(JSON.stringify(orderResponse?.data));
+      try {
+        const orderResponse = await axiosPrivate.post(
+          "/api/order/place/",
+          JSON.stringify(orderPayload)
+        );
+        console.log(JSON.stringify(orderResponse?.data));
 
-      const orderDetails = orderResponse?.data;
-      const orderProductIds = orderDetails?.order_items.map(
-        (item) => item.product_id
-      );
+        const orderDetails = orderResponse?.data;
+        const orderProductIds = orderDetails?.order_items.map(
+          (item) => item.product_id
+        );
 
-      if (orderProductIds?.length > 0) {
-        const response = await getCartData({
-          type: "REMOVE_FROM_CART",
-          payload: orderProductIds,
-        });
-      }
+        if (orderProductIds?.length > 0) {
+          const response = await getCartData({
+            type: "REMOVE_FROM_CART",
+            payload: orderProductIds,
+          });
+        }
 
-      orderDetails &&
-        navigate("/confirmation", {
-          state: orderDetails,
-          replace: true,
-        });
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else if (err.response?.status === 401) {
-        setErrMsg("Unauthorized");
-      } else {
-        setErrMsg("Order Failed");
+        orderDetails &&
+          navigate("/confirmation", {
+            state: orderDetails,
+            replace: true,
+          });
+      } catch (err) {
+        if (!err?.response) {
+          setErrMsg("No Server Response");
+        } else if (err.response?.status === 401) {
+          handleUnauthorized();
+        } else {
+          setErrMsg("Order Failed");
+        }
       }
     }
   };

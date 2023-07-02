@@ -5,13 +5,13 @@ const useLogout = () => {
   const { setAuth, setUser, cartDispatch } = useAuth();
 
   const logout = async () => {
-    setAuth({});
+    // setAuth({});
     try {
       const response = await axios("user/logout/", {
         withCredentials: true,
       });
-      setUser({});
-      cartDispatch({ type: "RESET_CART" });
+      // setUser({});
+      // cartDispatch({ type: "RESET_CART" });
 
       localStorage.removeItem("auth");
       localStorage.removeItem("user");

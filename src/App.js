@@ -26,11 +26,12 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="verify" element={<VerifyUser />} />
-
-          <Route element={<RequireAuth />}>
-            <Route path="checkout" element={<Checkout />} />
+          <Route element={<PersistLogin />}>
+            <Route element={<RequireAuth />}>
+              <Route path="checkout" element={<Checkout />} />
+            </Route>
+            <Route path="/*" element={<MainLayout />} />
           </Route>
-          <Route path="/*" element={<MainLayout />} />
         </Routes>
       </BrowserRouter>
     </GoogleOAuthProvider>
@@ -43,17 +44,15 @@ const MainLayout = () => {
       <Header />
       <div className="content-container">
         <Routes>
-          <Route element={<PersistLogin />}>
-            <Route path="/" element={<Home />} exact />
-            <Route path="products" element={<Products />} />
-            <Route path="cart" element={<Cart />} />
+          <Route path="/" element={<Home />} exact />
+          <Route path="products" element={<Products />} />
+          <Route path="cart" element={<Cart />} />
 
-            <Route element={<RequireAuth />}>
-              <Route path="confirmation" element={<Confirmation />} />
-            </Route>
-
-            <Route path="*" element={<Missing />} />
+          <Route element={<RequireAuth />}>
+            <Route path="confirmation" element={<Confirmation />} />
           </Route>
+
+          <Route path="*" element={<Missing />} />
         </Routes>
       </div>
       <Footer />

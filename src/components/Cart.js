@@ -2,6 +2,7 @@ import { React, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
+import useUserLogged from "../hooks/useUserLogged";
 import CartList from "./CartList";
 import CartTotal from "./CartTotal";
 
@@ -19,8 +20,10 @@ const Cart = () => {
   // const { auth } = useAuth();
   const auth = JSON.parse(localStorage.getItem("auth"));
   const getCartData = useCartData();
+  const isLogged = useUserLogged();
 
   useEffect(() => {
+    isLogged();
     let isMounted = true;
     const controller = new AbortController();
 

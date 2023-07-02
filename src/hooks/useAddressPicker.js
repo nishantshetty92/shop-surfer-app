@@ -1,11 +1,30 @@
+import { useLocation } from "react-router-dom";
 import useAuth from "./useAuth";
 import useAxiosPrivate from "./useAxiosPrivate";
 
-const useAddressPicker = (pickerData) => {
-  const { addressList, setAddressList } = useAuth();
+const useAddressPicker = () => {
+  const { user, addressList, setAddressList } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const location = useLocation();
 
-  const addAddress = async (payload) => {
+  const isLogged = (navigate) => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+
+    if (!auth?.accessToken && user?.email) {
+      console.log("CHECKOUT SESSION EXPIRED");
+      navigate("/login", { state: { from: location }, replace: true });
+    } else {
+      return true;
+    }
+    return false;
+  };
+
+  const handleUnauthorized = (navigate) => {
+    localStorage.removeItem("auth");
+    isLogged(navigate);
+  };
+
+  const addAddress = async (payload, navigate) => {
     let newAddress = payload;
     try {
       const response = await axiosPrivate.post(
@@ -19,6 +38,7 @@ const useAddressPicker = (pickerData) => {
         console.log("No Server Response");
       } else if (err.response?.status === 401) {
         console.log("Unauthorized");
+        handleUnauthorized(navigate);
       } else {
         console.log("Failed");
       }
@@ -26,7 +46,7 @@ const useAddressPicker = (pickerData) => {
     }
   };
 
-  const editAddress = async (payload) => {
+  const editAddress = async (payload, navigate) => {
     let updatedAddress = payload;
     try {
       const response = await axiosPrivate.patch(
@@ -40,6 +60,7 @@ const useAddressPicker = (pickerData) => {
         console.log("No Server Response");
       } else if (err.response?.status === 401) {
         console.log("Unauthorized");
+        handleUnauthorized(navigate);
       } else {
         console.log("Failed");
       }
@@ -58,7 +79,7 @@ const useAddressPicker = (pickerData) => {
     console.log("SELECT_ADDRESS");
   };
 
-  const getAddressList = async () => {
+  const getAddressList = async (navigate) => {
     try {
       const response = await axiosPrivate.get("/api/address/");
       console.log(JSON.stringify(response?.data));
@@ -68,6 +89,7 @@ const useAddressPicker = (pickerData) => {
         console.log("No Server Response");
       } else if (err.response?.status === 401) {
         console.log("Unauthorized");
+        handleUnauthorized(navigate);
       } else {
         console.log("Order Failed");
       }
@@ -76,15 +98,18 @@ const useAddressPicker = (pickerData) => {
     console.log("GET_LIST");
   };
 
-  const handleAction = (pickerData) => {
-    if (pickerData.type === "GET_LIST") {
-      getAddressList();
-    } else if (pickerData.type === "SELECT_ADDRESS") {
-      selectAddress(pickerData?.payload);
-    } else if (pickerData.type === "ADD_ADDRESS") {
-      addAddress(pickerData?.payload);
-    } else if (pickerData.type === "EDIT_ADDRESS") {
-      editAddress(pickerData?.payload);
+  const handleAction = (pickerData, navigate) => {
+    const result = isLogged(navigate);
+    if (result) {
+      if (pickerData.type === "GET_LIST") {
+        getAddressList(navigate);
+      } else if (pickerData.type === "SELECT_ADDRESS") {
+        selectAddress(pickerData?.payload);
+      } else if (pickerData.type === "ADD_ADDRESS") {
+        addAddress(pickerData?.payload, navigate);
+      } else if (pickerData.type === "EDIT_ADDRESS") {
+        editAddress(pickerData?.payload, navigate);
+      }
     }
   };
 

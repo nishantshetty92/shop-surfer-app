@@ -34,10 +34,11 @@ export const AuthProvider = ({ children }) => {
     const fetchData = async () => {
       console.log(user);
       if (user?.email && user?.newLogin) {
+        const offlineCart = JSON.parse(localStorage.getItem("cart"));
         console.log("User Logged In ");
         let isMounted = true;
         const controller = new AbortController();
-        console.log("CURRENT CART: ", cart);
+        console.log("OFFLINE CART: ", offlineCart);
 
         const getCart = async () => {
           try {
@@ -55,7 +56,10 @@ export const AuthProvider = ({ children }) => {
 
         const mergeCart = async () => {
           try {
-            const response = await axiosPrivate.post("/api/cart/merge/", cart);
+            const response = await axiosPrivate.post(
+              "/api/cart/merge/",
+              offlineCart
+            );
 
             isMounted &&
               cartDispatch({
@@ -67,7 +71,7 @@ export const AuthProvider = ({ children }) => {
           }
         };
 
-        isMounted && (cart?.length > 0 ? mergeCart() : getCart());
+        isMounted && (offlineCart?.length > 0 ? mergeCart() : getCart());
         const updatedUser = { ...user, newLogin: false };
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
