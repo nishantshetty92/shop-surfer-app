@@ -7,6 +7,7 @@ import useAuth from "../hooks/useAuth";
 import jwt_decode from "jwt-decode";
 import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import "./Login.css";
+import Spinner from "react-bootstrap/Spinner";
 
 const LOGIN_URL = "/user/login/";
 
@@ -23,6 +24,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -44,6 +46,7 @@ const Login = () => {
 
   const useHandleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -85,10 +88,13 @@ const Login = () => {
         setErrMsg("Login Failed");
       }
       errRef.current.focus();
+    } finally {
+      setLoading(false);
     }
   };
 
   const googleSubmit = async (credentialResponse) => {
+    setLoading(true);
     setLoginType("google");
     const decodedCred = decodeAccessToken(credentialResponse?.credential);
     try {
@@ -131,6 +137,8 @@ const Login = () => {
         setErrMsg("Login Failed");
       }
       errRef.current.focus();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -176,8 +184,17 @@ const Login = () => {
               placeholder="Password"
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
-            Sign In
+          <Button variant="primary" type="submit" disabled={loading}>
+            Sign In{" "}
+            {loading && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
           </Button>
         </Form>
         <span className="form-subheader">

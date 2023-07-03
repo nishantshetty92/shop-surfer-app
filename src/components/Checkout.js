@@ -15,6 +15,7 @@ import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useCartData from "../hooks/useCartData";
 import AddressPicker from "./AddressPicker";
+import Spinner from "react-bootstrap/Spinner";
 import "./Checkout.css";
 
 const Checkout = () => {
@@ -24,6 +25,7 @@ const Checkout = () => {
   const { cart, addressList, user } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [errMsg, setErrMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const getCartData = useCartData();
 
   const isLogged = () => {
@@ -61,6 +63,7 @@ const Checkout = () => {
   const placeOrder = async () => {
     const result = isLogged();
     if (result) {
+      setLoading(true);
       const selectedAddress = addressList.find((addr) => addr.is_selected);
       const shippingAddress = `${selectedAddress.full_name}, ${selectedAddress.address1}, ${selectedAddress.address2}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pin_code}, Phone number: ${selectedAddress.mobile_number}`;
 
@@ -100,6 +103,7 @@ const Checkout = () => {
             payload: orderProductIds,
           });
         }
+        setLoading(false);
 
         orderDetails &&
           navigate("/confirmation", {
@@ -207,12 +211,21 @@ const Checkout = () => {
                 </ListGroup>
                 <div className="text-center">
                   <Button
-                    disabled={addressList?.length === 0}
+                    disabled={addressList?.length === 0 || loading}
                     variant="primary"
                     className="mt-3"
                     onClick={placeOrder}
                   >
-                    Place Order
+                    Place Order{"  "}
+                    {loading && (
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                    )}
                   </Button>
                 </div>
               </Card.Body>

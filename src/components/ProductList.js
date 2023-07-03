@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import Product from "./Product";
 import useAuth from "../hooks/useAuth";
+import Spinner from "react-bootstrap/Spinner";
 import axios from "../api/axios";
 
 const ProductList = () => {
@@ -69,7 +70,16 @@ const ProductList = () => {
   return (
     <Container fluid className="pt-4">
       {loading ? (
-        <Col>Loading Products...</Col>
+        <Col>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />{" "}
+          Loading Products...
+        </Col>
       ) : (
         <Row>
           {transformProducts()?.length === 0 ? (

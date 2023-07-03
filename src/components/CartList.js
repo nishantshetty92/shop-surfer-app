@@ -7,7 +7,7 @@ import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
 
 const CartList = () => {
-  const { cart, cartDispatch } = useAuth();
+  const { cart } = useAuth();
   const getCartData = useCartData();
   const [selectAll, setSelectAll] = useState(true);
 
@@ -94,22 +94,14 @@ const CartList = () => {
                   <Form.Control
                     as="select"
                     value={cartItem.quantity}
-                    onChange={
-                      (e) =>
-                        getCartData({
-                          type: "CHANGE_CART_QTY",
-                          payload: {
-                            id: cartItem.product.id,
-                            quantity: e.target.value,
-                          },
-                        })
-                      // dispatch({
-                      //   type: "CHANGE_CART_QTY",
-                      //   payload: {
-                      //     id: cartItem.product.id,
-                      //     quantity: e.target.value,
-                      //   },
-                      // })
+                    onChange={(e) =>
+                      getCartData({
+                        type: "CHANGE_CART_QTY",
+                        payload: {
+                          id: cartItem.product.id,
+                          quantity: e.target.value,
+                        },
+                      })
                     }
                   >
                     {[...Array(cartItem.product.quantity)].map((_, x) => (
@@ -121,16 +113,11 @@ const CartList = () => {
                   <Button
                     type="button"
                     variant="light"
-                    onClick={
-                      () =>
-                        getCartData({
-                          type: "REMOVE_FROM_CART",
-                          payload: [cartItem.product.id],
-                        })
-                      // dispatch({
-                      //   type: "REMOVE_FROM_CART",
-                      //   payload: cartItem.product,
-                      // })
+                    onClick={() =>
+                      getCartData({
+                        type: "REMOVE_FROM_CART",
+                        payload: [cartItem.product.id],
+                      })
                     }
                   >
                     <AiFillDelete fontSize="20px" />

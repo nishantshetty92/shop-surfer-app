@@ -6,7 +6,8 @@ import { BsExclamationCircleFill } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
 import axios from "../api/axios";
 import jwt_decode from "jwt-decode";
-import "./VerifyUser.css"; // Import the custom CSS file
+import Spinner from "react-bootstrap/Spinner";
+import "./VerifyUser.css";
 
 const VerifyUser = () => {
   const [verificationStatus, setVerificationStatus] = useState("");
@@ -15,6 +16,8 @@ const VerifyUser = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertStatus, setAlertStatus] = useState("");
   const [response, setResponse] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -39,6 +42,7 @@ const VerifyUser = () => {
   };
 
   const verifyToken = async (token) => {
+    setLoading(true);
     try {
       // Send the token to the backend for verification
       const response = await axios.post("/user/verify/register/", { token });
@@ -54,10 +58,13 @@ const VerifyUser = () => {
         setResponse(err?.response);
         setMessage(err.response?.data?.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   const resendVerification = async () => {
+    setResendLoading(true);
     try {
       // Send the token to the backend for verification
       const decodedToken = decodeAccessToken(token);
@@ -75,6 +82,8 @@ const VerifyUser = () => {
       } else {
         setAlertMessage(err.response?.data?.message);
       }
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -86,51 +95,79 @@ const VerifyUser = () => {
         </span>
         <Card className="verify-card">
           <Card.Body>
-            <div className="icon-container">
-              {verificationStatus === "success" ? (
-                <FaCheckCircle size={64} className="success-icon" />
-              ) : (
-                <BsExclamationCircleFill size={64} className="danger-icon" />
-              )}
-            </div>
-            <div className="message-container">
-              {verificationStatus === "success" ? (
-                <span className="success">{message}</span>
-              ) : (
-                <span className="error">{message}</span>
-              )}
-            </div>
-            <div className="button-container mb-0">
-              {[200, 409].includes(response?.status) ? (
-                <Button
-                  variant="primary"
-                  className="w-100"
-                  as={Link}
-                  to="/login"
-                >
-                  Sign In
-                </Button>
-              ) : response?.status === 401 ? (
-                <Button
-                  variant="primary"
-                  className="w-100"
-                  onClick={resendVerification}
-                >
-                  Resend Verification Link
-                </Button>
-              ) : (
-                [400, 404].includes(response?.status) && (
-                  <Button
-                    variant="primary"
-                    className="w-100"
-                    as={Link}
-                    to="/register"
-                  >
-                    Sign Up
-                  </Button>
-                )
-              )}
-            </div>
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />{" "}
+                Verifying...
+              </>
+            ) : (
+              <>
+                <div className="icon-container">
+                  {verificationStatus === "success" ? (
+                    <FaCheckCircle size={64} className="success-icon" />
+                  ) : (
+                    <BsExclamationCircleFill
+                      size={64}
+                      className="danger-icon"
+                    />
+                  )}
+                </div>
+                <div className="message-container">
+                  {verificationStatus === "success" ? (
+                    <span className="success">{message}</span>
+                  ) : (
+                    <span className="error">{message}</span>
+                  )}
+                </div>
+                <div className="button-container mb-0">
+                  {[200, 409].includes(response?.status) ? (
+                    <Button
+                      variant="primary"
+                      className="w-100"
+                      as={Link}
+                      to="/login"
+                    >
+                      Sign In
+                    </Button>
+                  ) : response?.status === 401 ? (
+                    <Button
+                      variant="primary"
+                      className="w-100"
+                      onClick={resendVerification}
+                      disabled={resendLoading}
+                    >
+                      Resend Verification Link{" "}
+                      {resendLoading && (
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </Button>
+                  ) : (
+                    [400, 404].includes(response?.status) && (
+                      <Button
+                        variant="primary"
+                        className="w-100"
+                        as={Link}
+                        to="/register"
+                      >
+                        Sign Up
+                      </Button>
+                    )
+                  )}
+                </div>
+              </>
+            )}
           </Card.Body>
         </Card>
         <Alert

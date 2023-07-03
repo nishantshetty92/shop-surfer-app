@@ -33,6 +33,7 @@ const useAddressPicker = () => {
       );
       console.log(JSON.stringify(response?.data));
       setAddressList(response?.data);
+      return response?.data;
     } catch (err) {
       if (!err?.response) {
         console.log("No Server Response");
@@ -98,17 +99,17 @@ const useAddressPicker = () => {
     console.log("GET_LIST");
   };
 
-  const handleAction = (pickerData, navigate) => {
+  const handleAction = async (pickerData, navigate) => {
     const result = isLogged(navigate);
     if (result) {
       if (pickerData.type === "GET_LIST") {
-        getAddressList(navigate);
+        await getAddressList(navigate);
       } else if (pickerData.type === "SELECT_ADDRESS") {
         selectAddress(pickerData?.payload);
       } else if (pickerData.type === "ADD_ADDRESS") {
-        addAddress(pickerData?.payload, navigate);
+        await addAddress(pickerData?.payload, navigate);
       } else if (pickerData.type === "EDIT_ADDRESS") {
-        editAddress(pickerData?.payload, navigate);
+        await editAddress(pickerData?.payload, navigate);
       }
     }
   };

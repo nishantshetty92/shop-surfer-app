@@ -1,13 +1,14 @@
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ListGroup, Card, Form } from "react-bootstrap";
 import { GrAdd } from "react-icons/gr";
 import useAuth from "../hooks/useAuth";
 import useAddressPicker from "../hooks/useAddressPicker";
 import AddressModal from "./AddressModal";
 import { useNavigate } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
 
 const AddressPicker = () => {
-  const { auth, addressList } = useAuth();
+  const { addressList } = useAuth();
   console.log("AddressPicker");
 
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ const AddressPicker = () => {
   });
   const [action, setAction] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const openAddModal = (event) => {
     event.preventDefault();
@@ -54,18 +56,27 @@ const AddressPicker = () => {
   const picker = useAddressPicker();
 
   useEffect(() => {
-    picker({ type: "GET_LIST" }, navigate);
+    const getAddresses = async () => {
+      setLoading(true);
+      await picker({ type: "GET_LIST" }, navigate);
+      setLoading(false);
+    };
+    getAddresses();
   }, []);
 
   const selectAddress = (addressId) => {
     picker({ type: "SELECT_ADDRESS", payload: addressId }, navigate);
   };
 
-  const submitAddress = (payload, action) => {
-    action == "add" &&
-      picker({ type: "ADD_ADDRESS", payload: payload }, navigate);
-    action == "edit" &&
-      picker({ type: "EDIT_ADDRESS", payload: payload }, navigate);
+  const submitAddress = async (payload, action) => {
+    {
+      action === "add" &&
+        (await picker({ type: "ADD_ADDRESS", payload: payload }, navigate));
+    }
+    {
+      action === "edit" &&
+        (await picker({ type: "EDIT_ADDRESS", payload: payload }, navigate));
+    }
   };
 
   return (
@@ -75,52 +86,64 @@ const AddressPicker = () => {
           Shipping Address
         </ListGroup.Item>
         <ListGroup.Item>
-          {addressList?.length == 0 && (
+          {loading ? (
+            <>
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />{" "}
+              Loading your address information...
+            </>
+          ) : addressList?.length === 0 ? (
             <Card className="address-card mb-3">
               <Card.Body>No Addresses Found</Card.Body>
             </Card>
+          ) : (
+            addressList.map((addr) => (
+              <React.Fragment key={addr.id}>
+                <Card
+                  className={`address-card mb-3 ${
+                    addr.is_selected ? "selected" : ""
+                  }`}
+                >
+                  <Card.Body onClick={() => selectAddress(addr.id)}>
+                    <div className="address-item">
+                      <Form.Check
+                        type="radio"
+                        name="shippingAddress"
+                        id={`shippingAddress${addr.id}`}
+                        value={addr.id}
+                        label=""
+                        className="radio-button"
+                        checked={addr.is_selected}
+                        onChange={() => {}}
+                      />
+                      <Card.Text>
+                        <span className="mb-0">
+                          <b>{addr.full_name}</b>, {addr.address1},{" "}
+                          {addr.address2}, {addr.city}, {addr.state},{" "}
+                          {addr.pin_code}, Phone number: {addr.mobile_number}
+                        </span>
+                      </Card.Text>
+                    </div>
+                  </Card.Body>
+                  <span className="mb-2 mr-2 d-flex justify-content-end">
+                    <a href="#" onClick={(event) => openEditModal(event, addr)}>
+                      Edit address
+                    </a>
+                  </span>
+                </Card>
+              </React.Fragment>
+            ))
           )}
-          {addressList.map((addr) => (
-            <>
-              <Card
-                className={`address-card mb-3 ${
-                  addr.is_selected ? "selected" : ""
-                }`}
-                key={addr.id}
-              >
-                <Card.Body onClick={() => selectAddress(addr.id)}>
-                  <div className="address-item">
-                    <Form.Check
-                      type="radio"
-                      name="shippingAddress"
-                      id={`shippingAddress${addr.id}`}
-                      value={addr.id}
-                      label=""
-                      className="radio-button"
-                      checked={addr.is_selected}
-                      onChange={() => {}}
-                    />
-                    <Card.Text>
-                      <span className="mb-0">
-                        <b>{addr.full_name}</b>, {addr.address1},{" "}
-                        {addr.address2}, {addr.city}, {addr.state},{" "}
-                        {addr.pin_code}, Phone number: {addr.mobile_number}
-                      </span>
-                    </Card.Text>
-                  </div>
-                </Card.Body>
-                <span className="mb-2 mr-2 d-flex justify-content-end">
-                  <a href="#" onClick={(event) => openEditModal(event, addr)}>
-                    Edit address
-                  </a>
-                </span>
-              </Card>
-            </>
-          ))}
-
-          <a href="#" onClick={openAddModal}>
-            <GrAdd style={{ color: "gray" }} /> Add a new address
-          </a>
+          {!loading && (
+            <a href="#" onClick={openAddModal}>
+              <GrAdd style={{ color: "gray" }} /> Add a new address
+            </a>
+          )}
         </ListGroup.Item>
       </ListGroup>
       <AddressModal

@@ -9,8 +9,6 @@ const useCartData = () => {
 
   const isLogged = () => {
     const auth = JSON.parse(localStorage.getItem("auth"));
-    console.log(auth?.accessToken);
-    console.log(!auth?.accessToken && user?.email);
 
     if (!auth?.accessToken && user?.email) {
       console.log("useCartData SESSION EXPIRED");
@@ -41,6 +39,7 @@ const useCartData = () => {
       if (error?.response?.status === 401) {
         handleUnauthorized();
       }
+    } finally {
     }
   };
 
@@ -89,6 +88,7 @@ const useCartData = () => {
         handleUnauthorized();
       }
       console.error("Error fetching cart data:", error);
+    } finally {
     }
   };
 

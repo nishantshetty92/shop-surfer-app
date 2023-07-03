@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
+import Spinner from "react-bootstrap/Spinner";
 
 const AddressModal = ({
   show,
@@ -9,6 +10,7 @@ const AddressModal = ({
   submitAddress,
   action,
 }) => {
+  const [loading, setLoading] = useState(false);
   const resetFormData = () => {
     setFormData({
       full_name: "",
@@ -30,11 +32,13 @@ const AddressModal = ({
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     console.log(JSON.stringify(formData));
     // Handle form submission logic here
-    submitAddress(formData, action);
+    await submitAddress(formData, action);
+    setLoading(false);
     resetFormData();
     handleClose();
   };
@@ -193,7 +197,16 @@ const AddressModal = ({
 
           <div className="mt-4 d-flex justify-content-end">
             <Button variant="primary" type="submit" className="mr-2">
-              Use Address
+              Use Address{" "}
+              {loading && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              )}
             </Button>
             {/* <Button variant="danger" onClick={handleClose}>
               Cancel

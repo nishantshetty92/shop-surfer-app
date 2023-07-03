@@ -9,6 +9,7 @@ import useAuth from "../hooks/useAuth";
 import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
 import "./Register.css";
+import Spinner from "react-bootstrap/Spinner";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -48,6 +49,7 @@ const Register = () => {
   const [successMsg, setSuccessMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [showResend, setShowResend] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -86,6 +88,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     // if button enabled with JS hack
     const v1 = EMAIL_REGEX.test(email);
     const v2 = PWD_REGEX.test(pwd);
@@ -128,10 +131,13 @@ const Register = () => {
         setErrMsg("Registration Failed");
       }
       errRef.current.focus();
+    } finally {
+      setLoading(false);
     }
   };
 
   const resendVerification = async () => {
+    setLoading(true);
     try {
       setSuccessMsg("");
       setErrMsg("");
@@ -147,10 +153,13 @@ const Register = () => {
       } else {
         setErrMsg(err.response?.data?.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   const googleSubmit = async (credentialResponse) => {
+    setLoading(true);
     setLoginType("google");
     const decodedCred = decodeAccessToken(credentialResponse?.credential);
     try {
@@ -191,6 +200,8 @@ const Register = () => {
         setErrMsg("Login Failed");
       }
       errRef.current.focus();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -348,18 +359,38 @@ const Register = () => {
               !validPwd ||
               !validMatch ||
               !validPhone ||
-              showResend
+              showResend ||
+              loading
             }
           >
-            Sign Up
+            Sign Up{" "}
+            {!showResend && loading && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
           </Button>
           {showResend && (
             <Button
               variant="primary"
               onClick={resendVerification}
               className="mt-3"
+              disabled={loading}
             >
-              Resend Verification Email
+              Resend Verification Email{" "}
+              {showResend && loading && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              )}
             </Button>
           )}
         </Form>

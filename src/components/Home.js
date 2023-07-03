@@ -3,6 +3,7 @@ import { Container, Card, Col, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import useUserLogged from "../hooks/useUserLogged";
+import Spinner from "react-bootstrap/Spinner";
 import "./Category.css";
 
 const Home = () => {
@@ -51,7 +52,16 @@ const Home = () => {
       </Container>
       <Container fluid className="pt-4">
         {loading ? (
-          <Col className="text-center">Loading Categories...</Col>
+          <Col className="text-center">
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />{" "}
+            Loading Categories...
+          </Col>
         ) : (
           <Row>
             {categories.map((category) => (
