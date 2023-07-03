@@ -6,8 +6,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import jwt_decode from "jwt-decode";
 import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
-import "./Login.css";
 import Spinner from "react-bootstrap/Spinner";
+import "./Login.css";
 
 const LOGIN_URL = "/user/login/";
 
@@ -19,12 +19,29 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/";
 
   const emailRef = useRef();
-  const errRef = useRef();
 
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const resetFormData = () => {
+    setFormData({
+      email: "",
+      password: "",
+    });
+  };
 
   useEffect(() => {
     emailRef.current.focus();
@@ -32,7 +49,7 @@ const Login = () => {
 
   useEffect(() => {
     setErrMsg("");
-  }, [email, pwd]);
+  }, [formData.email, formData.password]);
 
   const decodeAccessToken = (token) => {
     try {
@@ -49,22 +66,17 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ email, password: pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(LOGIN_URL, JSON.stringify(formData), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
       // console.log(JSON.stringify(response?.data));
       const accessToken = response?.data?.access_token;
       const decodedToken = decodeAccessToken(accessToken);
       // const roles = response?.data?.roles
       setAuth({ accessToken });
       localStorage.setItem("auth", JSON.stringify({ accessToken }));
-      setEmail("");
-      setPwd("");
+      resetFormData();
       const user = {
         email: decodedToken.email,
         name: decodedToken.name,
@@ -87,7 +99,6 @@ const Login = () => {
       } else {
         setErrMsg("Login Failed");
       }
-      errRef.current.focus();
     } finally {
       setLoading(false);
     }
@@ -112,8 +123,7 @@ const Login = () => {
       // const roles = response?.data?.roles
       setAuth({ accessToken });
       localStorage.setItem("auth", JSON.stringify({ accessToken }));
-      setEmail("");
-      setPwd("");
+      resetFormData();
       const user = {
         email: decodedToken.email,
         name: decodedToken.name,
@@ -136,7 +146,6 @@ const Login = () => {
       } else {
         setErrMsg("Login Failed");
       }
-      errRef.current.focus();
     } finally {
       setLoading(false);
     }
@@ -151,15 +160,10 @@ const Login = () => {
 
   return (
     <Container className="d-flex justify-content-center login-container">
+      <Alert variant="danger" show={errMsg !== ""} role="alert">
+        {errMsg}
+      </Alert>
       <section className="login-section mb-0">
-        <Alert
-          ref={errRef}
-          variant={errMsg ? "danger" : "secondary"}
-          className={errMsg ? "" : "offscreen"}
-          role="alert"
-        >
-          {errMsg}
-        </Alert>
         <span className="form-header">
           <RiShoppingCartLine className="navbar-icon" /> ShopSurfer
         </span>
@@ -167,10 +171,11 @@ const Login = () => {
           <Form.Group controlId="username">
             <Form.Control
               type="text"
+              name="email"
               ref={emailRef}
               autoComplete="off"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              onChange={handleChange}
+              value={formData.email}
               required
               placeholder="Email"
             />
@@ -178,8 +183,9 @@ const Login = () => {
           <Form.Group controlId="password">
             <Form.Control
               type="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
+              name="password"
+              onChange={handleChange}
+              value={formData.password}
               required
               placeholder="Password"
             />

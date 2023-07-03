@@ -66,7 +66,7 @@ const Product = ({ prod }) => {
               />
             )}
           </Button>
-        ) : (
+        ) : prod.in_stock ? (
           <Button
             onClick={() =>
               handleAction({
@@ -74,7 +74,7 @@ const Product = ({ prod }) => {
                 payload: prod,
               })
             }
-            disabled={!prod.in_stock || loading}
+            disabled={loading}
             className="mt-3"
           >
             Add to Cart{"  "}
@@ -88,6 +88,10 @@ const Product = ({ prod }) => {
               />
             )}
           </Button>
+        ) : (
+          <div style={{ color: "#e92c2c", fontWeight: "bold" }}>
+            Out of Stock
+          </div>
         )}
       </Card.Body>
     </Card>

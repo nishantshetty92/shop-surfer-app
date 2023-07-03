@@ -8,8 +8,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import jwt_decode from "jwt-decode";
-import "./Register.css";
 import Spinner from "react-bootstrap/Spinner";
+import "./Register.css";
 
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -24,27 +24,31 @@ const Register = () => {
   const from = location.state?.from?.pathname || "/";
 
   const emailRef = useRef();
-  const errRef = useRef();
-  const successRef = useRef();
+  // const errRef = useRef();
+  // const successRef = useRef();
 
-  const [email, setEmail] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    phone: "",
+    firstName: "",
+    lastName: "",
+    pwd: "",
+    matchPwd: "",
+  });
+
   const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
 
-  const [phone, setPhone] = useState("");
+  const [validFirstName, setValidFirstName] = useState(false);
+
   const [validPhone, setValidPhone] = useState(false);
   const [phoneFocus, setPhoneFocus] = useState(false);
 
-  const [pwd, setPwd] = useState("");
   const [validPwd, setValidPwd] = useState(false);
   const [pwdFocus, setPwdFocus] = useState(false);
 
-  const [matchPwd, setMatchPwd] = useState("");
   const [validMatch, setValidMatch] = useState(false);
   const [matchFocus, setMatchFocus] = useState(false);
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
 
   const [successMsg, setSuccessMsg] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -56,23 +60,49 @@ const Register = () => {
   }, []);
 
   useEffect(() => {
-    setValidEmail(EMAIL_REGEX.test(email));
-  }, [email]);
+    setValidEmail(EMAIL_REGEX.test(formData.email));
+  }, [formData.email]);
 
   useEffect(() => {
-    setValidPhone(PHONE_REGEX.test(phone));
-  }, [phone]);
+    setValidPhone(PHONE_REGEX.test(formData.phone));
+  }, [formData.phone]);
 
   useEffect(() => {
-    setValidPwd(PWD_REGEX.test(pwd));
-    setValidMatch(pwd === matchPwd);
-  }, [pwd, matchPwd]);
+    setValidFirstName(formData.firstName?.length > 2);
+  }, [formData.firstName]);
 
   useEffect(() => {
-    // setSuccessMsg("");
-    // setErrMsg("");
-    setShowResend(false);
-  }, [email, pwd, matchPwd, phone]);
+    setValidPwd(PWD_REGEX.test(formData.pwd));
+    setValidMatch(formData.pwd === formData.matchPwd);
+  }, [formData.pwd, formData.matchPwd]);
+
+  // useEffect(() => {
+
+  // }, [formData.email, formData.pwd, formData.matchPwd, formData.phone]);
+
+  const resetFormData = () => {
+    setFormData({
+      email: "",
+      phone: "",
+      firstName: "",
+      lastName: "",
+      pwd: "",
+      matchPwd: "",
+    });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (["email", "pwd", "matchPwd", "phone"].includes(name)) {
+      setSuccessMsg("");
+      setErrMsg("");
+      setShowResend(false);
+    }
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   const decodeAccessToken = (token) => {
     try {
@@ -90,9 +120,9 @@ const Register = () => {
     e.preventDefault();
     setLoading(true);
     // if button enabled with JS hack
-    const v1 = EMAIL_REGEX.test(email);
-    const v2 = PWD_REGEX.test(pwd);
-    const v3 = PHONE_REGEX.test(phone);
+    const v1 = EMAIL_REGEX.test(formData.email);
+    const v2 = PWD_REGEX.test(formData.pwd);
+    const v3 = PHONE_REGEX.test(formData.phone);
     if (!v1 || !v2 || !v3) {
       setErrMsg("Invalid Entry");
       return;
@@ -100,7 +130,7 @@ const Register = () => {
     try {
       const response = await axios.post(
         REGISTER_URL,
-        JSON.stringify({ email, pwd, phone, firstName, lastName }),
+        JSON.stringify(formData),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -110,12 +140,7 @@ const Register = () => {
       console.log(JSON.stringify(response?.data));
       //console.log(JSON.stringify(response))
       //clear state and controlled inputs
-      setEmail("");
-      setPwd("");
-      setMatchPwd("");
-      setPhone("");
-      setFirstName("");
-      setLastName("");
+      resetFormData();
       setSuccessMsg(
         "We have sent you an email. Please click on the verification link to activate your account."
       );
@@ -130,7 +155,6 @@ const Register = () => {
       } else {
         setErrMsg("Registration Failed");
       }
-      errRef.current.focus();
     } finally {
       setLoading(false);
     }
@@ -141,9 +165,9 @@ const Register = () => {
     try {
       setSuccessMsg("");
       setErrMsg("");
-      if (email) {
+      if (formData?.email) {
         const response = await axios.post("/user/resend/register/", {
-          email,
+          email: formData.email,
         });
         setSuccessMsg(response?.data?.message);
       }
@@ -199,7 +223,6 @@ const Register = () => {
       } else {
         setErrMsg("Login Failed");
       }
-      errRef.current.focus();
     } finally {
       setLoading(false);
     }
@@ -214,23 +237,13 @@ const Register = () => {
 
   return (
     <Container className="d-flex justify-content-center register-container">
+      <Alert variant="success" show={successMsg !== ""} role="alert">
+        {successMsg}
+      </Alert>
+      <Alert variant="danger" show={errMsg !== ""} role="alert">
+        {errMsg}
+      </Alert>
       <section className="register-section">
-        <Alert
-          ref={successRef}
-          variant={successMsg ? "success" : "secondary"}
-          className={successMsg ? "" : "offscreen"}
-          role="alert"
-        >
-          {successMsg}
-        </Alert>
-        <Alert
-          ref={errRef}
-          variant={errMsg ? "danger" : "secondary"}
-          className={errMsg ? "" : "offscreen"}
-          role="alert"
-        >
-          {errMsg}
-        </Alert>
         <h1 className="form-header">
           <RiShoppingCartLine className="navbar-icon" /> ShopSurfer
         </h1>
@@ -238,19 +251,20 @@ const Register = () => {
           <Form.Group controlId="email">
             <Form.Control
               type="text"
+              name="email"
               ref={emailRef}
               autoComplete="off"
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              onChange={handleChange}
+              value={formData.email}
               required
               isValid={validEmail}
-              isInvalid={!validEmail && email}
+              isInvalid={!validEmail && formData.email}
               onFocus={() => setEmailFocus(true)}
               onBlur={() => setEmailFocus(false)}
               placeholder="Email"
               className="mb-3"
             />
-            {emailFocus && email && !validEmail && (
+            {emailFocus && formData.email && !validEmail && (
               <p className="instructions">
                 <FontAwesomeIcon icon={faInfoCircle} /> Must be a valid email
                 address
@@ -260,17 +274,18 @@ const Register = () => {
           <Form.Group controlId="phone">
             <Form.Control
               type="phone"
-              onChange={(e) => setPhone(e.target.value)}
-              value={phone}
+              name="phone"
+              onChange={handleChange}
+              value={formData.phone}
               required
               isValid={validPhone}
-              isInvalid={!validPhone && phone}
+              isInvalid={!validPhone && formData.phone}
               onFocus={() => setPhoneFocus(true)}
               onBlur={() => setPhoneFocus(false)}
               className="mb-3"
               placeholder="Mobile Number"
             />
-            {phoneFocus && phone && !validPhone && (
+            {phoneFocus && formData.phone && !validPhone && (
               <p className="instructions">
                 <FontAwesomeIcon icon={faInfoCircle} /> Must be a valid mobile
                 number
@@ -282,8 +297,11 @@ const Register = () => {
             <Col>
               <Form.Control
                 type="text"
-                onChange={(e) => setFirstName(e.target.value)}
-                value={firstName}
+                name="firstName"
+                onChange={handleChange}
+                value={formData.firstName}
+                isValid={validFirstName}
+                isInvalid={!validFirstName && formData.firstName}
                 className="mb-3"
                 placeholder="First Name"
                 required
@@ -292,8 +310,9 @@ const Register = () => {
             <Col>
               <Form.Control
                 type="text"
-                onChange={(e) => setLastName(e.target.value)}
-                value={lastName}
+                name="lastName"
+                onChange={handleChange}
+                value={formData.lastName}
                 className="mb-3"
                 placeholder="Last Name"
               />
@@ -303,11 +322,12 @@ const Register = () => {
           <Form.Group controlId="password">
             <Form.Control
               type="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
+              name="pwd"
+              onChange={handleChange}
+              value={formData.pwd}
               required
               isValid={validPwd}
-              isInvalid={!validPwd && pwd}
+              isInvalid={!validPwd && formData.pwd}
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
               placeholder="Password"
@@ -333,11 +353,12 @@ const Register = () => {
           <Form.Group controlId="confirm_pwd">
             <Form.Control
               type="password"
-              onChange={(e) => setMatchPwd(e.target.value)}
-              value={matchPwd}
+              name="matchPwd"
+              onChange={handleChange}
+              value={formData.matchPwd}
               required
-              isValid={validMatch && matchPwd !== ""}
-              isInvalid={!validMatch && matchPwd}
+              isValid={validMatch && formData.matchPwd !== ""}
+              isInvalid={!validMatch && formData.matchPwd}
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
               placeholder="Confirm Password"
@@ -359,6 +380,7 @@ const Register = () => {
               !validPwd ||
               !validMatch ||
               !validPhone ||
+              !validFirstName ||
               showResend ||
               loading
             }

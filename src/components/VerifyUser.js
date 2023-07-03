@@ -172,8 +172,9 @@ const VerifyUser = () => {
         </Card>
         <Alert
           variant={alertStatus === "error" ? "danger" : "success"}
-          className={alertMessage ? "alert-message mt-4" : "offscreen"}
+          className="alert-message mt-4"
           role="alert"
+          show={alertMessage !== ""}
         >
           {alertMessage}
         </Alert>
