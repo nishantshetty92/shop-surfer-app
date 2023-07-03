@@ -1,0 +1,11 @@
+.itemLoading {
+  /* background-color: rgb(236, 233, 233) !important; */
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.cartItem,
+.cartSelect,
+.cartCheck {
+  cursor: pointer;
+}
