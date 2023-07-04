@@ -6,6 +6,7 @@ import {
   FormControl,
   Dropdown,
   Badge,
+  Image,
 } from "react-bootstrap";
 import { RiShoppingCartLine, RiUserLine, RiStore2Line } from "react-icons/ri";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -32,8 +33,8 @@ const Header = () => {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Navbar.Brand className="d-flex align-items-center" as={Link} to="/">
-        <RiShoppingCartLine className="navbar-icon" />
-        <span className="ml-2">ShopSurfer</span>
+        <RiShoppingCartLine />
+        <span className="ml-1">ShopSurfer</span>
       </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -58,10 +59,12 @@ const Header = () => {
             as={Link}
             to="/products"
           >
-            <RiStore2Line className="navbar-icon" />
+            <RiStore2Line />
             <span className="link-text ml-1">Products</span>
           </Nav.Link>
+        </Nav>
 
+        <Nav className="align-items-center">
           {user?.email ? (
             <Dropdown>
               <Dropdown.Toggle
@@ -69,7 +72,18 @@ const Header = () => {
                 id="profile-dropdown"
                 className="d-flex align-items-center"
               >
-                <RiUserLine className="mr-1" />
+                {user?.image ? (
+                  <Image
+                    src={user.image}
+                    alt="Profile Picture"
+                    roundedCircle
+                    className="mr-1"
+                    style={{ width: "24px", height: "24px" }}
+                  />
+                ) : (
+                  <RiUserLine className="mr-1" />
+                )}
+
                 <span className="link-text">{user?.name}</span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -85,13 +99,10 @@ const Header = () => {
               as={Link}
               to="/login"
             >
-              <RiUserLine className="navbar-icon" />
+              <RiUserLine />
               <span className="link-text ml-1">Sign In</span>
             </Nav.Link>
           )}
-        </Nav>
-
-        <Nav className="align-items-center">
           <Nav.Link className="d-flex align-items-center" as={Link} to="/cart">
             <RiShoppingCartLine />
             <span className="link-text ml-1 mr-1">Cart</span>

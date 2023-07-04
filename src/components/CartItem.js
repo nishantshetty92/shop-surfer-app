@@ -20,7 +20,7 @@ const CartItem = ({ cartItem, updateItem, disableAll }) => {
   return (
     <ListGroup.Item disabled={loading || disableAll} className={cartItemClass}>
       <Row>
-        <Col md={1}>
+        <Col md={1} className="text-center">
           <Form.Check
             type="checkbox"
             checked={cartItem.is_selected}
@@ -44,13 +44,13 @@ const CartItem = ({ cartItem, updateItem, disableAll }) => {
             rounded
           />
         </Col>
-        <Col md={2}>
+        <Col md={4}>
           <span>{cartItem.product.name}</span>
         </Col>
         <Col md={2}>₹ {cartItem.product.price}</Col>
-        <Col md={2}>
+        {/* <Col md={2}>
           <Rating rating={cartItem.product.rating} onClick={() => {}} />
-        </Col>
+        </Col> */}
         <Col md={2}>
           <Form.Control
             as="select"

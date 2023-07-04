@@ -80,6 +80,7 @@ const Login = () => {
       const user = {
         email: decodedToken.email,
         name: decodedToken.name,
+        image: decodedToken.image,
         phoneNumber: decodedToken.phone_number,
         newLogin: true,
       };
@@ -127,6 +128,7 @@ const Login = () => {
       const user = {
         email: decodedToken.email,
         name: decodedToken.name,
+        image: decodedToken.image,
         phoneNumber: decodedToken.phone_number,
         newLogin: true,
       };

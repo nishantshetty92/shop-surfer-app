@@ -46,6 +46,7 @@ const CartList = () => {
   }, [cart]);
   return (
     <>
+      <h3>Shopping Cart</h3>
       {cart?.length > 0 && (
         <span>
           {cart.filter((item) => item.is_selected).length === 0 && (
@@ -66,7 +67,7 @@ const CartList = () => {
         </span>
       )}
 
-      <ListGroup>
+      <ListGroup className="cart">
         {cart?.length === 0 ? (
           <ListGroup.Item>
             <Col className="text-center">Your Cart Is Empty!</Col>

@@ -204,6 +204,7 @@ const Register = () => {
       const user = {
         email: decodedToken.email,
         name: decodedToken.name,
+        image: decodedToken.image,
         phoneNumber: decodedToken.phone_number,
         newLogin: true,
       };
@@ -212,6 +213,7 @@ const Register = () => {
       setLoginType("google");
       navigate(from, { replace: true });
     } catch (err) {
+      setSuccessMsg("");
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 400) {

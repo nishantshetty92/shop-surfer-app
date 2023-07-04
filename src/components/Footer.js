@@ -1,4 +1,5 @@
 import { Container, Row, Col } from "react-bootstrap";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -9,28 +10,34 @@ const Footer = () => {
             {/* Add padding class p-3 */}
             <h5>About</h5>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse condimentum magna eget lacinia commodo.
+              Welcome to ShopSurfer! Shop with confidence and enjoy a seamless
+              experience from start to finish. Happy shopping with us!
             </p>
           </Col>
           <Col className="text-center p-3">
             {/* Add padding class p-3 */}
             <h5>Contact</h5>
-            <p>Email: info@example.com</p>
-            <p>Phone: 123-456-7890</p>
+            <p>Email: info@shopsurfer.com</p>
+            <p>Phone: +919833166313</p>
           </Col>
           <Col className="text-center p-3">
             {/* Add padding class p-3 */}
             <h5>Follow Us</h5>
-            <ul className="list-unstyled">
-              <li>
-                <a href="#">Facebook</a>
+            <ul className="list-inline">
+              <li className="list-inline-item">
+                <a href="#">
+                  <FaTwitter size={20} style={{ color: "white" }} />
+                </a>
               </li>
-              <li>
-                <a href="#">Twitter</a>
+              <li className="list-inline-item">
+                <a href="#">
+                  <FaInstagram size={20} style={{ color: "white" }} />
+                </a>
               </li>
-              <li>
-                <a href="#">Instagram</a>
+              <li className="list-inline-item">
+                <a href="#">
+                  <FaLinkedin size={20} style={{ color: "white" }} />
+                </a>
               </li>
             </ul>
           </Col>
