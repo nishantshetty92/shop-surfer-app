@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 
-import { ListGroup } from "react-bootstrap";
+import { ListGroup, Col } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 
 import useAuth from "../hooks/useAuth";
@@ -36,16 +36,11 @@ const CartList = () => {
   };
 
   useEffect(() => {
-    const selectedCount = cart.reduce(
-      (acc, cartItem) => (cartItem.is_selected ? acc + 1 : acc),
-      0
-    );
+    const selectedCount = cart.filter((item) => item.is_selected).length;
 
     if (selectedCount !== cart.length) {
       setSelectAll(true);
-    } else if (selectedCount === cart.length) {
-      setSelectAll(false);
-    } else if (selectedCount === 0) {
+    } else if (selectedCount === cart.length || selectedCount === 0) {
       setSelectAll(false);
     }
   }, [cart]);
@@ -53,10 +48,9 @@ const CartList = () => {
     <>
       {cart?.length > 0 && (
         <span>
-          {cart.reduce(
-            (acc, cartItem) => (cartItem.is_selected ? acc + 1 : acc),
-            0
-          ) === 0 && <span>No items selected. </span>}
+          {cart.filter((item) => item.is_selected).length === 0 && (
+            <span>No items selected. </span>
+          )}
           <a href="#" onClick={updateSelectAll}>
             {selectAll ? "Select All" : "Deselect All"}
           </a>{" "}
@@ -74,7 +68,9 @@ const CartList = () => {
 
       <ListGroup>
         {cart?.length === 0 ? (
-          <span>Cart is empty!</span>
+          <ListGroup.Item>
+            <Col className="text-center">Your Cart Is Empty!</Col>
+          </ListGroup.Item>
         ) : (
           cart.map((cartItem) => (
             <CartItem
