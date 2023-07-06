@@ -19,7 +19,7 @@ const ProductList = () => {
 
     const getProducts = async () => {
       try {
-        const response = await axios.get("/api/products/2/", {
+        const response = await axios.get("/api/products/1/", {
           signal: controller.signal,
         });
         setLoading(false);
