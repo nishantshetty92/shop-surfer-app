@@ -1,6 +1,6 @@
 import axios from "axios";
 // const BASE_URL = "http://localhost:8000";
-const BASE_URL = "https://ec2-65-2-128-166.ap-south-1.compute.amazonaws.com";
+const BASE_URL = "/api";
 
 export default axios.create({
   baseURL: BASE_URL,
