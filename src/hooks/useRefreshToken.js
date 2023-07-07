@@ -24,7 +24,7 @@ const useRefreshToken = () => {
       return response.data.accessToken;
     } catch (err) {
       if (err?.response?.status === 401) {
-        logOut();
+        // logOut();
       }
     }
   };

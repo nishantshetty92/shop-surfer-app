@@ -87,7 +87,7 @@ const Login = () => {
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
       setLoginType("regular");
-      navigate(from, { replace: true });
+      navigate(from, { state: { from: location }, replace: true });
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -135,7 +135,7 @@ const Login = () => {
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
       setLoginType("google");
-      navigate(from, { replace: true });
+      navigate(from, { state: { from: location }, replace: true });
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");

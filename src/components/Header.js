@@ -20,7 +20,6 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const logOut = useLogout();
-  const currentPage = window.location.pathname;
 
   const signOut = async () => {
     // if used in more components, this should be in context
@@ -28,7 +27,7 @@ const Header = () => {
     await logOut();
     loginType === "google" && googleLogout();
     setLoginType(null);
-    navigate("/login", { state: { location }, replace: true });
+    navigate("/login", { state: { from: location }, replace: true });
   };
 
   return (
@@ -41,7 +40,7 @@ const Header = () => {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto align-items-center">
-          {currentPage === "/products" && (
+          {location?.pathname === "/products" && (
             <Form className="d-flex">
               <FormControl
                 type="search"

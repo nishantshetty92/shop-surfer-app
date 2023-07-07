@@ -3,8 +3,7 @@ import useAuth from "./useAuth";
 import useAxiosPrivate from "./useAxiosPrivate";
 
 const useAddressPicker = () => {
-  const { user, setUser, addressList, setAddressList, cartDispatch } =
-    useAuth();
+  const { user, setUser, addressList, setAddressList } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const location = useLocation();
 
@@ -14,7 +13,7 @@ const useAddressPicker = () => {
     if (!auth?.accessToken && user?.email) {
       console.log("CHECKOUT SESSION EXPIRED");
       setUser({});
-      cartDispatch({ type: "RESET_CART" });
+
       navigate("/login", { state: { from: location }, replace: true });
     } else {
       return true;
@@ -25,6 +24,7 @@ const useAddressPicker = () => {
   const handleUnauthorized = (navigate) => {
     localStorage.removeItem("auth");
     localStorage.removeItem("user");
+    localStorage.removeItem("cart");
     isLogged(navigate);
   };
 

@@ -21,10 +21,10 @@ import "./Checkout.css";
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const from = location.state?.from?.pathname;
 
-  const { cart, cartDispatch, addressList, user, setUser } = useAuth();
+  const { cart, addressList, user, setUser } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const [selectCount, setSelectCount] = useState(0);
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const getCartData = useCartData();
@@ -35,7 +35,6 @@ const Checkout = () => {
     if (!auth?.accessToken && user?.email) {
       console.log("CHECKOUT SESSION EXPIRED");
       setUser({});
-      cartDispatch({ type: "RESET_CART" });
       navigate("/login", { state: { from: location }, replace: true });
     } else {
       return true;
@@ -46,14 +45,16 @@ const Checkout = () => {
   const handleUnauthorized = () => {
     localStorage.removeItem("auth");
     localStorage.removeItem("user");
+    localStorage.removeItem("cart");
     isLogged();
   };
 
   useEffect(() => {
-    const selectCount = cart.filter((item) => item.is_selected).length;
-    setSelectCount(selectCount);
-    selectCount === 0 && navigate("/cart", { replace: true });
-  }, []);
+    console.log("CHECKOUT");
+    const selectedCount = cart.filter((item) => item.is_selected).length;
+    console.log(from);
+    selectedCount === 0 && navigate("/cart", { replace: true });
+  }, [cart]);
 
   const subTotal = cart.reduce(
     (acc, item) =>
@@ -134,7 +135,7 @@ const Checkout = () => {
         </Navbar.Brand>
       </Navbar>
       <Container className="mt-3">
-        {selectCount === 0 ? (
+        {cart.filter((item) => item.is_selected).length === 0 ? (
           <Col lg={8} md={12}>
             <Spinner
               as="span"
