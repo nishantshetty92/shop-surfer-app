@@ -22,7 +22,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { cart, addressList, user } = useAuth();
+  const { cart, cartDispatch, addressList, user, setUser } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [selectCount, setSelectCount] = useState(0);
   const [errMsg, setErrMsg] = useState("");
@@ -34,6 +34,8 @@ const Checkout = () => {
 
     if (!auth?.accessToken && user?.email) {
       console.log("CHECKOUT SESSION EXPIRED");
+      setUser({});
+      cartDispatch({ type: "RESET_CART" });
       navigate("/login", { state: { from: location }, replace: true });
     } else {
       return true;
@@ -43,6 +45,7 @@ const Checkout = () => {
 
   const handleUnauthorized = () => {
     localStorage.removeItem("auth");
+    localStorage.removeItem("user");
     isLogged();
   };
 

@@ -23,6 +23,7 @@ const useCartData = () => {
   const handleUnauthorized = () => {
     console.log("HANDLEUNAUTHORIZED");
     localStorage.removeItem("auth");
+    localStorage.removeItem("user");
     isLogged();
   };
 
