@@ -20,6 +20,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const logOut = useLogout();
+  const currentPage = window.location.pathname;
 
   const signOut = async () => {
     // if used in more components, this should be in context
@@ -40,20 +41,22 @@ const Header = () => {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto align-items-center">
-          <Form className="d-flex">
-            <FormControl
-              type="search"
-              placeholder="Search products"
-              className="mr-2"
-              aria-label="Search"
-              onChange={(e) => {
-                filterDispatch({
-                  type: "FILTER_BY_SEARCH",
-                  payload: e.target.value,
-                });
-              }}
-            />
-          </Form>
+          {currentPage === "/products" && (
+            <Form className="d-flex">
+              <FormControl
+                type="search"
+                placeholder="Search products"
+                className="mr-2"
+                aria-label="Search"
+                onChange={(e) => {
+                  filterDispatch({
+                    type: "FILTER_BY_SEARCH",
+                    payload: e.target.value,
+                  });
+                }}
+              />
+            </Form>
+          )}
           <Nav.Link
             className="d-flex align-items-center"
             as={Link}
