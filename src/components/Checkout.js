@@ -10,7 +10,8 @@ import {
   Navbar,
 } from "react-bootstrap";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { useLocation, useNavigate } from "react-router-dom";
+import { BsArrowLeftSquare } from "react-icons/bs";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useCartData from "../hooks/useCartData";
@@ -21,9 +22,8 @@ import "./Checkout.css";
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname;
 
-  const { cart, addressList, user, setUser } = useAuth();
+  const { cart, addressList, user, setAddressList, cleanData } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,7 +34,7 @@ const Checkout = () => {
 
     if (!auth?.accessToken && user?.email) {
       console.log("CHECKOUT SESSION EXPIRED");
-      setUser({});
+      setAddressList([]);
       navigate("/login", { state: { from: location }, replace: true });
     } else {
       return true;
@@ -43,16 +43,13 @@ const Checkout = () => {
   };
 
   const handleUnauthorized = () => {
-    localStorage.removeItem("auth");
-    localStorage.removeItem("user");
-    localStorage.removeItem("cart");
+    cleanData();
     isLogged();
   };
 
   useEffect(() => {
     console.log("CHECKOUT");
     const selectedCount = cart.filter((item) => item.is_selected).length;
-    console.log(from);
     selectedCount === 0 && navigate("/cart", { replace: true });
   }, [cart]);
 
@@ -130,6 +127,9 @@ const Checkout = () => {
   return (
     <div className="page-container">
       <Navbar bg="dark" variant="dark" className="navbar-container">
+        <Navbar.Brand className="d-flex" as={Link} to="/cart">
+          <BsArrowLeftSquare />
+        </Navbar.Brand>
         <Navbar.Brand className="mx-auto">
           <RiShoppingCartLine className="navbar-icon" /> Checkout
         </Navbar.Brand>

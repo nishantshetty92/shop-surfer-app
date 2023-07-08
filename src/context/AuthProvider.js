@@ -2,6 +2,7 @@ import { createContext, useReducer, useState, useEffect } from "react";
 import { cartReducer, productReducer } from "./Reducers";
 
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useCleanData from "../hooks/useCleanData";
 
 const AuthContext = createContext({});
 
@@ -29,6 +30,7 @@ export const AuthProvider = ({ children }) => {
   const [loginType, setLoginType] = useState(null);
 
   const axiosPrivate = useAxiosPrivate();
+  const cleanData = useCleanData();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,6 +105,7 @@ export const AuthProvider = ({ children }) => {
         filterDispatch,
         addressList,
         setAddressList,
+        cleanData,
       }}
     >
       {children}

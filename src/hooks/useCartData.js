@@ -2,8 +2,7 @@ import useAuth from "./useAuth";
 import useAxiosPrivate from "./useAxiosPrivate";
 
 const useCartData = () => {
-  // const { auth, cartDispatch } = useAuth();
-  const { cartDispatch, user, setUser } = useAuth();
+  const { cartDispatch, user, setUser, cleanData } = useAuth();
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -22,8 +21,7 @@ const useCartData = () => {
 
   const handleUnauthorized = () => {
     console.log("HANDLEUNAUTHORIZED");
-    localStorage.removeItem("auth");
-    localStorage.removeItem("user");
+    cleanData();
     isLogged();
   };
 

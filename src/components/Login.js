@@ -74,7 +74,7 @@ const Login = () => {
       const accessToken = response?.data?.access_token;
       const decodedToken = decodeAccessToken(accessToken);
       // const roles = response?.data?.roles
-      setAuth({ accessToken });
+      // setAuth({ accessToken });
       localStorage.setItem("auth", JSON.stringify({ accessToken }));
       resetFormData();
       const user = {
@@ -122,7 +122,7 @@ const Login = () => {
       const accessToken = response?.data?.access_token;
       const decodedToken = decodeAccessToken(accessToken);
       // const roles = response?.data?.roles
-      setAuth({ accessToken });
+      // setAuth({ accessToken });
       localStorage.setItem("auth", JSON.stringify({ accessToken }));
       resetFormData();
       const user = {
