@@ -61,6 +61,7 @@ const Product = ({ prod }) => {
                   })
                 }
                 disabled={loading}
+                style={{ cursor: "pointer" }}
               >
                 {[...Array(cartItem.product.quantity)].map((_, x) => (
                   <option key={x + 1}>{x + 1}</option>

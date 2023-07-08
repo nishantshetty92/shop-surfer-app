@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
+
+const PHONE_REGEX = /^[789]\d{9}$/;
+const PIN_REGEX = /^\d{6}$/;
 
 const AddressModal = ({
   show,
@@ -11,6 +14,24 @@ const AddressModal = ({
   action,
 }) => {
   const [loading, setLoading] = useState(false);
+
+  const [validFullName, setValidFullName] = useState(false);
+  const [validPhone, setValidPhone] = useState(false);
+  const [validPinCode, setValidPinCode] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
+
+  useEffect(() => {
+    setValidFullName(formData.full_name?.length > 2);
+  }, [formData.full_name]);
+
+  useEffect(() => {
+    setValidPhone(PHONE_REGEX.test(formData.mobile_number));
+  }, [formData.mobile_number]);
+
+  useEffect(() => {
+    setValidPinCode(PIN_REGEX.test(formData.pin_code));
+  }, [formData.pin_code]);
+
   const resetFormData = () => {
     setFormData({
       full_name: "",
@@ -35,6 +56,14 @@ const AddressModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // if button enabled with JS hack
+    const v1 = formData.full_name?.length > 2;
+    const v2 = PHONE_REGEX.test(formData.mobile_number);
+    const v3 = PIN_REGEX.test(formData.pin_code);
+    if (!v1 || !v2 || !v3) {
+      setErrMsg("Invalid Entry");
+      return;
+    }
     console.log(JSON.stringify(formData));
     // Handle form submission logic here
     await submitAddress(formData, action);
@@ -100,6 +129,8 @@ const AddressModal = ({
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
+              isValid={validFullName}
+              isInvalid={!validFullName && formData.full_name}
               required
             />
           </Form.Group>
@@ -113,6 +144,9 @@ const AddressModal = ({
               name="mobile_number"
               value={formData.mobile_number}
               onChange={handleChange}
+              placeholder="9 digit mobile number"
+              isValid={validPhone}
+              isInvalid={!validPhone && formData.mobile_number}
               required
             />
           </Form.Group>
@@ -127,6 +161,8 @@ const AddressModal = ({
               value={formData.pin_code}
               onChange={handleChange}
               placeholder="6 digits [0-9] PIN code"
+              isValid={validPinCode}
+              isInvalid={!validPinCode && formData.pin_code}
               required
             />
           </Form.Group>
@@ -196,7 +232,14 @@ const AddressModal = ({
           </Row>
 
           <div className="mt-4 d-flex justify-content-end">
-            <Button variant="primary" type="submit" className="mr-2">
+            <Button
+              variant="primary"
+              type="submit"
+              className="mr-2"
+              disabled={
+                !validFullName || !validPhone || !validPinCode || loading
+              }
+            >
               Use Address{" "}
               {loading && (
                 <Spinner
