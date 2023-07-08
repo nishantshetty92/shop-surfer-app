@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Form, Col, Row } from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
 import Rating from "./Rating";
@@ -11,6 +11,8 @@ const Product = ({ prod }) => {
   const [loading, setLoading] = useState(false);
 
   const getCartData = useCartData();
+
+  const cartItem = cart.find((cartItem) => cartItem.product.id === prod.id);
 
   const handleAction = async (cartAction) => {
     setLoading(true);
@@ -43,29 +45,52 @@ const Product = ({ prod }) => {
             style={{ cursor: "pointer" }}
           />
         </Card.Subtitle>
-        {cart.some((cartItem) => cartItem.product.id === prod.id) ? (
-          <Button
-            variant="danger"
-            onClick={() =>
-              handleAction({
-                type: "REMOVE_FROM_CART",
-                payload: [prod.id],
-              })
-            }
-            className="mt-3"
-            disabled={loading}
-          >
-            Remove from Cart{"  "}
-            {loading && (
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />
-            )}
-          </Button>
+        {cartItem?.product?.id === prod.id ? (
+          <Row className="mt-3">
+            <Col className="pr-0">
+              <Form.Control
+                as="select"
+                value={cartItem.quantity}
+                onChange={(e) =>
+                  handleAction({
+                    type: "CHANGE_CART_QTY",
+                    payload: {
+                      id: cartItem.product.id,
+                      quantity: e.target.value,
+                    },
+                  })
+                }
+                disabled={loading}
+              >
+                {[...Array(cartItem.product.quantity)].map((_, x) => (
+                  <option key={x + 1}>{x + 1}</option>
+                ))}
+              </Form.Control>
+            </Col>
+            <Col>
+              <Button
+                variant="danger"
+                onClick={() =>
+                  handleAction({
+                    type: "REMOVE_FROM_CART",
+                    payload: [prod.id],
+                  })
+                }
+                disabled={loading}
+              >
+                Remove{"  "}
+                {loading && (
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                )}
+              </Button>
+            </Col>
+          </Row>
         ) : prod.in_stock ? (
           <Button
             onClick={() =>
