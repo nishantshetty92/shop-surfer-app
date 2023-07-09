@@ -100,6 +100,8 @@ const Header = () => {
               className="d-flex align-items-center"
               as={Link}
               to="/login"
+              state={{ from: location }}
+              replace={true}
             >
               <RiUserLine />
               <span className="link-text ml-1">Sign In</span>

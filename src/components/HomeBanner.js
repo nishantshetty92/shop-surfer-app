@@ -52,7 +52,7 @@ const HomeBanner = () => {
           <Card className="text-center home-banner">
             <Card.Body>
               <Card.Title>Unleashing The Monster</Card.Title>
-              <Card.Text>Get a look at the latest IPhone 13 Pro</Card.Text>
+              <Card.Text>Checkout the latest IPhone 13 Pro</Card.Text>
               <Button variant="primary" as={Link} to="/products">
                 Buy Now
               </Button>
