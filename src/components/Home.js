@@ -1,15 +1,71 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Col, Row, Button } from "react-bootstrap";
+import { Container, Col, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import useUserLogged from "../hooks/useUserLogged";
 import Spinner from "react-bootstrap/Spinner";
-import "./Category.css";
+import HomeBanner from "./HomeBanner";
+import CategoryCarousel from "./CategoryCarousel";
+import "./Home.css";
 
 const Home = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const isLogged = useUserLogged();
+
+  const topCategories = [
+    {
+      id: 1,
+      name: "Mobiles",
+      slug: "mobiles",
+      items: [
+        { id: 1, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 2, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 3, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 4, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 5, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 6, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 7, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 8, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 9, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 10, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+      ],
+    },
+    {
+      id: 2,
+      name: "Clothing",
+      slug: "clothing",
+      items: [
+        { id: 1, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 2, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 3, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 4, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 5, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 6, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 7, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 8, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 9, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 10, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+      ],
+    },
+    {
+      id: 3,
+      name: "Home Appliances",
+      slug: "home-appliances",
+      items: [
+        { id: 1, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 2, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 3, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 4, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 5, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 6, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 7, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+        { id: 8, name: "Moto G 5", price: 10500, seller: "Motorola" },
+        { id: 9, name: "Samsung Galaxy S3", price: 12500, seller: "Samsung" },
+        { id: 10, name: "IPhone 13 Pro", price: 80000, seller: "Apple" },
+      ],
+    },
+  ];
 
   useEffect(() => {
     isLogged();
@@ -38,20 +94,10 @@ const Home = () => {
   }, []);
 
   return (
-    <>
-      <Container fluid>
-        <Card className="text-center home-banner">
-          <Card.Body>
-            <Card.Title>Welcome to ShopSurfer</Card.Title>
-            <Card.Text>Discover amazing products and shop with ease.</Card.Text>
-            <Button variant="primary" as={Link} to="/products">
-              Shop Now
-            </Button>
-          </Card.Body>
-        </Card>
-      </Container>
-      <Container fluid className="pt-4">
-        {loading ? (
+    <Container fluid className="pt-2 pl-2 pr-2 pb-2">
+      <HomeBanner />
+      {loading ? (
+        <Container fluid className="pt-4">
           <Col className="text-center">
             <Spinner
               as="span"
@@ -60,44 +106,51 @@ const Home = () => {
               role="status"
               aria-hidden="true"
             />{" "}
-            Loading Categories...
+            Loading Top Categories...
           </Col>
-        ) : (
-          <Row>
-            {categories.map((category) => (
-              <Col md={4} key={category.id} className="mb-4">
-                <Card className="category-card">
-                  <div className="category-image-container">
-                    <Card.Img
-                      variant="top"
-                      src={category.image}
-                      alt={category.name}
-                      className="category-image"
-                    />
-                  </div>
-
-                  <Card.Body>
-                    <Card.Title>{category.name}</Card.Title>
-                    {/* <Card.Subtitle style={{ paddingBottom: 10 }}>
-                    <span>₹ {prod.price}</span>
-                  </Card.Subtitle>
-                  <Card.Subtitle>
-                    <span>
-                      <Rating
-                        rating={prod.rating}
-                        onClick={(i) => {}}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </span>
-                  </Card.Subtitle> */}
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        )}
-      </Container>
-    </>
+        </Container>
+      ) : (
+        <Container fluid className="mt-0 p-3">
+          {topCategories.map((category) => (
+            <Container
+              fluid
+              style={{ backgroundColor: "white" }}
+              className="mb-4"
+              key={category?.id}
+            >
+              <Row>
+                <Col md={2} className="border p-0">
+                  <Container
+                    fluid
+                    className="d-flex align-items-center justify-content-center h-100 category-set"
+                  >
+                    <Row>
+                      <Col
+                        className="text-center pt-3 pb-2"
+                        style={{ color: "white" }}
+                      >
+                        <h4>Best of {category?.name}</h4>
+                        <Button
+                          variant="success"
+                          as={Link}
+                          to={`/category/${category?.slug}`}
+                          className="mt-2 view-button"
+                        >
+                          View All
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Col>
+                <Col md={10} className="p-0">
+                  <CategoryCarousel items={category?.items} />
+                </Col>
+              </Row>
+            </Container>
+          ))}
+        </Container>
+      )}
+    </Container>
   );
 };
 

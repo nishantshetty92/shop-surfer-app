@@ -125,7 +125,7 @@ const Checkout = () => {
     }
   };
   return (
-    <div className="page-container">
+    <div className="page-container" style={{ backgroundColor: "#eaeded" }}>
       <Navbar bg="dark" variant="dark" className="navbar-container">
         <Navbar.Brand className="d-flex" as={Link} to="/cart">
           <BsArrowLeftSquare />

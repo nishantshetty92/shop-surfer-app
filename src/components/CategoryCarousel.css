@@ -1,0 +1,11 @@
+.category-carousel {
+  padding-left: 20px;
+}
+
+.category-carousel-item .price {
+  color: green;
+}
+
+.category-carousel-item .seller {
+  color: rgb(100, 96, 96);
+}

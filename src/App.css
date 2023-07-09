@@ -17,6 +17,7 @@ body,
 
 .content-container {
   flex: 1;
+  background-color: #eaeded;
 }
 
 /* .footer-container {
