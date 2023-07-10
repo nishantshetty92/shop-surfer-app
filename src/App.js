@@ -45,7 +45,7 @@ const MainLayout = () => {
       <div className="content-container">
         <Routes>
           <Route path="/" element={<Home />} exact />
-          <Route path="products" element={<Products />} />
+          <Route path="/category/:slug" element={<Products />} />
           <Route path="cart" element={<Cart />} />
 
           <Route element={<RequireAuth />}>

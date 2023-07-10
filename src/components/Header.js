@@ -30,6 +30,11 @@ const Header = () => {
     navigate("/login", { state: { from: location }, replace: true });
   };
 
+  const isCategoryUrl = (str) => {
+    const pattern = /^\/category\/\w+$/; // Example pattern: "/category/value"
+    return pattern.test(str);
+  };
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Navbar.Brand className="d-flex align-items-center" as={Link} to="/">
@@ -40,11 +45,11 @@ const Header = () => {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto align-items-center">
-          {location?.pathname === "/products" && (
+          {isCategoryUrl(location?.pathname) && (
             <Form className="d-flex">
               <FormControl
                 type="search"
-                placeholder="Search products"
+                placeholder="Search"
                 className="mr-2"
                 aria-label="Search"
                 onChange={(e) => {
@@ -59,10 +64,18 @@ const Header = () => {
           <Nav.Link
             className="d-flex align-items-center"
             as={Link}
-            to="/products"
+            to="/category/mobiles"
           >
             <RiStore2Line />
-            <span className="link-text ml-1">Products</span>
+            <span className="link-text ml-1">Mobiles</span>
+          </Nav.Link>
+          <Nav.Link
+            className="d-flex align-items-center"
+            as={Link}
+            to="/category/earphones"
+          >
+            <RiStore2Line />
+            <span className="link-text ml-1">Earphones</span>
           </Nav.Link>
         </Nav>
 

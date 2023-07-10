@@ -3,6 +3,7 @@ import { Container, Col, Row } from "react-bootstrap";
 import Product from "./Product";
 import useAuth from "../hooks/useAuth";
 import Spinner from "react-bootstrap/Spinner";
+import { useParams } from "react-router-dom";
 import axios from "../api/axios";
 
 const ProductList = () => {
@@ -13,13 +14,15 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { slug } = useParams();
+
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
 
     const getProducts = async () => {
       try {
-        const response = await axios.get("/api/products/1/", {
+        const response = await axios.get(`/api/products/${slug}/`, {
           signal: controller.signal,
         });
         setLoading(false);
@@ -36,7 +39,7 @@ const ProductList = () => {
       isMounted = false;
       controller.abort();
     };
-  }, []);
+  }, [slug]);
 
   const transformProducts = () => {
     let sortedProducts = products;

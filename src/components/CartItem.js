@@ -2,6 +2,7 @@ import { ListGroup, Row, Col, Button, Image, Form } from "react-bootstrap";
 import Rating from "./Rating";
 import { AiFillDelete } from "react-icons/ai";
 import { useState } from "react";
+import NumberFormatter from "./NumberFormatter";
 import "./CartItem.css";
 
 const CartItem = ({ cartItem, updateItem, disableAll }) => {
@@ -47,7 +48,9 @@ const CartItem = ({ cartItem, updateItem, disableAll }) => {
         <Col md={4}>
           <span>{cartItem.product.name}</span>
         </Col>
-        <Col md={2}>₹ {cartItem.product.price}</Col>
+        <Col md={2}>
+          ₹ <NumberFormatter number={cartItem.product.price} />
+        </Col>
         {/* <Col md={2}>
           <Rating rating={cartItem.product.rating} onClick={() => {}} />
         </Col> */}

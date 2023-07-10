@@ -5,6 +5,7 @@ import { RiCheckDoubleLine } from "react-icons/ri";
 import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import "./Confirmation.css";
+import NumberFormatter from "./NumberFormatter";
 
 const Confirmation = () => {
   const navigate = useNavigate();
@@ -77,7 +78,9 @@ const Confirmation = () => {
                     </li>
                     <li>
                       <span>Price:</span>
-                      <span>₹ {Number(item.price).toFixed(2)}</span>
+                      <span>
+                        ₹ <NumberFormatter number={item.price} />
+                      </span>
                     </li>
                     <li>
                       <span>Quantity:</span>
@@ -89,7 +92,9 @@ const Confirmation = () => {
 
                 <li>
                   <span>Total:</span>
-                  <span>₹ {orderDetails?.total_amount}</span>
+                  <span>
+                    ₹ <NumberFormatter number={orderDetails?.total_amount} />
+                  </span>
                 </li>
               </ul>
             </Card.Body>

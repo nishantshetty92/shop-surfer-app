@@ -14,3 +14,17 @@
   max-width: 100%;
   object-fit: contain;
 }
+
+.prod-title {
+  font-weight: bold;
+  color: #5f5b5b;
+}
+
+.prod-rating {
+  font-size: 10px !important;
+  font-weight: bold !important;
+  background-color: #388e3c !important;
+  color: white;
+  padding: 4px !important;
+  display: inline;
+}

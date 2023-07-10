@@ -4,6 +4,8 @@ import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
 import Rating from "./Rating";
 import Spinner from "react-bootstrap/Spinner";
+import { FaStar } from "react-icons/fa";
+import NumberFormatter from "./NumberFormatter";
 import "./Product.css";
 
 const Product = ({ prod }) => {
@@ -31,22 +33,30 @@ const Product = ({ prod }) => {
       </div>
 
       <Card.Body>
-        <Card.Title>{prod.name}</Card.Title>
-        <Card.Subtitle style={{ paddingBottom: 10 }}>
-          <span>₹ {prod.price}</span>
-          {prod.fast_delivery ? (
-            <div>Fast Delivery</div>
-          ) : (
-            <div>4 days delivery</div>
-          )}
-          <Rating
-            rating={prod.rating}
-            onClick={(i) => {}}
-            style={{ cursor: "pointer" }}
-          />
+        <Card.Title>
+          <Col fluid className="prod-title pl-0 mb-3 align-items-left">
+            {prod.name}
+          </Col>
+        </Card.Title>
+        <Card.Subtitle>
+          <Col fluid className="pl-0 mb-2 align-items-left">
+            <span>
+              ₹ <NumberFormatter number={prod?.price} />
+            </span>
+            <Button className="prod-rating ml-2">
+              {prod.rating} <FaStar className="mb-1" />
+            </Button>
+          </Col>
+          <Col fluid className="pl-0 mb-3 align-items-left">
+            {prod.fast_delivery ? (
+              <div>Fast Delivery</div>
+            ) : (
+              <div>4 days delivery</div>
+            )}
+          </Col>
         </Card.Subtitle>
         {cartItem?.product?.id === prod.id ? (
-          <Row className="mt-3">
+          <Row>
             <Col className="pr-0">
               <Form.Control
                 as="select"
@@ -101,7 +111,7 @@ const Product = ({ prod }) => {
               })
             }
             disabled={loading}
-            className="mt-3"
+            className="mt-0"
           >
             Add to Cart{"  "}
             {loading && (

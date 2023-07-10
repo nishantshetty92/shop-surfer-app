@@ -2,6 +2,7 @@ import { React } from "react";
 import { Container, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import NumberFormatter from "./NumberFormatter";
 
 const CartTotal = () => {
   const { cart } = useAuth();
@@ -25,7 +26,9 @@ const CartTotal = () => {
       >
         <Card.Body>
           <Card.Title>Subtotal ({subItems}) items</Card.Title>
-          <Card.Text>Total: ₹ {total.toFixed(2)}</Card.Text>
+          <Card.Text>
+            Total: ₹ <NumberFormatter number={total.toFixed(2)} />
+          </Card.Text>
           <Button
             type="button"
             disabled={total === 0}

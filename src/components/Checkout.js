@@ -17,6 +17,7 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useCartData from "../hooks/useCartData";
 import AddressPicker from "./AddressPicker";
 import Spinner from "react-bootstrap/Spinner";
+import NumberFormatter from "./NumberFormatter";
 import "./Checkout.css";
 
 const Checkout = () => {
@@ -180,7 +181,9 @@ const Checkout = () => {
                             <span>{item.product.name}</span>
                             <span>
                               ₹{" "}
-                              {(item.quantity * item.product.price).toFixed(2)}
+                              <NumberFormatter
+                                number={item.quantity * item.product.price}
+                              />
                             </span>
                           </div>
                           <div className="d-flex justify-content-between mb-2">
@@ -194,7 +197,9 @@ const Checkout = () => {
 
                   <div className="d-flex justify-content-between mb-2">
                     <span className="fw-bold">Subtotal:</span>
-                    <span>₹ {subTotal.toFixed(2)}</span>
+                    <span>
+                      ₹ <NumberFormatter number={subTotal} />
+                    </span>
                   </div>
                   <div className="d-flex justify-content-between mb-2">
                     <span className="fw-bold">Tax:</span>
@@ -203,7 +208,9 @@ const Checkout = () => {
                   <hr />
                   <div className="d-flex justify-content-between">
                     <span className="fw-bold">Total:</span>
-                    <span>₹ {total.toFixed(2)}</span>
+                    <span>
+                      ₹ <NumberFormatter number={total} />
+                    </span>
                   </div>
                 </ListGroup.Item>
               </ListGroup>
@@ -216,7 +223,9 @@ const Checkout = () => {
                     <ListGroup.Item>
                       <div className="d-flex justify-content-between">
                         <span>Subtotal:</span>
-                        <span>₹ {subTotal.toFixed(2)}</span>
+                        <span>
+                          ₹ <NumberFormatter number={subTotal} />
+                        </span>
                       </div>
                       <div className="d-flex justify-content-between">
                         <span>Tax:</span>
@@ -225,7 +234,9 @@ const Checkout = () => {
                       <hr />
                       <div className="d-flex justify-content-between">
                         <span className="fw-bold">Total:</span>
-                        <span className="fw-bold">₹ {total.toFixed(2)}</span>
+                        <span className="fw-bold">
+                          ₹ <NumberFormatter number={total} />
+                        </span>
                       </div>
                     </ListGroup.Item>
                   </ListGroup>

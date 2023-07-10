@@ -15,7 +15,7 @@ const ProductFilter = () => {
         <Form>
           <Form.Group className="mb-3">
             <Form.Check
-              label="Ascending"
+              label="Price Ascending"
               name="group1"
               type="radio"
               id={`inline-1`}
@@ -30,7 +30,7 @@ const ProductFilter = () => {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Check
-              label="Descending"
+              label="Price Descending"
               name="group1"
               type="radio"
               id={`inline-2`}
