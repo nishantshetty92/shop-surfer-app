@@ -31,7 +31,7 @@ const HomeBanner = () => {
               <Card.Text>
                 Discover amazing products and shop with ease.
               </Card.Text>
-              <Button variant="primary" as={Link} to="/products">
+              <Button variant="primary" as={Link} to="/category/mobiles">
                 Shop Now
               </Button>
             </Card.Body>
@@ -42,7 +42,7 @@ const HomeBanner = () => {
             <Card.Body>
               <Card.Title>Get Amazing Deals</Card.Title>
               <Card.Text>Discover our exclusive Mobile collection</Card.Text>
-              <Button variant="primary" as={Link} to="/products">
+              <Button variant="primary" as={Link} to="/category/mobiles">
                 Shop Now
               </Button>
             </Card.Body>
@@ -53,7 +53,7 @@ const HomeBanner = () => {
             <Card.Body>
               <Card.Title>Unleashing The Monster</Card.Title>
               <Card.Text>Checkout the latest IPhone 13 Pro</Card.Text>
-              <Button variant="primary" as={Link} to="/products">
+              <Button variant="primary" as={Link} to="/product/iphone-13-pro">
                 Buy Now
               </Button>
             </Card.Body>
