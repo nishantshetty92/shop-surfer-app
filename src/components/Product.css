@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .product-image {
@@ -18,6 +19,12 @@
 .prod-title {
   font-weight: bold;
   color: #5f5b5b;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.prod-title:hover {
+  color: #5f5b5b !important;
 }
 
 .prod-rating {

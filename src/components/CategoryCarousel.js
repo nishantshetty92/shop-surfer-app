@@ -4,7 +4,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import "./CategoryCarousel.css";
-import { Button } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import NumberFormatter from "./NumberFormatter";
 
 const CategoryCarousel = ({ products }) => {
@@ -34,16 +34,24 @@ const CategoryCarousel = ({ products }) => {
           }}
           className="category-carousel-item"
         >
-          <img
-            src={prod?.image}
-            // height="350px"
-            style={{ marginBottom: "8px" }}
-          />
+          <Card className="border-0">
+            <Link to={`/product/${prod.slug}`}>
+              <Card.Img
+                variant="top"
+                src={prod?.image}
+                alt={prod.name}
+                style={{ marginBottom: "8px" }}
+              />
+            </Link>
+          </Card>
+
           <p
             className="carousel-item-info"
             style={{ fontWeight: "bold", lineHeight: "30px" }}
           >
-            <span className="title">{prod?.name}</span>
+            <a href={`/product/${prod?.slug}`} className="title">
+              {prod?.name}
+            </a>
             <Button className="rating ml-2">
               {prod?.rating} <FaStar className="mb-1" />
             </Button>

@@ -7,6 +7,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { FaStar } from "react-icons/fa";
 import NumberFormatter from "./NumberFormatter";
 import "./Product.css";
+import { Link } from "react-router-dom";
 
 const Product = ({ prod }) => {
   const { cart } = useAuth();
@@ -21,20 +22,28 @@ const Product = ({ prod }) => {
     await getCartData(cartAction);
     setLoading(false);
   };
+
   return (
     <Card className="product-card">
       <div className="product-image-container">
-        <Card.Img
-          variant="top"
-          src={prod.image}
-          alt={prod.name}
-          className="product-image"
-        />
+        <Link to={`/product/${prod.slug}`}>
+          <Card.Img
+            variant="top"
+            src={prod.image}
+            alt={prod.name}
+            className="product-image"
+          />
+        </Link>
       </div>
 
       <Card.Body>
         <Card.Title>
-          <Col fluid className="prod-title pl-0 mb-3 align-items-left">
+          <Col
+            fluid
+            className="prod-title pl-0 mb-3 align-items-left"
+            as={Link}
+            to={`/product/${prod?.slug}`}
+          >
             {prod.name}
           </Col>
         </Card.Title>

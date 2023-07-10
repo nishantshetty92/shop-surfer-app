@@ -2,6 +2,15 @@
   padding-left: 20px;
 }
 
+.category-carousel-item .title {
+  color: #212529;
+}
+
+.category-carousel-item .title:hover {
+  color: #212529;
+  text-decoration: none;
+}
+
 .category-carousel-item .rating {
   font-size: 10px;
   font-weight: bold;
@@ -9,6 +18,11 @@
   color: white;
   /* border-radius: 5px; */
   padding: 3px;
+  border: none;
+}
+
+.category-carousel-item .rating:hover {
+  background-color: #388e3c;
 }
 
 .category-carousel-item .price {

@@ -4,6 +4,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { useState } from "react";
 import NumberFormatter from "./NumberFormatter";
 import "./CartItem.css";
+import { Link } from "react-router-dom";
 
 const CartItem = ({ cartItem, updateItem, disableAll }) => {
   const [loading, setLoading] = useState(false);
@@ -38,22 +39,23 @@ const CartItem = ({ cartItem, updateItem, disableAll }) => {
           />
         </Col>
         <Col md={2}>
-          <Image
-            src={cartItem.product.image}
-            alt={cartItem.product.name}
-            fluid
-            rounded
-          />
+          <Link to={`/product/${cartItem.product.slug}`}>
+            <Image
+              src={cartItem.product.image}
+              alt={cartItem.product.name}
+              fluid
+              rounded
+            />
+          </Link>
         </Col>
         <Col md={4}>
-          <span>{cartItem.product.name}</span>
+          <Link to={`/product/${cartItem.product.slug}`} className="title">
+            <span>{cartItem.product.name}</span>
+          </Link>
         </Col>
         <Col md={2}>
           ₹ <NumberFormatter number={cartItem.product.price} />
         </Col>
-        {/* <Col md={2}>
-          <Rating rating={cartItem.product.rating} onClick={() => {}} />
-        </Col> */}
         <Col md={2}>
           <Form.Control
             as="select"

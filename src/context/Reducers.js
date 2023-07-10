@@ -1,9 +1,15 @@
 export const cartReducer = (state, action) => {
   switch (action.type) {
     case "ADD_TO_CART":
+      const cartQuantity = action.payload?.addQty ? action.payload.addQty : 1;
+      delete action.payload["addQty"];
       state = [
         ...state,
-        { product: action.payload, quantity: 1, is_selected: true },
+        {
+          product: action.payload,
+          quantity: cartQuantity,
+          is_selected: true,
+        },
       ];
       saveCart(state);
       return state;

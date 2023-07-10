@@ -13,6 +13,7 @@ import Missing from "./components/Missing";
 import RequireAuth from "./components/RequireAuth";
 import PersistLogin from "./components/PersistLogin";
 import VerifyUser from "./components/VerifyUser";
+import ProductDetail from "./components/ProductDetail";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./App.css";
 
@@ -46,6 +47,7 @@ const MainLayout = () => {
         <Routes>
           <Route path="/" element={<Home />} exact />
           <Route path="/category/:slug" element={<Products />} />
+          <Route path="/product/:slug" element={<ProductDetail />} />
           <Route path="cart" element={<Cart />} />
 
           <Route element={<RequireAuth />}>

@@ -67,7 +67,7 @@ const CartList = () => {
         </span>
       )}
 
-      <ListGroup className="cart">
+      <ListGroup className="cart mb-5">
         {cart?.length === 0 ? (
           <ListGroup.Item>
             <Col className="text-center">Your Cart Is Empty!</Col>

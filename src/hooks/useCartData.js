@@ -27,7 +27,10 @@ const useCartData = () => {
 
   const addCartItem = async (data) => {
     try {
-      const format_payload = { product_id: data.id };
+      let format_payload = { product_id: data.id };
+      format_payload = data?.addQty
+        ? { ...format_payload, quantity: data.addQty }
+        : format_payload;
       const response = await axiosPrivate.post(
         "/api/cart/add/",
         format_payload

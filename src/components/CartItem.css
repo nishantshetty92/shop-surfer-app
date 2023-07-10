@@ -21,3 +21,13 @@
   border-width: 0 0 1px 0 !important;
   border-style: none none solid none !important;
 }
+
+.cartItem .title {
+  color: #212529;
+  font-weight: bold;
+}
+
+.cartItem .title:hover {
+  color: #212529;
+  text-decoration: none;
+}
