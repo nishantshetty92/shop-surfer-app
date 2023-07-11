@@ -3,10 +3,12 @@ import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
-import Rating from "./Rating";
+import ProductRating from "./ProductRating";
 import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
 import "./ProductDetail.css";
+import NumberFormatter from "./NumberFormatter";
+import { FaStar } from "react-icons/fa";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -120,29 +122,16 @@ const ProductDetail = () => {
                 alt={product.name}
                 // height="300px"
               />
-            </Card>
-          </Col>
-          <Col md={7} className="product-details mt-4 mb-4">
-            <Card>
-              <Card.Body>
-                <Col className="title font-weight-bold mb-3">
-                  {product.name}
-                </Col>
-                <Col className="mb-3">
-                  <Rating rating={product.rating} onClick={(e) => {}} />
-                  {"  "}
-                  {product.rating}
-                  {"  "}
-                  {product.in_stock ? "In Stock" : "Out of Stock"}
-                </Col>
-                <Col className="mb-3">₹ {product.price}</Col>
-                <Col className="mb-3">{product.description}</Col>
-                <Col className="mb-3">
-                  <span>Sold by: {product.seller}</span>
-                </Col>
-                <hr />
-                <Row>
-                  <Col md={3} className="mb-2">
+              <Card.Body className="p-0" style={{ backgroundColor: "#eaeded" }}>
+                <Row className="mt-3 mb-3">
+                  <Col
+                    md={7}
+                    className="text-right p-2 pr-3 font-weight-bold"
+                    style={{ color: "#4e4e4e" }}
+                  >
+                    Quantity:
+                  </Col>
+                  <Col md={5}>
                     <Form.Control
                       as="select"
                       value={
@@ -171,84 +160,125 @@ const ProductDetail = () => {
                       ))}
                     </Form.Control>
                   </Col>
-                  <Col md={9}>
-                    <Row>
-                      <Col md={6} className="mb-2">
-                        {cartItem?.product?.id === product.id ? (
-                          <Button
-                            variant="danger"
-                            className="font-weight-bold w-100"
-                            onClick={(e) =>
-                              handleAction(e, {
-                                type: "REMOVE_FROM_CART",
-                                payload: [product.id],
-                              })
-                            }
-                            disabled={btnLoading || buyNowLoading}
-                          >
-                            Remove from Cart{"  "}
-                            {btnLoading && (
-                              <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                              />
-                            )}
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="primary"
-                            className="font-weight-bold w-100"
-                            onClick={(e) =>
-                              handleAction(e, {
-                                type: "ADD_TO_CART",
-                                payload: product,
-                              })
-                            }
-                            disabled={
-                              !product.in_stock || btnLoading || buyNowLoading
-                            }
-                          >
-                            Add to Cart
-                            {"  "}
-                            {btnLoading && (
-                              <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                              />
-                            )}
-                          </Button>
+                </Row>
+
+                <Row className="mb-0">
+                  <Col md={6} className="mb-3">
+                    {cartItem?.product?.id === product.id ? (
+                      <Button
+                        variant="danger"
+                        className="font-weight-bold w-100 pt-3 pb-3"
+                        onClick={(e) =>
+                          handleAction(e, {
+                            type: "REMOVE_FROM_CART",
+                            payload: [product.id],
+                          })
+                        }
+                        disabled={btnLoading || buyNowLoading}
+                      >
+                        Remove from Cart{"  "}
+                        {btnLoading && (
+                          <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                          />
                         )}
-                      </Col>
-                      <Col md={6} className="mb-2">
-                        <Button
-                          variant="success"
-                          className="font-weight-bold w-100"
-                          onClick={buyNow}
-                          disabled={
-                            !product.in_stock || buyNowLoading || btnLoading
-                          }
-                        >
-                          Buy Now{"  "}
-                          {buyNowLoading && (
-                            <Spinner
-                              as="span"
-                              animation="border"
-                              size="sm"
-                              role="status"
-                              aria-hidden="true"
-                            />
-                          )}
-                        </Button>
-                      </Col>
-                    </Row>
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="primary"
+                        className="font-weight-bold w-100 pt-3 pb-3"
+                        onClick={(e) =>
+                          handleAction(e, {
+                            type: "ADD_TO_CART",
+                            payload: product,
+                          })
+                        }
+                        disabled={
+                          !product.in_stock || btnLoading || buyNowLoading
+                        }
+                      >
+                        Add to Cart
+                        {"  "}
+                        {btnLoading && (
+                          <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </Button>
+                    )}
+                  </Col>
+                  <Col md={6} className="mb-0">
+                    <Button
+                      variant="success"
+                      className="font-weight-bold w-100 pt-3 pb-3"
+                      onClick={buyNow}
+                      disabled={
+                        !product.in_stock || buyNowLoading || btnLoading
+                      }
+                    >
+                      Buy Now{"  "}
+                      {buyNowLoading && (
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </Button>
                   </Col>
                 </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={7} className="product-details mt-4 mb-4 pl-2">
+            <Card>
+              <Card.Body>
+                <Col className="title font-weight-bold mb-3">
+                  <h2>{product.name}</h2>
+                </Col>
+                <Col className="mb-3">
+                  <span className="ratingNumber">{product.rating}</span>
+                  <ProductRating rating={product.rating} onClick={(e) => {}} />
+                  {"  "}
+                  {product.in_stock ? (
+                    <span className="availability-green">In Stock</span>
+                  ) : (
+                    <span className="availability-red">Out of Stock</span>
+                  )}
+                </Col>
+                <Col className="mb-3 price">
+                  <h3>
+                    <sup className="rupee">₹</sup>
+                    <NumberFormatter number={product?.price} />
+                  </h3>
+                </Col>
+                <Col className="mb-3 ml-3">
+                  <ul style={{ paddingLeft: "0" }}>
+                    {product.description?.map((line) => (
+                      <li>{line}</li>
+                    ))}
+                  </ul>
+                </Col>
+                <Col className="mb-3">
+                  <span>Sold by: {product.seller}</span>
+                </Col>
+                <Col className="mb-3">
+                  <span>
+                    {product.fast_delivery
+                      ? "Fast Delivery"
+                      : "Delivery in 4 days"}
+                  </span>
+                </Col>
               </Card.Body>
             </Card>
           </Col>

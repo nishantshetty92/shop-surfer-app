@@ -166,145 +166,147 @@ const Checkout = () => {
     }
   };
   return (
-    <div className="page-container" style={{ backgroundColor: "#eaeded" }}>
-      <Navbar bg="dark" variant="dark" className="navbar-container">
-        <Navbar.Brand className="d-flex" as={Link} to="/cart">
-          <BsArrowLeftSquare />
-        </Navbar.Brand>
-        <Navbar.Brand className="mx-auto">
-          <RiShoppingCartLine className="navbar-icon" /> Checkout
-        </Navbar.Brand>
-      </Navbar>
-      <Container className="mt-3">
-        {activeCart.filter((item) => item.is_selected).length === 0 ? (
-          <Col lg={8} md={12}>
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
-            {"  "}
-            Verifying Cart...
-          </Col>
-        ) : (
-          <Row>
+    <div className="app-container">
+      <div className="content-container">
+        <Navbar bg="dark" variant="dark" className="navbar-container">
+          <Navbar.Brand className="d-flex" as={Link} to="/cart">
+            <BsArrowLeftSquare />
+          </Navbar.Brand>
+          <Navbar.Brand className="mx-auto">
+            <RiShoppingCartLine className="navbar-icon" /> Checkout
+          </Navbar.Brand>
+        </Navbar>
+        <Container className="mt-3">
+          {activeCart.filter((item) => item.is_selected).length === 0 ? (
             <Col lg={8} md={12}>
-              <AddressPicker />
-              <ListGroup className="mb-4">
-                <ListGroup.Item className="fw-bold" variant="primary">
-                  Payment Method
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <div className="d-flex justify-content-between mb-2">
-                    <span className="mb-0">Credit Card</span>
-                  </div>
-                  <div className="d-flex justify-content-between mb-2">
-                    <span className="mb-0">**** **** **** 1234</span>
-                  </div>
-                  <div className="d-flex justify-content-between mb-2">
-                    <span className="mb-0">Expiry: 12/24</span>
-                  </div>
-                </ListGroup.Item>
-              </ListGroup>
-              <ListGroup className="mb-4">
-                <ListGroup.Item className="fw-bold" variant="primary">
-                  Order Summary
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  {activeCart.map(
-                    (item) =>
-                      item.is_selected && (
-                        <React.Fragment key={item.product.id}>
-                          <div className="d-flex justify-content-between mb-2">
-                            <span>{item.product.name}</span>
-                            <span>
-                              ₹{" "}
-                              <NumberFormatter
-                                number={item.quantity * item.product.price}
-                              />
-                            </span>
-                          </div>
-                          <div className="d-flex justify-content-between mb-2">
-                            <span>Quantity:</span>
-                            <span>{item.quantity}</span>
-                          </div>
-                          <hr />
-                        </React.Fragment>
-                      )
-                  )}
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+              {"  "}
+              Verifying Cart...
+            </Col>
+          ) : (
+            <Row>
+              <Col lg={8} md={12}>
+                <AddressPicker />
+                <ListGroup className="mb-4">
+                  <ListGroup.Item className="fw-bold" variant="primary">
+                    Payment Method
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <div className="d-flex justify-content-between mb-2">
+                      <span className="mb-0">Credit Card</span>
+                    </div>
+                    <div className="d-flex justify-content-between mb-2">
+                      <span className="mb-0">**** **** **** 1234</span>
+                    </div>
+                    <div className="d-flex justify-content-between mb-2">
+                      <span className="mb-0">Expiry: 12/24</span>
+                    </div>
+                  </ListGroup.Item>
+                </ListGroup>
+                <ListGroup className="mb-4">
+                  <ListGroup.Item className="fw-bold" variant="primary">
+                    Order Summary
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    {activeCart.map(
+                      (item) =>
+                        item.is_selected && (
+                          <React.Fragment key={item.product.id}>
+                            <div className="d-flex justify-content-between mb-2">
+                              <span>{item.product.name}</span>
+                              <span>
+                                ₹{" "}
+                                <NumberFormatter
+                                  number={item.quantity * item.product.price}
+                                />
+                              </span>
+                            </div>
+                            <div className="d-flex justify-content-between mb-2">
+                              <span>Quantity:</span>
+                              <span>{item.quantity}</span>
+                            </div>
+                            <hr />
+                          </React.Fragment>
+                        )
+                    )}
 
-                  <div className="d-flex justify-content-between mb-2">
-                    <span className="fw-bold">Subtotal:</span>
-                    <span>
-                      ₹ <NumberFormatter number={subTotal} />
-                    </span>
-                  </div>
-                  <div className="d-flex justify-content-between mb-2">
-                    <span className="fw-bold">Tax:</span>
-                    <span>₹ {tax.toFixed(2)}</span>
-                  </div>
-                  <hr />
-                  <div className="d-flex justify-content-between">
-                    <span className="fw-bold">Total:</span>
-                    <span>
-                      ₹ <NumberFormatter number={total} />
-                    </span>
-                  </div>
-                </ListGroup.Item>
-              </ListGroup>
-            </Col>
-            <Col lg={4} md={12}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Order Summary</Card.Title>
-                  <ListGroup variant="flush">
-                    <ListGroup.Item>
-                      <div className="d-flex justify-content-between">
-                        <span>Subtotal:</span>
-                        <span>
-                          ₹ <NumberFormatter number={subTotal} />
-                        </span>
-                      </div>
-                      <div className="d-flex justify-content-between">
-                        <span>Tax:</span>
-                        <span>₹ {tax.toFixed(2)}</span>
-                      </div>
-                      <hr />
-                      <div className="d-flex justify-content-between">
-                        <span className="fw-bold">Total:</span>
-                        <span className="fw-bold">
-                          ₹ <NumberFormatter number={total} />
-                        </span>
-                      </div>
-                    </ListGroup.Item>
-                  </ListGroup>
-                  <div className="text-center">
-                    <Button
-                      disabled={addressList?.length === 0 || loading}
-                      variant="primary"
-                      className="mt-3"
-                      onClick={placeOrder}
-                    >
-                      Place Order{"  "}
-                      {loading && (
-                        <Spinner
-                          as="span"
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        )}
-      </Container>
+                    <div className="d-flex justify-content-between mb-2">
+                      <span className="fw-bold">Subtotal:</span>
+                      <span>
+                        ₹ <NumberFormatter number={subTotal} />
+                      </span>
+                    </div>
+                    <div className="d-flex justify-content-between mb-2">
+                      <span className="fw-bold">Tax:</span>
+                      <span>₹ {tax.toFixed(2)}</span>
+                    </div>
+                    <hr />
+                    <div className="d-flex justify-content-between">
+                      <span className="fw-bold">Total:</span>
+                      <span>
+                        ₹ <NumberFormatter number={total} />
+                      </span>
+                    </div>
+                  </ListGroup.Item>
+                </ListGroup>
+              </Col>
+              <Col lg={4} md={12}>
+                <Card>
+                  <Card.Body>
+                    <Card.Title>Order Summary</Card.Title>
+                    <ListGroup variant="flush">
+                      <ListGroup.Item>
+                        <div className="d-flex justify-content-between">
+                          <span>Subtotal:</span>
+                          <span>
+                            ₹ <NumberFormatter number={subTotal} />
+                          </span>
+                        </div>
+                        <div className="d-flex justify-content-between">
+                          <span>Tax:</span>
+                          <span>₹ {tax.toFixed(2)}</span>
+                        </div>
+                        <hr />
+                        <div className="d-flex justify-content-between">
+                          <span className="fw-bold">Total:</span>
+                          <span className="fw-bold">
+                            ₹ <NumberFormatter number={total} />
+                          </span>
+                        </div>
+                      </ListGroup.Item>
+                    </ListGroup>
+                    <div className="text-center">
+                      <Button
+                        disabled={addressList?.length === 0 || loading}
+                        variant="primary"
+                        className="mt-3"
+                        onClick={placeOrder}
+                      >
+                        Place Order{"  "}
+                        {loading && (
+                          <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </Button>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          )}
+        </Container>
+      </div>
     </div>
   );
 };

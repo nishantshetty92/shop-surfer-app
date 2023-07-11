@@ -10,3 +10,29 @@
   max-height: 100%;
   object-fit: contain;
 } */
+
+.product-details .ratingNumber {
+  color: #4e4e4e;
+  font-weight: bold;
+}
+
+.product-details .rating {
+  color: #f08804;
+  margin-left: 4px;
+}
+
+.product-details .availability-green {
+  margin-left: 8px;
+  font-weight: bold;
+  color: green;
+}
+
+.product-details .availability-red {
+  margin-left: 8px;
+  font-weight: bold;
+  color: red;
+}
+
+.product-details .rupee {
+  font-size: 15px;
+}
