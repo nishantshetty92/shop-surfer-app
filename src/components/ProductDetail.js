@@ -100,7 +100,7 @@ const ProductDetail = () => {
   return (
     <Container className="product-detail" style={{ maxWidth: "90%" }}>
       {loading ? (
-        <Col>
+        <Col className="text-center mt-5">
           <Spinner
             as="span"
             animation="border"
@@ -161,7 +161,9 @@ const ProductDetail = () => {
                             })
                           : updateQuantity(e)
                       }
-                      disabled={btnLoading || buyNowLoading}
+                      disabled={
+                        !product.in_stock || btnLoading || buyNowLoading
+                      }
                       style={{ cursor: "pointer" }}
                     >
                       {[...Array(product.quantity)].map((_, x) => (
@@ -205,7 +207,9 @@ const ProductDetail = () => {
                                 payload: product,
                               })
                             }
-                            disabled={btnLoading || buyNowLoading}
+                            disabled={
+                              !product.in_stock || btnLoading || buyNowLoading
+                            }
                           >
                             Add to Cart
                             {"  "}
@@ -226,7 +230,9 @@ const ProductDetail = () => {
                           variant="success"
                           className="font-weight-bold w-100"
                           onClick={buyNow}
-                          disabled={buyNowLoading || btnLoading}
+                          disabled={
+                            !product.in_stock || buyNowLoading || btnLoading
+                          }
                         >
                           Buy Now{"  "}
                           {buyNowLoading && (
