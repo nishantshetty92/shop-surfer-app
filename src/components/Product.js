@@ -39,7 +39,6 @@ const Product = ({ prod }) => {
       <Card.Body>
         <Card.Title>
           <Col
-            fluid
             className="prod-title pl-0 mb-3 align-items-left"
             as={Link}
             to={`/product/${prod?.slug}`}
@@ -48,7 +47,7 @@ const Product = ({ prod }) => {
           </Col>
         </Card.Title>
         <Card.Subtitle>
-          <Col fluid className="pl-0 mb-2 align-items-left">
+          <Col className="pl-0 mb-2 align-items-left">
             <span>
               ₹ <NumberFormatter number={prod?.price} />
             </span>
@@ -56,7 +55,7 @@ const Product = ({ prod }) => {
               {prod.rating} <FaStar className="mb-1" />
             </Button>
           </Col>
-          <Col fluid className="pl-0 mb-3 align-items-left">
+          <Col className="pl-0 mb-3 align-items-left">
             {prod.fast_delivery ? (
               <div>Fast Delivery</div>
             ) : (

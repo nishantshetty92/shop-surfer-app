@@ -24,10 +24,42 @@ const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { cart, addressList, user, setAddressList, cleanData } = useAuth();
+  const {
+    cart,
+    addressList,
+    user,
+    setAddressList,
+    cleanData,
+    buyItem,
+    setBuyItem,
+  } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [errMsg, setErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
+  let activeCart;
+
+  // fetching ?buynow=1 param from url when user clicks Buy Now for a product
+  const urlParams = new URLSearchParams(window.location.search);
+  const buyNow = urlParams.get("buynow");
+
+  const verifyCart = () => {
+    let itemIsFound;
+    // checking for url param buynow and the buy product info in app state
+    if (buyNow && buyItem) {
+      console.log(buyItem, "CHECKOUT BUYITEM FOUND");
+      itemIsFound = cart.find(
+        (cartItem) =>
+          cartItem.product.id === buyItem?.product?.id && cartItem.is_selected
+      );
+      // if buy now product is found in cart, checkout for only that product else checkout the whole cart
+      activeCart = itemIsFound ? [buyItem] : cart;
+    } else {
+      console.log("CHECKOUT BUYITEM NOT FOUND");
+      activeCart = cart;
+    }
+    !itemIsFound && localStorage.removeItem("buyItem");
+  };
+
   const getCartData = useCartData();
 
   const isLogged = () => {
@@ -43,6 +75,8 @@ const Checkout = () => {
     return false;
   };
 
+  verifyCart();
+
   const handleUnauthorized = () => {
     cleanData();
     isLogged();
@@ -50,11 +84,11 @@ const Checkout = () => {
 
   useEffect(() => {
     console.log("CHECKOUT");
-    const selectedCount = cart.filter((item) => item.is_selected).length;
+    const selectedCount = activeCart.filter((item) => item.is_selected).length;
     selectedCount === 0 && navigate("/cart", { replace: true });
-  }, [cart]);
+  }, [activeCart]);
 
-  const subTotal = cart.reduce(
+  const subTotal = activeCart.reduce(
     (acc, item) =>
       item.is_selected ? acc + Number(item.product.price) * item.quantity : acc,
     0
@@ -65,13 +99,15 @@ const Checkout = () => {
   const paymentMethod = "Credit Card";
 
   const placeOrder = async () => {
+    // This function places the order
+
     const result = isLogged();
     if (result) {
       setLoading(true);
       const selectedAddress = addressList.find((addr) => addr.is_selected);
       const shippingAddress = `${selectedAddress.full_name}, ${selectedAddress.address1}, ${selectedAddress.address2}, ${selectedAddress.city}, ${selectedAddress.state}, ${selectedAddress.pin_code}, Phone number: ${selectedAddress.mobile_number}`;
 
-      const orderItems = cart
+      const orderItems = activeCart
         .filter((item) => item.is_selected)
         .map((item) => ({
           product_id: item.product.id,
@@ -109,6 +145,10 @@ const Checkout = () => {
         }
         setLoading(false);
 
+        // Once buy now product order is placed, removing buy now product info from app state
+        setBuyItem(null);
+        localStorage.removeItem("buyItem");
+
         orderDetails &&
           navigate("/confirmation", {
             state: orderDetails,
@@ -136,7 +176,7 @@ const Checkout = () => {
         </Navbar.Brand>
       </Navbar>
       <Container className="mt-3">
-        {cart.filter((item) => item.is_selected).length === 0 ? (
+        {activeCart.filter((item) => item.is_selected).length === 0 ? (
           <Col lg={8} md={12}>
             <Spinner
               as="span"
@@ -173,7 +213,7 @@ const Checkout = () => {
                   Order Summary
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  {cart.map(
+                  {activeCart.map(
                     (item) =>
                       item.is_selected && (
                         <React.Fragment key={item.product.id}>

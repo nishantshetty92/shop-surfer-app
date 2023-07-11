@@ -45,9 +45,9 @@ const useCartData = () => {
     }
   };
 
-  const addCartItems = async (data) => {
+  const mergeCart = async (data) => {
     try {
-      const response = await axiosPrivate.post("/api/cart/add_items/", data);
+      const response = await axiosPrivate.post("/api/cart/merge/", data);
       return response.data;
     } catch (error) {
       if (error?.response?.status === 401) {
@@ -114,8 +114,8 @@ const useCartData = () => {
     if (auth?.accessToken) {
       if (cartData.type === "ADD_TO_CART") {
         response = await addCartItem(cartData.payload);
-      } else if (cartData.type === "ADD_CART_ITEMS") {
-        response = await addCartItems(cartData.payload);
+      } else if (cartData.type === "MERGE_CART") {
+        response = await mergeCart(cartData.payload);
       } else if (
         cartData.type === "CHANGE_CART_QTY" ||
         cartData.type === "SELECT_ITEM" ||
@@ -135,11 +135,17 @@ const useCartData = () => {
           type: "UPDATE_CART",
           payload: response,
         });
+      return response;
     } else {
       if (cartData.type === "ADD_TO_CART") {
         cartDispatch({
           type: "ADD_TO_CART",
           payload: cartData.payload,
+        });
+      } else if (cartData.type === "MERGE_CART") {
+        cartDispatch({
+          type: "MERGE_CART",
+          payload: cartData.payload[0].product,
         });
       } else if (cartData.type === "CHANGE_CART_QTY") {
         cartDispatch({
@@ -162,6 +168,7 @@ const useCartData = () => {
           payload: cartData.payload,
         });
       }
+      return true;
     }
   };
   return getCartData;

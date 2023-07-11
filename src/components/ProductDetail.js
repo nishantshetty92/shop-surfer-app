@@ -2,17 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "../api/axios";
-import { useParams } from "react-router-dom";
-import "./ProductDetail.css";
+import { useNavigate, useParams } from "react-router-dom";
 import Rating from "./Rating";
 import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
+import "./ProductDetail.css";
 
 const ProductDetail = () => {
-  const { cart } = useAuth();
+  const navigate = useNavigate();
+  const { cart, setBuyItem } = useAuth();
   const [product, setProduct] = useState({});
   const [loading, setLoading] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
+  const [buyNowLoading, setBuyNowLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
   const { slug } = useParams();
@@ -67,6 +69,32 @@ const ProductDetail = () => {
   const updateQuantity = (e) => {
     e.preventDefault();
     setQuantity(e.target.value);
+  };
+
+  const buyNow = async (e) => {
+    e.preventDefault();
+    setBuyNowLoading(true);
+    const buyItem = {
+      is_selected: true,
+      quantity: cartItem ? cartItem?.quantity : quantity,
+      product: product,
+    };
+    buyItem.product = {
+      ...buyItem.product,
+      addQty: cartItem ? cartItem?.quantity : quantity,
+    };
+
+    const response = await getCartData({
+      type: "MERGE_CART",
+      payload: [buyItem],
+    });
+    setBuyItem(buyItem);
+    localStorage.setItem("buyItem", JSON.stringify(buyItem));
+    setBuyNowLoading(false);
+    response &&
+      navigate("/checkout?buynow=1", {
+        replace: true,
+      });
   };
 
   return (
@@ -133,7 +161,7 @@ const ProductDetail = () => {
                             })
                           : updateQuantity(e)
                       }
-                      disabled={btnLoading}
+                      disabled={btnLoading || buyNowLoading}
                       style={{ cursor: "pointer" }}
                     >
                       {[...Array(product.quantity)].map((_, x) => (
@@ -154,7 +182,7 @@ const ProductDetail = () => {
                                 payload: [product.id],
                               })
                             }
-                            disabled={btnLoading}
+                            disabled={btnLoading || buyNowLoading}
                           >
                             Remove from Cart{"  "}
                             {btnLoading && (
@@ -177,7 +205,7 @@ const ProductDetail = () => {
                                 payload: product,
                               })
                             }
-                            disabled={btnLoading}
+                            disabled={btnLoading || buyNowLoading}
                           >
                             Add to Cart
                             {"  "}
@@ -197,8 +225,19 @@ const ProductDetail = () => {
                         <Button
                           variant="success"
                           className="font-weight-bold w-100"
+                          onClick={buyNow}
+                          disabled={buyNowLoading || btnLoading}
                         >
-                          Buy Now
+                          Buy Now{"  "}
+                          {buyNowLoading && (
+                            <Spinner
+                              as="span"
+                              animation="border"
+                              size="sm"
+                              role="status"
+                              aria-hidden="true"
+                            />
+                          )}
                         </Button>
                       </Col>
                     </Row>

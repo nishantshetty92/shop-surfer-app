@@ -16,7 +16,10 @@ const Login = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  let from = location.state?.from?.pathname || "/";
+  const search = location.state?.from?.search;
+  from = search ? `${from}${search}` : from;
+  console.log(from, "LOGIN FROM");
 
   const emailRef = useRef();
 

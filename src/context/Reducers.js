@@ -1,17 +1,40 @@
 export const cartReducer = (state, action) => {
+  let product;
+  let cartQuantity;
   switch (action.type) {
     case "ADD_TO_CART":
-      const cartQuantity = action.payload?.addQty ? action.payload.addQty : 1;
-      delete action.payload["addQty"];
+      product = action?.payload;
+      cartQuantity = product?.addQty ? product.addQty : 1;
+      delete product.addQty;
       state = [
         ...state,
         {
-          product: action.payload,
+          product: product,
           quantity: cartQuantity,
           is_selected: true,
         },
       ];
       saveCart(state);
+      return state;
+    case "MERGE_CART":
+      product = action?.payload;
+      cartQuantity = product?.addQty ? product.addQty : 1;
+      delete product.addQty;
+      const itemIsFound = state.find(
+        (cartItem) => cartItem.product.id === product?.id
+      );
+      if (!itemIsFound) {
+        state = [
+          ...state,
+          {
+            product: product,
+            quantity: cartQuantity,
+            is_selected: true,
+          },
+        ];
+        saveCart(state);
+      }
+
       return state;
     case "REMOVE_FROM_CART":
       state = state.filter((c) => c.product.id !== action.payload[0]);

@@ -29,6 +29,10 @@ export const AuthProvider = ({ children }) => {
 
   const [loginType, setLoginType] = useState(null);
 
+  const [buyItem, setBuyItem] = useState(
+    JSON.parse(localStorage.getItem("buyItem")) || null
+  );
+
   const axiosPrivate = useAxiosPrivate();
   const cleanData = useCleanData();
 
@@ -106,6 +110,8 @@ export const AuthProvider = ({ children }) => {
         addressList,
         setAddressList,
         cleanData,
+        buyItem,
+        setBuyItem,
       }}
     >
       {children}
