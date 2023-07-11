@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useRefreshToken from "../hooks/useRefreshToken";
 import useAuth from "../hooks/useAuth";
+import { Container } from "react-bootstrap";
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +36,19 @@ const PersistLogin = () => {
     // console.log(`aT: ${JSON.stringify(auth?.accessToken)}`);
   }, [isLoading]);
 
-  return <>{isLoading ? <p>Loading...</p> : <Outlet />}</>;
+  return (
+    <>
+      {isLoading ? (
+        <div className="app-container">
+          <Container fluid className="content-container text-center pt-5">
+            Verifying Session...
+          </Container>
+        </div>
+      ) : (
+        <Outlet />
+      )}
+    </>
+  );
 };
 
 export default PersistLogin;

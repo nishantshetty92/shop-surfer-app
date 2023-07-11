@@ -1,10 +1,11 @@
-import { React, useEffect } from "react";
+import { React, useEffect, useState } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
 import useUserLogged from "../hooks/useUserLogged";
 import CartList from "./CartList";
 import CartTotal from "./CartTotal";
+import Spinner from "react-bootstrap/Spinner";
 
 const Cart = () => {
   // const products = [...Array(7)].map((_, i) => ({
@@ -19,41 +20,50 @@ const Cart = () => {
 
   // const { auth } = useAuth();
   const auth = JSON.parse(localStorage.getItem("auth"));
+  const [loading, setLoading] = useState(false);
   const getCartData = useCartData();
   const isLogged = useUserLogged();
+
+  const updateCart = async () => {
+    setLoading(true);
+    auth?.accessToken && (await getCartData({ type: "UPDATE_CART" }));
+    setLoading(false);
+  };
 
   useEffect(() => {
     isLogged();
     let isMounted = true;
-    const controller = new AbortController();
 
-    // const getLatestCart = async () => {
-    //   try {
-    //     const response = await axiosPrivate.get("/api/cart/");
-    //     console.log(response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching cart data:", error);
-    //   }
-    // };
-    // auth?.accessToken && getLatestCart();
-    auth?.accessToken && getCartData({ type: "UPDATE_CART" });
+    isMounted && updateCart();
 
     return () => {
       isMounted = false;
-      controller.abort();
     };
   }, []);
 
   return (
     <Container fluid className="pt-4">
-      <Row className="h-100">
-        <Col md={9}>
-          <CartList />
+      {loading ? (
+        <Col className="text-center mt-5">
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />{" "}
+          Loading Cart...
         </Col>
-        <Col md={3}>
-          <CartTotal />
-        </Col>
-      </Row>
+      ) : (
+        <Row className="h-100">
+          <Col md={9}>
+            <CartList />
+          </Col>
+          <Col md={3}>
+            <CartTotal />
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 };
