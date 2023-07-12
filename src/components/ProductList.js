@@ -12,7 +12,7 @@ const ProductList = () => {
   } = useAuth();
 
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const { slug } = useParams();
 
@@ -21,6 +21,7 @@ const ProductList = () => {
     const controller = new AbortController();
 
     const getProducts = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`/api/products/${slug}/`, {
           signal: controller.signal,

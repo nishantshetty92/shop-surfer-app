@@ -15,7 +15,8 @@ import useLogout from "../hooks/useLogout";
 import { googleLogout } from "@react-oauth/google";
 
 const Header = () => {
-  const { cart, user, filterDispatch, loginType, setLoginType } = useAuth();
+  const { cart, user, filter, filterDispatch, loginType, setLoginType } =
+    useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,6 +53,7 @@ const Header = () => {
                 placeholder="Search"
                 className="mr-2"
                 aria-label="Search"
+                value={filter?.searchQuery}
                 onChange={(e) => {
                   filterDispatch({
                     type: "FILTER_BY_SEARCH",
