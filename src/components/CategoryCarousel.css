@@ -1,34 +1,73 @@
-.category-carousel {
-  padding-left: 20px;
+.carousel-container {
+  position: relative;
 }
 
-.category-carousel-item .title {
-  color: #212529;
+.slick-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
 }
 
-.category-carousel-item .title:hover {
-  color: #212529;
-  text-decoration: none;
+.slick-nav {
+  background-color: white;
+  width: 40px;
+  height: 100px;
+}
+
+.slick-nav:hover {
+  background-color: white;
+}
+
+.slick-prev {
+  left: 0px;
+}
+
+.slick-next {
+  right: 0px;
+}
+
+.arrows-hidden {
+  display: none;
+}
+
+.carousel-image-container {
+  width: 100%;
+  padding-top: 75%; /* Adjust the desired aspect ratio here (e.g., 75% for 4:3 ratio) */
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-image-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.carousel-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .category-carousel-item .rating {
   font-size: 10px;
   font-weight: bold;
-  background-color: #388e3c;
+  background-color: #388e3c !important;
   color: white;
   /* border-radius: 5px; */
   padding: 3px;
   border: none;
 }
 
-.category-carousel-item .rating:hover {
-  background-color: #388e3c;
-}
-
 .category-carousel-item .price {
   color: green;
+  font-weight: bold;
 }
 
 .category-carousel-item .seller {
   color: rgb(100, 96, 96);
+  font-weight: bold;
 }

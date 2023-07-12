@@ -2,8 +2,7 @@
   height: 100%;
 }
 
-.product-image-container {
-  /* height: 300px; */
+/* .product-image-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,6 +13,27 @@
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
+} */
+
+.product-image-container {
+  width: 100%;
+  padding-top: 75%; /* Adjust the desired aspect ratio here (e.g., 75% for 4:3 ratio) */
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image-wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.product-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .prod-title {
@@ -34,4 +54,5 @@
   color: white;
   padding: 4px !important;
   display: inline;
+  border: none !important;
 }

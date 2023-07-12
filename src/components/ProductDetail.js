@@ -8,7 +8,6 @@ import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
 import "./ProductDetail.css";
 import NumberFormatter from "./NumberFormatter";
-import { FaStar } from "react-icons/fa";
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -264,8 +263,8 @@ const ProductDetail = () => {
                 </Col>
                 <Col className="mb-3 ml-3">
                   <ul style={{ paddingLeft: "0" }}>
-                    {product.description?.map((line) => (
-                      <li>{line}</li>
+                    {product.description?.map((line, x) => (
+                      <li key={x}>{line}</li>
                     ))}
                   </ul>
                 </Col>

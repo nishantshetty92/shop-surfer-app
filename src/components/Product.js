@@ -26,14 +26,16 @@ const Product = ({ prod }) => {
   return (
     <Card className="product-card">
       <div className="product-image-container">
-        <Link to={`/product/${prod.slug}`}>
-          <Card.Img
-            variant="top"
-            src={prod.image}
-            alt={prod.name}
-            className="product-image"
-          />
-        </Link>
+        <div className="product-image-wrapper">
+          <Link to={`/product/${prod.slug}`}>
+            <Card.Img
+              variant="top"
+              src={prod.image}
+              alt={prod.name}
+              className="product-image"
+            />
+          </Link>
+        </div>
       </div>
 
       <Card.Body>
