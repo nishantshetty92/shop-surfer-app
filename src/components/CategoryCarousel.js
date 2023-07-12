@@ -3,9 +3,9 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
-import "./CategoryCarousel.css";
 import { Button, Card } from "react-bootstrap";
 import NumberFormatter from "./NumberFormatter";
+import "./CategoryCarousel.css";
 
 const CategoryCarousel = ({ products }) => {
   return (

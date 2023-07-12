@@ -1,26 +1,16 @@
 import { Container, Carousel, Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import "./HomeBanner.css";
 
 const HomeBanner = () => {
   return (
     <Container fluid className="pt-3 mb-2">
       <Carousel
         indicators={false}
-        nextIcon={
-          <span
-            aria-hidden="true"
-            className="carousel-control-next-icon"
-            style={{ backgroundColor: "black" }}
-          />
-        }
+        nextIcon={<GrNext className="banner-nav" />}
         nextLabel=""
-        prevIcon={
-          <span
-            aria-hidden="true"
-            className="carousel-control-prev-icon"
-            style={{ backgroundColor: "black" }}
-          />
-        }
+        prevIcon={<GrPrevious className="banner-nav" />}
         prevLabel=""
         className="banner-carousel"
       >
