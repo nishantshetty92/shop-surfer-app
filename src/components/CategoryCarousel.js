@@ -85,7 +85,6 @@ const CategoryCarousel = ({ products }) => {
     } else {
       setSlidesToShow(1);
     }
-    // adjustArrowFlags();
   };
 
   const handleMouseEnter = () => {

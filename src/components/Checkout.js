@@ -132,7 +132,8 @@ const Checkout = () => {
         );
         console.log(JSON.stringify(orderResponse?.data));
 
-        const orderDetails = orderResponse?.data;
+        let orderDetails = orderResponse?.data;
+        orderDetails.sub_total = subTotal;
         const orderProductIds = orderDetails?.order_items.map(
           (item) => item.product_id
         );

@@ -3,23 +3,26 @@
   color: #28a745;
 }
 
-.order-details-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.order-details-list li {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.order-details-list li span:first-child {
-  font-weight: bold;
-}
-
 @media (max-width: 576px) {
   .order-icon {
     font-size: 40px;
+  }
+  .order-title {
+    font-size: 25px;
+  }
+}
+
+.order-item .item-name {
+  color: #5f5b5b;
+  font-weight: bold;
+  text-decoration: none !important;
+}
+
+@media (max-width: 768px) {
+  .order-summary .shipping-address {
+    border-left-style: solid !important;
+    border-left-width: 1px !important;
+    border-top: none !important;
+    border-color: #dee2e6 !important;
   }
 }

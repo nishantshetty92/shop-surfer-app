@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Container, Card, Button, Col } from "react-bootstrap";
+import { Container, Card, Button, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { RiCheckDoubleLine } from "react-icons/ri";
 import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import "./Confirmation.css";
 import NumberFormatter from "./NumberFormatter";
+import "./Confirmation.css";
 
 const Confirmation = () => {
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ const Confirmation = () => {
       setLoading(false);
     }
   }, []);
+
   return (
     <Container>
       {loading ? (
@@ -41,67 +42,139 @@ const Confirmation = () => {
           <Card className="mt-3">
             <Card.Body className="text-center">
               <RiCheckDoubleLine className="order-icon" />
-              <h2 className="mb-4">Order Confirmation</h2>
-              <p>Your order has been successfully placed.</p>
-              <p>Order ID: {orderDetails?.order_id}</p>
-              <h4>Order Details</h4>
-              <ul className="order-details-list">
-                <li>
-                  <span>Date:</span>
-                  <span>{orderDetails?.created_at}</span>
-                </li>
-                <li>
-                  <span>Payment Method:</span>
-                  <span>{orderDetails?.payment_method}</span>
-                </li>
-                <li>
-                  <span style={{ textAlign: "left" }}>Shipping Address:</span>
-                  <span
-                    style={{
-                      width: "400px",
-                      textAlign: "right",
-                    }}
-                  >
-                    {orderDetails?.shipping_address}
-                  </span>
-                </li>
-              </ul>
+              <h2 className="mb-4 order-title">Your Order Is Placed</h2>
+              <h6>
+                Thank you for shopping at{" "}
+                <b>
+                  <span style={{ color: "#5f5b5b" }}>ShopSurfer</span>
+                </b>
+                !
+              </h6>
+              {/* <hr /> */}
+              <Row className="ml-0 mr-0 mt-4 mb-5 order-summary">
+                <Col md={6} className="border p-3">
+                  <Row className="text-left font-weight-bold">
+                    <Col className="mb-1">Summary:</Col>
+                  </Row>
+                  <Row className="text-left mb-1">
+                    <Col xs={4} md={3}>
+                      Order #:
+                    </Col>
+                    <Col xs={8} md={9}>
+                      {orderDetails?.order_id}
+                    </Col>
+                  </Row>
+                  <Row className="text-left mb-1">
+                    <Col xs={4} md={3}>
+                      Order Date:
+                    </Col>
+                    <Col xs={8} md={9}>
+                      {orderDetails?.created_at}
+                    </Col>
+                  </Row>
+                  <Row className="text-left mb-1">
+                    <Col xs={4} md={3}>
+                      Order Total:
+                    </Col>
+                    <Col xs={8} md={9}>
+                      ₹ <NumberFormatter number={orderDetails?.total_amount} />
+                    </Col>
+                  </Row>
+                  <Row className="text-left">
+                    <Col xs={4} md={3}>
+                      Payment:
+                    </Col>
+                    <Col xs={8} md={9}>
+                      Credit Card
+                    </Col>
+                  </Row>
+                </Col>
+                <Col
+                  md={6}
+                  className="border border-left-0 p-3 shipping-address"
+                >
+                  <Row className="text-left font-weight-bold">
+                    <Col className="mb-1">Shipping Address:</Col>
+                  </Row>
+                  <Row className="text-left">
+                    <Col>{orderDetails?.shipping_address}</Col>
+                  </Row>
+                </Col>
+              </Row>
+
+              <Row className="mb-3 mt-3 font-weight-bold">
+                <Col xs={4} md={5} className="text-left">
+                  Items Shipped
+                </Col>
+                <Col xs={3} className="text-right">
+                  Qty
+                </Col>
+                <Col xs={5} md={4} className="text-right">
+                  Price
+                </Col>
+              </Row>
               <hr />
-              <h4>Order Summary</h4>
 
-              <ul className="order-details-list">
-                {orderDetails?.order_items.map((item) => (
-                  <React.Fragment key={item.product_id}>
-                    <li>
-                      <span>Product:</span>
-                      <span>{item.product_name}</span>
-                    </li>
-                    <li>
-                      <span>Price:</span>
-                      <span>
-                        ₹ <NumberFormatter number={item.price} />
-                      </span>
-                    </li>
-                    <li>
-                      <span>Quantity:</span>
-                      <span>{item.quantity}</span>
-                    </li>
-                    <hr />
-                  </React.Fragment>
-                ))}
+              {orderDetails?.order_items.map((item) => (
+                <React.Fragment key={item.product_id}>
+                  <Row className="mb-3 order-item">
+                    <Col
+                      xs={4}
+                      md={5}
+                      className="text-left item-name"
+                      as={Link}
+                      to={`/product/${item.product_slug}`}
+                    >
+                      {item.product_name}
+                    </Col>
+                    <Col xs={3} className="text-right">
+                      {item.quantity}
+                    </Col>
+                    <Col xs={5} md={4} className="text-right">
+                      ₹ <NumberFormatter number={item.price} />
+                    </Col>
+                  </Row>
+                  <hr />
+                </React.Fragment>
+              ))}
 
-                <li>
-                  <span>Total:</span>
-                  <span>
+              <React.Fragment className="total-summary">
+                <Row className="mb-3">
+                  <Col xs={7} md={8} className="text-right">
+                    Subtotal ({orderDetails?.order_items?.length} Item
+                    {orderDetails?.order_items?.length > 1 ? "s" : ""})
+                  </Col>
+                  <Col xs={5} md={4} className="text-right">
+                    ₹ <NumberFormatter number={orderDetails?.sub_total} />
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col xs={7} md={8} className="text-right">
+                    Estimated Tax
+                  </Col>
+                  <Col xs={5} md={4} className="text-right">
+                    ₹ <NumberFormatter number={10} />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col xs={7} md={8} className="text-right font-weight-bold">
+                    Order Total
+                  </Col>
+                  <Col xs={5} md={4} className="text-right">
                     ₹ <NumberFormatter number={orderDetails?.total_amount} />
-                  </span>
-                </li>
-              </ul>
+                  </Col>
+                </Row>
+              </React.Fragment>
             </Card.Body>
           </Card>
           <div className="mt-4 mb-4 text-center">
-            <h4 className="text-center">Thank you for shopping with us!</h4>
-            <Button as={Link} to="/" variant="primary" className="mt-3">
+            {/* <h4 className="text-center">Thank you for shopping with us!</h4> */}
+            <Button
+              as={Link}
+              to="/"
+              variant="primary"
+              className="font-weight-bold"
+            >
               Continue Shopping
             </Button>
           </div>
