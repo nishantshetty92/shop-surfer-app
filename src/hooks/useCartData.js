@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 import useAxiosPrivate from "./useAxiosPrivate";
 
@@ -5,6 +6,8 @@ const useCartData = () => {
   const { cartDispatch, user, setUser, cleanData } = useAuth();
 
   const axiosPrivate = useAxiosPrivate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const isLogged = () => {
     const auth = JSON.parse(localStorage.getItem("auth"));
@@ -13,6 +16,7 @@ const useCartData = () => {
       console.log("useCartData SESSION EXPIRED");
       setUser({});
       cartDispatch({ type: "RESET_CART" });
+      navigate("/login", { state: { from: location }, replace: true });
     } else if (auth?.accessToken && !user?.email) {
       console.log("UPDATE DATA");
       setUser(JSON.parse(localStorage.getItem("user")));

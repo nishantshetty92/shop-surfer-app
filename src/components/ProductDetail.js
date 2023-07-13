@@ -8,8 +8,10 @@ import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
 import "./ProductDetail.css";
 import NumberFormatter from "./NumberFormatter";
+import useUserLogged from "../hooks/useUserLogged";
 
 const ProductDetail = () => {
+  const isLogged = useUserLogged();
   const navigate = useNavigate();
   const { cart, setBuyItem } = useAuth();
   const [product, setProduct] = useState({});
@@ -23,6 +25,7 @@ const ProductDetail = () => {
   const cartItem = cart.find((cartItem) => cartItem.product.id === product.id);
 
   useEffect(() => {
+    isLogged();
     let isMounted = true;
     const controller = new AbortController();
 
