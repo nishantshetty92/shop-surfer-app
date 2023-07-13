@@ -10,10 +10,13 @@
   border-style: solid none none none !important;
 }
 
-.cartItem,
 .cartSelect,
 .cartCheck {
   cursor: pointer;
+}
+
+.cartItem .cartCheck {
+  transform: scale(1.5);
 }
 
 .cartItem {
@@ -23,8 +26,9 @@
 }
 
 .cartItem .title {
-  color: #212529;
+  color: #5f5b5b;
   font-weight: bold;
+  font-size: 20px;
 }
 
 .cartItem .title:hover {

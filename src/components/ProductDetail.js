@@ -124,13 +124,13 @@ const ProductDetail = () => {
               <Card.Body className="p-0" style={{ backgroundColor: "#eaeded" }}>
                 <Row className="mt-3 mb-3">
                   <Col
-                    md={7}
+                    xs={7}
                     className="text-right p-2 pr-3 font-weight-bold"
                     style={{ color: "#4e4e4e" }}
                   >
                     Quantity:
                   </Col>
-                  <Col md={5}>
+                  <Col xs={5}>
                     <Form.Control
                       as="select"
                       value={

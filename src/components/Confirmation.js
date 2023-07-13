@@ -24,6 +24,11 @@ const Confirmation = () => {
     }
   }, []);
 
+  const subItems = orderDetails?.order_items?.reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
+
   return (
     <Container>
       {loading ? (
@@ -141,8 +146,8 @@ const Confirmation = () => {
               <React.Fragment className="total-summary">
                 <Row className="mb-3">
                   <Col xs={7} md={8} className="text-right">
-                    Subtotal ({orderDetails?.order_items?.length} Item
-                    {orderDetails?.order_items?.length > 1 ? "s" : ""})
+                    Subtotal ({subItems} Item
+                    {subItems > 1 ? "s" : ""})
                   </Col>
                   <Col xs={5} md={4} className="text-right">
                     ₹ <NumberFormatter number={orderDetails?.sub_total} />
