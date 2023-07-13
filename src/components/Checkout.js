@@ -94,6 +94,11 @@ const Checkout = () => {
     0
   );
 
+  const subItems = activeCart.reduce(
+    (acc, item) => (item.is_selected ? acc + Number(item.quantity) : acc),
+    0
+  );
+
   const tax = 10;
   const total = subTotal + tax;
   const paymentMethod = "Credit Card";
@@ -212,55 +217,52 @@ const Checkout = () => {
                 </ListGroup>
                 <ListGroup className="mb-4">
                   <ListGroup.Item className="fw-bold" variant="primary">
-                    Order Summary
+                    Item Summary
                   </ListGroup.Item>
                   <ListGroup.Item>
                     {activeCart.map(
-                      (item) =>
+                      (item, x) =>
                         item.is_selected && (
                           <React.Fragment key={item.product.id}>
-                            <div className="d-flex justify-content-between mb-2">
-                              <span>{item.product.name}</span>
-                              <span>
+                            <Col className="mb-2 pl-0">
+                              <Link
+                                to={`/product/${item.product.slug}`}
+                                className="item-summary-title"
+                              >
+                                {item.product.name}
+                              </Link>
+                            </Col>
+                            <Row className="mb-2">
+                              <Col>Qty: {item.quantity}</Col>
+                              <Col className="text-right">
                                 ₹{" "}
                                 <NumberFormatter
                                   number={item.quantity * item.product.price}
                                 />
-                              </span>
-                            </div>
-                            <div className="d-flex justify-content-between mb-2">
-                              <span>Quantity:</span>
-                              <span>{item.quantity}</span>
-                            </div>
+                              </Col>
+                            </Row>
                             <hr />
                           </React.Fragment>
                         )
                     )}
 
-                    <div className="d-flex justify-content-between mb-2">
-                      <span className="fw-bold">Subtotal:</span>
-                      <span>
+                    <Row className="mb-2">
+                      <Col>
+                        Subtotal ({subItems} Item{subItems > 1 && "s"}):
+                      </Col>
+                      <Col className="text-right">
                         ₹ <NumberFormatter number={subTotal} />
-                      </span>
-                    </div>
-                    <div className="d-flex justify-content-between mb-2">
-                      <span className="fw-bold">Tax:</span>
-                      <span>₹ {tax.toFixed(2)}</span>
-                    </div>
-                    <hr />
-                    <div className="d-flex justify-content-between">
-                      <span className="fw-bold">Total:</span>
-                      <span>
-                        ₹ <NumberFormatter number={total} />
-                      </span>
-                    </div>
+                      </Col>
+                    </Row>
                   </ListGroup.Item>
                 </ListGroup>
               </Col>
-              <Col lg={4} md={12}>
+              <Col lg={4} md={12} className="mb-4">
                 <Card>
                   <Card.Body>
-                    <Card.Title>Order Summary</Card.Title>
+                    <Card.Title className="text-left pl-3">
+                      Order Summary
+                    </Card.Title>
                     <ListGroup variant="flush">
                       <ListGroup.Item>
                         <div className="d-flex justify-content-between">

@@ -147,7 +147,7 @@ const Confirmation = () => {
                 <Row className="mb-3">
                   <Col xs={7} md={8} className="text-right">
                     Subtotal ({subItems} Item
-                    {subItems > 1 ? "s" : ""})
+                    {subItems > 1 && "s"})
                   </Col>
                   <Col xs={5} md={4} className="text-right">
                     ₹ <NumberFormatter number={orderDetails?.sub_total} />

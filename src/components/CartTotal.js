@@ -9,7 +9,7 @@ const CartTotal = () => {
   const total = cart.reduce(
     (acc, cartItem) =>
       cartItem.is_selected
-        ? acc + Number(cartItem.product.price) * cartItem.quantity
+        ? acc + Number(cartItem.product.price) * Number(cartItem.quantity)
         : acc,
     0
   );
