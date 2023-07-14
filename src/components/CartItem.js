@@ -7,12 +7,12 @@ import {
   Form,
   Container,
 } from "react-bootstrap";
-import Rating from "./Rating";
 import { AiFillDelete } from "react-icons/ai";
 import { useState } from "react";
 import NumberFormatter from "./NumberFormatter";
 import "./CartItem.css";
 import { Link } from "react-router-dom";
+import ProductRating from "./ProductRating";
 
 const CartItem = ({ cartItem, updateItem, disableAll }) => {
   const [loading, setLoading] = useState(false);
@@ -86,8 +86,15 @@ const CartItem = ({ cartItem, updateItem, disableAll }) => {
                 <Col className="pl-0 mb-3 price">
                   ₹ <NumberFormatter number={cartItem.product.price} />
                 </Col>
-                <Col className="pl-0 mb-3 rating">
-                  <Rating rating={cartItem.product.rating} onClick={() => {}} />
+                <Col className="pl-0 mb-3">
+                  <span className="ratingNumber">
+                    {cartItem.product.rating}
+                  </span>
+                  <ProductRating
+                    rating={cartItem.product.rating}
+                    onClick={(e) => {}}
+                    className="rating"
+                  />
                 </Col>
                 <Col className="pl-0 mb-3 delivery">
                   {cartItem.product.fast_delivery

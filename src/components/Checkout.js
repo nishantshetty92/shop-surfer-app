@@ -223,10 +223,10 @@ const Checkout = () => {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     {activeCart.map(
-                      (item, x) =>
+                      (item) =>
                         item.is_selected && (
                           <React.Fragment key={item.product.id}>
-                            <Col className="mb-2 pl-0">
+                            <Col className="mb-3 pl-0">
                               <Link
                                 to={`/product/${item.product.slug}`}
                                 className="title"
@@ -234,8 +234,14 @@ const Checkout = () => {
                                 {item.product.name}
                               </Link>
                             </Col>
-                            <Row className="mb-2">
-                              <Col>Qty: {item.quantity}</Col>
+                            <Row className="mb-3">
+                              <Col>
+                                ₹{" "}
+                                <NumberFormatter number={item.product.price} />
+                                <span className="ml-3">
+                                  Qty: {item.quantity}
+                                </span>
+                              </Col>
                               <Col className="text-right">
                                 ₹{" "}
                                 <NumberFormatter

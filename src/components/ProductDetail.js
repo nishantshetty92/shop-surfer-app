@@ -250,7 +250,11 @@ const ProductDetail = () => {
                 </Col>
                 <Col className="mb-3">
                   <span className="ratingNumber">{product.rating}</span>
-                  <ProductRating rating={product.rating} onClick={(e) => {}} />
+                  <ProductRating
+                    rating={product.rating}
+                    onClick={(e) => {}}
+                    className="rating"
+                  />
                   {"  "}
                   {product.in_stock ? (
                     <span className="availability-green">In Stock</span>
