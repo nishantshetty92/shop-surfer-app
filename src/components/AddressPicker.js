@@ -4,7 +4,6 @@ import { GrAdd } from "react-icons/gr";
 import useAuth from "../hooks/useAuth";
 import useAddressPicker from "../hooks/useAddressPicker";
 import AddressModal from "./AddressModal";
-import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 
 const AddressPicker = () => {
@@ -52,30 +51,29 @@ const AddressPicker = () => {
     setShowModal(false);
   };
 
-  const navigate = useNavigate();
   const picker = useAddressPicker();
 
   useEffect(() => {
     const getAddresses = async () => {
       setLoading(true);
-      await picker({ type: "GET_LIST" }, navigate);
+      await picker({ type: "GET_LIST" });
       setLoading(false);
     };
     getAddresses();
   }, []);
 
   const selectAddress = (addressId) => {
-    picker({ type: "SELECT_ADDRESS", payload: addressId }, navigate);
+    picker({ type: "SELECT_ADDRESS", payload: addressId });
   };
 
   const submitAddress = async (payload, action) => {
     {
       action === "add" &&
-        (await picker({ type: "ADD_ADDRESS", payload: payload }, navigate));
+        (await picker({ type: "ADD_ADDRESS", payload: payload }));
     }
     {
       action === "edit" &&
-        (await picker({ type: "EDIT_ADDRESS", payload: payload }, navigate));
+        (await picker({ type: "EDIT_ADDRESS", payload: payload }));
     }
   };
 
