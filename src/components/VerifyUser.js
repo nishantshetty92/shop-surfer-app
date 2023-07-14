@@ -21,12 +21,12 @@ const VerifyUser = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Extract the token from the URL
+    // Getting jwt token from URL
     const urlParams = new URLSearchParams(location.search);
     const token = urlParams.get("token");
     setToken(token);
 
-    // Verify the token on the backend
+    // Verifying the token on the backend
     token && verifyToken(token);
   }, []);
 
@@ -44,7 +44,7 @@ const VerifyUser = () => {
   const verifyToken = async (token) => {
     setLoading(true);
     try {
-      // Send the token to the backend for verification
+      // This endpoint activates the registered user if sent token is verified & valid
       const response = await axios.post("/user/verify/register/", { token });
 
       setResponse(response);
@@ -66,7 +66,8 @@ const VerifyUser = () => {
   const resendVerification = async () => {
     setResendLoading(true);
     try {
-      // Send the token to the backend for verification
+      // This endpoint resends verification email to registered user email address
+      // Getting user email address from token sent in URL
       const decodedToken = decodeAccessToken(token);
       if (decodedToken?.email) {
         const response = await axios.post("/user/resend/register/", {
@@ -126,6 +127,7 @@ const VerifyUser = () => {
                   )}
                 </div>
                 <div className="button-container mb-0">
+                  {/* Based on api response code returned showing button for different cases*/}
                   {[200, 409].includes(response?.status) ? (
                     <Button
                       variant="primary"

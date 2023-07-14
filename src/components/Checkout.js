@@ -39,12 +39,12 @@ const Checkout = () => {
   let activeCart;
 
   // fetching ?buynow=1 param from url when user clicks Buy Now for a product
-  const urlParams = new URLSearchParams(window.location.search);
+  const urlParams = new URLSearchParams(location.search);
   const buyNow = urlParams.get("buynow");
 
   const verifyCart = () => {
     let itemIsFound;
-    // checking for url param buynow and the buy product info in app state
+    // checking for url param buynow and the buy product info in context api state
     if (buyNow && buyItem) {
       console.log(buyItem, "CHECKOUT BUYITEM FOUND");
       itemIsFound = cart.find(
@@ -84,6 +84,7 @@ const Checkout = () => {
 
   useEffect(() => {
     console.log("CHECKOUT");
+    // Checks if there are any selected item in the cart, if not then redirecting to cart page
     const selectedCount = activeCart.filter((item) => item.is_selected).length;
     selectedCount === 0 && navigate("/cart", { replace: true });
   }, [activeCart]);
@@ -106,7 +107,7 @@ const Checkout = () => {
   const paymentMethod = "Credit Card";
 
   const placeOrder = async () => {
-    // This function places the order
+    // This function places the order & redirects to order confirmation page
 
     const result = isLogged();
     if (result) {
@@ -146,6 +147,7 @@ const Checkout = () => {
         );
 
         if (orderProductIds?.length > 0) {
+          // deleting the items from cart once order is placed
           const response = await getCartData({
             type: "REMOVE_FROM_CART",
             payload: orderProductIds,
@@ -186,6 +188,7 @@ const Checkout = () => {
         </Navbar>
         <Container className="mt-3">
           {activeCart.filter((item) => item.is_selected).length === 0 ? (
+            // Until the cart is loaded showing this message
             <Col lg={8} md={12}>
               <Spinner
                 as="span"
@@ -225,6 +228,7 @@ const Checkout = () => {
                     {activeCart.map(
                       (item) =>
                         item.is_selected && (
+                          // Showing only the selected cart items
                           <React.Fragment key={item.product.id}>
                             <Col className="mb-3 pl-0">
                               <Link

@@ -53,19 +53,20 @@ const CategoryCarousel = ({ products }) => {
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 992, // Adjust the breakpoint as per your needs
+        breakpoint: 992,
         settings: {
           slidesToShow: 2,
         },
       },
       {
-        breakpoint: 768, // Adjust the breakpoint as per your needs
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
         },
       },
     ],
     beforeChange: (currentSlide, nextSlide) => {
+      // updating state variable slidesToShow using resize window event to make this logic work
       //   console.log(nextSlide);
       //   console.log(currentSlide);
       //   console.log(slidesToShow);
@@ -77,6 +78,7 @@ const CategoryCarousel = ({ products }) => {
   };
 
   const handleWindowResize = () => {
+    // Updating carousel slidesToShow limit on changing window dimensions for responsive behaviour
     const windowWidth = window.innerWidth;
     if (windowWidth >= 992) {
       setSlidesToShow(4);

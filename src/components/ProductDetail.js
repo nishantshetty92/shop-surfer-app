@@ -20,8 +20,9 @@ const ProductDetail = () => {
   const [buyNowLoading, setBuyNowLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
-  const { slug } = useParams();
+  const { slug } = useParams(); // gets product slug from url
 
+  // Checks if product is in the cart, returns cart item if found
   const cartItem = cart.find((cartItem) => cartItem.product.id === product.id);
 
   useEffect(() => {
@@ -56,14 +57,19 @@ const ProductDetail = () => {
   const getCartData = useCartData();
 
   const handleAction = async (e, cartAction) => {
+    // This function handles any updates to the cart
     e.preventDefault();
     setBtnLoading(true);
     if (cartAction.type === "ADD_TO_CART") {
+      /*Adding key addQty with selected quantity to indicate it is cart quantity not product quantity,
+       db has field quantity for both cartitem and product, need to change field name later*/
+      // Sending selected quantity while adding product to cart
       cartAction.payload = {
         ...cartAction.payload,
         addQty: quantity,
       };
     } else {
+      // resetting quantity value in app state
       setQuantity(1);
     }
     await getCartData(cartAction);
@@ -76,18 +82,20 @@ const ProductDetail = () => {
   };
 
   const buyNow = async (e) => {
+    // This function adds product to cart before redirecting to checkout page
     e.preventDefault();
     setBuyNowLoading(true);
     const buyItem = {
       is_selected: true,
-      quantity: cartItem ? cartItem?.quantity : quantity,
+      quantity: cartItem ? cartItem?.quantity : quantity, // using selected cart item quantity if product in cart
       product: product,
     };
     buyItem.product = {
       ...buyItem.product,
-      addQty: cartItem ? cartItem?.quantity : quantity,
+      addQty: cartItem ? cartItem?.quantity : quantity, // adding addQty to indicate it is cart item quantity not product quantity
     };
 
+    // This endpoint ensures the product has updated quantity if it already exists in cart
     const response = await getCartData({
       type: "MERGE_CART",
       payload: [buyItem],
@@ -134,6 +142,8 @@ const ProductDetail = () => {
                     Quantity:
                   </Col>
                   <Col xs={5}>
+                    {/* If product is already in cart, dropdown shows selected cart item quantity
+                     Else it shows app state value for quantity */}
                     <Form.Control
                       as="select"
                       value={
@@ -141,6 +151,7 @@ const ProductDetail = () => {
                           ? cartItem?.quantity
                           : quantity
                       }
+                      // if product is in cart then it updates cart item quantity else it updates app state quantity
                       onChange={(e) =>
                         cartItem?.product?.id === product.id
                           ? handleAction(e, {

@@ -7,6 +7,7 @@ import ProductList from "./ProductList";
 const Products = () => {
   const isLogged = useUserLogged();
   useEffect(() => {
+    // Checks if user is logged in, if not then deletes user data indicating session expiration
     isLogged();
   }, []);
 

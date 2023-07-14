@@ -10,20 +10,24 @@ const useCartData = () => {
   const navigate = useNavigate();
 
   const isLogged = () => {
+    // this function logs user out if session expired, also adds user data if user happens to be logged in
     const auth = JSON.parse(localStorage.getItem("auth"));
 
     if (!auth?.accessToken && user?.email) {
+      // deletes user data and redirects to login page
       console.log("useCartData SESSION EXPIRED");
       setUser({});
       cartDispatch({ type: "RESET_CART" });
       navigate("/login", { state: { from: location }, replace: true });
     } else if (auth?.accessToken && !user?.email) {
+      // loads user data if user is logged in
       console.log("UPDATE DATA");
       setUser(JSON.parse(localStorage.getItem("user")));
     }
   };
 
   const handleUnauthorized = () => {
+    // this logs out user on session expiration when user tries to update the cart
     console.log("HANDLEUNAUTHORIZED");
     cleanData();
     isLogged();
@@ -115,6 +119,7 @@ const useCartData = () => {
     console.log("getCartData: " + auth?.accessToken);
     isLogged();
     let response;
+    // updates cart in the backend if user if logged in else updates in cart data in app state
     if (auth?.accessToken) {
       if (cartData.type === "ADD_TO_CART") {
         response = await addCartItem(cartData.payload);

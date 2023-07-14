@@ -8,16 +8,6 @@ import CartTotal from "./CartTotal";
 import Spinner from "react-bootstrap/Spinner";
 
 const Cart = () => {
-  // const products = [...Array(7)].map((_, i) => ({
-  //   id: i,
-  //   name: "Product 2",
-  //   price: "19.00",
-  //   rating: 2,
-  //   image: "http://placeimg.com/640/480/cats",
-  //   fastDelivery: true,
-  //   qty: 0,
-  // }));
-
   // const { auth } = useAuth();
   const auth = JSON.parse(localStorage.getItem("auth"));
   const [loading, setLoading] = useState(false);

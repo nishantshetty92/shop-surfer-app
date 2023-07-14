@@ -14,7 +14,7 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { slug } = useParams();
+  const { slug } = useParams(); //geting product slug from url
 
   useEffect(() => {
     let isMounted = true;
@@ -86,6 +86,7 @@ const ProductList = () => {
         </Col>
       ) : (
         <Row>
+          {/* Showing products based on selected filters */}
           {transformProducts()?.length === 0 ? (
             <span>No Products Found</span>
           ) : (

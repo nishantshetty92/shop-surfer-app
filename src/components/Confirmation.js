@@ -12,11 +12,13 @@ const Confirmation = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
 
+  // Getting order details sent on redirection after order placement in checkout page
   const orderDetails = location.state;
   console.log(orderDetails);
 
   useEffect(() => {
     if (!orderDetails?.order_id) {
+      // redirecting to checkout page if order details not found
       setLoading(false);
       navigate("/checkout", { replace: true });
     } else {

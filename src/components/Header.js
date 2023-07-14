@@ -23,7 +23,6 @@ const Header = () => {
   const logOut = useLogout();
 
   const signOut = async () => {
-    // if used in more components, this should be in context
     // axios to /logout endpoint
     await logOut();
     loginType === "google" && googleLogout();
@@ -32,7 +31,8 @@ const Header = () => {
   };
 
   const isCategoryUrl = (str) => {
-    const pattern = /^\/category\/\w+$/; // Example pattern: "/category/value"
+    // Checks if page is a category url before rendering the search bar
+    const pattern = /^\/category\/\w+$/;
     return pattern.test(str);
   };
 

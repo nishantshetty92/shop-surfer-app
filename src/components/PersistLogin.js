@@ -5,6 +5,8 @@ import useAuth from "../hooks/useAuth";
 import { Container } from "react-bootstrap";
 
 const PersistLogin = () => {
+  /* This component is wrapped over all the pages that use a logged in user session
+  This component just refreshes the accesstoken for a logged in user */
   const [isLoading, setIsLoading] = useState(true);
   console.log("PERSIST LOGIN");
   // const { auth } = useAuth();
@@ -24,17 +26,11 @@ const PersistLogin = () => {
       }
     };
 
-    // persist added here AFTER tutorial video
     // Avoids unwanted call to verifyRefreshToken
     !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false);
 
     return () => (isMounted = false);
   }, []);
-
-  useEffect(() => {
-    // console.log(`isLoading: ${isLoading}`);
-    // console.log(`aT: ${JSON.stringify(auth?.accessToken)}`);
-  }, [isLoading]);
 
   return (
     <>
@@ -45,6 +41,7 @@ const PersistLogin = () => {
           </Container>
         </div>
       ) : (
+        // All wrapped child components
         <Outlet />
       )}
     </>

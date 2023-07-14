@@ -16,6 +16,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  // getting info from page user came from, using this info to redirect after user logs in
   let from = location.state?.from?.pathname || "/";
   const search = location.state?.from?.search;
   from = search ? `${from}${search}` : from;
@@ -77,6 +78,11 @@ const Login = () => {
       const accessToken = response?.data?.access_token;
       const decodedToken = decodeAccessToken(accessToken);
       // const roles = response?.data?.roles
+
+      /*Using localstorage to store the login auth data i.e accesstoken,
+      had tried context api to store this earlier, but was not able to access setAuth in a custom hook,
+       will look into this later
+      */
       // setAuth({ accessToken });
       localStorage.setItem("auth", JSON.stringify({ accessToken }));
       resetFormData();
@@ -156,6 +162,7 @@ const Login = () => {
     }
   };
 
+  // Once user authenticates using google this gets triggered
   useGoogleOneTapLogin({
     onSuccess: googleSubmit,
     onError: () => {

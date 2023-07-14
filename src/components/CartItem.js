@@ -30,14 +30,6 @@ const CartItem = ({ cartItem, updateItem, disableAll }) => {
   return (
     <ListGroup.Item disabled={loading || disableAll} className={cartItemClass}>
       <Row>
-        {/* <Col xs={1} md={1}>
-          <Container
-            fluid
-            className="d-flex align-items-center h-100 justify-content-center"
-          >
-            
-          </Container>
-        </Col> */}
         <Col>
           <Row>
             <Col md={3} className="mt-1 mb-1">

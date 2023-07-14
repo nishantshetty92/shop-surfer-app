@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Card, Button, Form, Col, Row } from "react-bootstrap";
 import useAuth from "../hooks/useAuth";
 import useCartData from "../hooks/useCartData";
-import Rating from "./Rating";
 import Spinner from "react-bootstrap/Spinner";
 import { FaStar } from "react-icons/fa";
 import NumberFormatter from "./NumberFormatter";
@@ -15,9 +14,11 @@ const Product = ({ prod }) => {
 
   const getCartData = useCartData();
 
+  // Checking whether product is in the cart
   const cartItem = cart.find((cartItem) => cartItem.product.id === prod.id);
 
   const handleAction = async (cartAction) => {
+    // This function handles any updates to the cart
     setLoading(true);
     await getCartData(cartAction);
     setLoading(false);
@@ -65,6 +66,7 @@ const Product = ({ prod }) => {
             )}
           </Col>
         </Card.Subtitle>
+        {/* Showing add/remove buttons based on if the product is in the cart */}
         {cartItem?.product?.id === prod.id ? (
           <Row>
             <Col className="pr-0">

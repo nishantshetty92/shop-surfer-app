@@ -14,11 +14,12 @@ const Home = () => {
   const isLogged = useUserLogged();
 
   useEffect(() => {
-    isLogged();
+    isLogged(); // Calling this to check if user is logged in, if not it deletes any user data to indicate session expiration
     let isMounted = true;
     const controller = new AbortController();
 
     const getTopCategories = async () => {
+      // This endpoint gets top 10 highest rated products for top 3 categories based on total purchases
       try {
         const response = await axios.get("/api/top_categories/", {
           signal: controller.signal,
