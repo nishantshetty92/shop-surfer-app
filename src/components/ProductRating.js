@@ -9,21 +9,21 @@ const ProductRating = ({ rating, onClick }) => {
   return (
     <span className="rating">
       {[...Array(wholeNumber)].map((_, i) => (
-        <BsStarFill fontSize="15px" className="mb-1" key={i} />
+        <BsStarFill fontSize="14px" className="mb-1" key={i} />
       ))}
 
       {remainingNumber > 0 && (
         <>
           {decimalPlace <= 2 ? (
-            <BsStar fontSize="15px" className="mb-1" />
+            <BsStar fontSize="14px" className="mb-1" />
           ) : decimalPlace > 2 && decimalPlace <= 7 ? (
-            <BsStarHalf fontSize="15px" className="mb-1" />
+            <BsStarHalf fontSize="14px" className="mb-1" />
           ) : (
-            <BsStarFill fontSize="15px" className="mb-1" />
+            <BsStarFill fontSize="14px" className="mb-1" />
           )}
 
           {[...Array(remainingNumber - 1)].map((_, i) => (
-            <BsStar fontSize="15px" className="mb-1" key={i} />
+            <BsStar fontSize="14px" className="mb-1" key={i} />
           ))}
         </>
       )}
