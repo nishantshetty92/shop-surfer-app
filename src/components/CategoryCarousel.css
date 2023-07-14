@@ -52,6 +52,17 @@
   object-fit: cover;
 }
 
+.category-carousel-item .title {
+  font-weight: bold;
+  color: #5f5b5b;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.title:hover {
+  color: #5f5b5b !important;
+}
+
 .category-carousel-item .rating {
   font-size: 10px;
   font-weight: bold;

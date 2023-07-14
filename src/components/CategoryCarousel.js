@@ -130,7 +130,7 @@ const CategoryCarousel = ({ products }) => {
                 <Card.Body>
                   <Card.Title className="text-center mb-3">
                     <Col
-                      className="prod-title pl-0"
+                      className="title pl-0"
                       as={Link}
                       to={`/product/${prod?.slug}`}
                     >

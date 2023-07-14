@@ -90,7 +90,9 @@ const Checkout = () => {
 
   const subTotal = activeCart.reduce(
     (acc, item) =>
-      item.is_selected ? acc + Number(item.product.price) * item.quantity : acc,
+      item.is_selected
+        ? acc + Number(item.product.price) * Number(item.quantity)
+        : acc,
     0
   );
 
@@ -215,7 +217,7 @@ const Checkout = () => {
                     </div>
                   </ListGroup.Item>
                 </ListGroup>
-                <ListGroup className="mb-4">
+                <ListGroup className="item-summary mb-4">
                   <ListGroup.Item className="fw-bold" variant="primary">
                     Item Summary
                   </ListGroup.Item>
@@ -227,7 +229,7 @@ const Checkout = () => {
                             <Col className="mb-2 pl-0">
                               <Link
                                 to={`/product/${item.product.slug}`}
-                                className="item-summary-title"
+                                className="title"
                               >
                                 {item.product.name}
                               </Link>
@@ -248,7 +250,9 @@ const Checkout = () => {
 
                     <Row className="mb-2">
                       <Col>
-                        Subtotal ({subItems} Item{subItems > 1 && "s"}):
+                        <span className="subtotal">Subtotal</span> ({subItems}{" "}
+                        Item
+                        {subItems > 1 && "s"}):
                       </Col>
                       <Col className="text-right">
                         ₹ <NumberFormatter number={subTotal} />

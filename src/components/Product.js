@@ -39,9 +39,9 @@ const Product = ({ prod }) => {
       </div>
 
       <Card.Body>
-        <Card.Title>
+        <Card.Title className="mb-4">
           <Col
-            className="prod-title pl-0 mb-3 align-items-left"
+            className="prod-title pl-0 align-items-left"
             as={Link}
             to={`/product/${prod?.slug}`}
           >
@@ -49,15 +49,15 @@ const Product = ({ prod }) => {
           </Col>
         </Card.Title>
         <Card.Subtitle>
-          <Col className="pl-0 mb-2 align-items-left">
-            <span>
+          <Col className="pl-0 mb-3 align-items-left">
+            <span className="price">
               ₹ <NumberFormatter number={prod?.price} />
             </span>
             <Button className="prod-rating ml-2">
               {prod.rating} <FaStar className="mb-1" />
             </Button>
           </Col>
-          <Col className="pl-0 mb-3 align-items-left">
+          <Col className="delivery pl-0 mb-4 align-items-left">
             {prod.fast_delivery ? (
               <div>Fast Delivery</div>
             ) : (

@@ -35,3 +35,17 @@
   color: #212529;
   text-decoration: none;
 }
+
+.cartItem .price {
+  color: green;
+  font-weight: bold;
+}
+
+.cartItem .rating {
+  color: #f08804;
+}
+
+.cartItem .delivery {
+  color: #5f5b5b;
+  font-weight: bold;
+}

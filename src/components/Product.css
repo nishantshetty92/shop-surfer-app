@@ -36,7 +36,7 @@
   object-fit: cover;
 }
 
-.prod-title {
+.product-card .prod-title {
   font-weight: bold;
   color: #5f5b5b;
   cursor: pointer;
@@ -47,7 +47,7 @@
   color: #5f5b5b !important;
 }
 
-.prod-rating {
+.product-card .prod-rating {
   font-size: 10px !important;
   font-weight: bold !important;
   background-color: #388e3c !important;
@@ -55,4 +55,14 @@
   padding: 4px !important;
   display: inline;
   border: none !important;
+}
+
+.product-card .price {
+  font-weight: bold;
+  color: #5f5b5b;
+}
+
+.product-card .delivery {
+  font-weight: bold;
+  color: #5f5b5b;
 }

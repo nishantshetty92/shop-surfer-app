@@ -25,7 +25,7 @@ const Confirmation = () => {
   }, []);
 
   const subItems = orderDetails?.order_items?.reduce(
-    (acc, item) => acc + item.quantity,
+    (acc, item) => acc + Number(item.quantity),
     0
   );
 
@@ -122,7 +122,7 @@ const Confirmation = () => {
 
               {orderDetails?.order_items.map((item) => (
                 <React.Fragment key={item.product_id}>
-                  <Row className="mb-3 order-item">
+                  <Row className="mb-4 order-item">
                     <Col
                       xs={4}
                       md={5}
@@ -139,9 +139,10 @@ const Confirmation = () => {
                       ₹ <NumberFormatter number={item.price} />
                     </Col>
                   </Row>
-                  <hr />
+                  {/* <hr /> */}
                 </React.Fragment>
               ))}
+              <hr />
 
               <React.Fragment className="total-summary">
                 <Row className="mb-3">

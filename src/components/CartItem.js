@@ -83,13 +83,13 @@ const CartItem = ({ cartItem, updateItem, disableAll }) => {
                     />
                   </Col>
                 </Row>
-                <Col className="pl-0 mb-3">
+                <Col className="pl-0 mb-3 price">
                   ₹ <NumberFormatter number={cartItem.product.price} />
                 </Col>
-                <Col className="pl-0 mb-3">
+                <Col className="pl-0 mb-3 rating">
                   <Rating rating={cartItem.product.rating} onClick={() => {}} />
                 </Col>
-                <Col className="pl-0 mb-3">
+                <Col className="pl-0 mb-3 delivery">
                   {cartItem.product.fast_delivery
                     ? "Fast Delivery"
                     : "Delivery in 4 Days"}

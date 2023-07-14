@@ -14,7 +14,8 @@ const CartTotal = () => {
     0
   );
   const subItems = cart.reduce(
-    (acc, cartItem) => (cartItem.is_selected ? acc + cartItem.quantity : acc),
+    (acc, cartItem) =>
+      cartItem.is_selected ? acc + Number(cartItem.quantity) : acc,
     0
   );
 

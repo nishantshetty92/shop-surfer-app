@@ -42,12 +42,17 @@
   background-color: #eaeded;
 }
 
-.item-summary-title {
+.item-summary .title {
   color: #5f5b5b;
   font-weight: bold;
 }
 
-.item-summary-title:hover {
+.title:hover {
   color: #5f5b5b;
   text-decoration: none !important;
+}
+
+.item-summary .subtotal {
+  color: #5f5b5b;
+  font-weight: bold;
 }
