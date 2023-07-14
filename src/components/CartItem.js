@@ -82,11 +82,13 @@ const CartItem = ({ cartItem, updateItem, disableAll }) => {
                   <span className="ratingNumber">
                     {cartItem.product.rating}
                   </span>
-                  <ProductRating
-                    rating={cartItem.product.rating}
-                    onClick={(e) => {}}
-                    className="rating"
-                  />
+                  {cartItem.product?.rating && (
+                    <ProductRating
+                      rating={cartItem.product.rating}
+                      onClick={(e) => {}}
+                      className="rating"
+                    />
+                  )}
                 </Col>
                 <Col className="pl-0 mb-3 delivery">
                   {cartItem.product.fast_delivery

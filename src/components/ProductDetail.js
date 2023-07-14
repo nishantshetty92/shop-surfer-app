@@ -256,16 +256,18 @@ const ProductDetail = () => {
           <Col md={7} className="product-details mt-4 mb-4 pl-2">
             <Card>
               <Card.Body>
-                <Col className="title font-weight-bold mb-3">
+                <Col className="font-weight-bold mb-3">
                   <h2>{product.name}</h2>
                 </Col>
                 <Col className="mb-3">
                   <span className="ratingNumber">{product.rating}</span>
-                  <ProductRating
-                    rating={product.rating}
-                    onClick={(e) => {}}
-                    className="rating"
-                  />
+                  {product?.rating && (
+                    <ProductRating
+                      rating={product.rating}
+                      onClick={(e) => {}}
+                      className="rating"
+                    />
+                  )}
                   {"  "}
                   {product.in_stock ? (
                     <span className="availability-green">In Stock</span>

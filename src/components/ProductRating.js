@@ -1,17 +1,32 @@
-import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { BsStarFill, BsStar, BsStarHalf } from "react-icons/bs";
 
 const ProductRating = ({ rating, onClick }) => {
+  const ratingParts = rating.split(".");
+  const wholeNumber = Number(ratingParts[0]);
+  const decimalPlace = Number(ratingParts[1]);
+
+  const remainingNumber = 5 - wholeNumber;
   return (
     <span className="rating">
-      {[...Array(5)].map((_, i) => (
-        <span key={i} onClick={() => onClick(i)}>
-          {rating > i ? (
-            <AiFillStar fontSize="15px" className="mb-1" />
-          ) : (
-            <AiOutlineStar fontSize="15px" className="mb-1" />
-          )}
-        </span>
+      {[...Array(wholeNumber)].map((_, i) => (
+        <BsStarFill fontSize="15px" className="mb-1" key={i} />
       ))}
+
+      {remainingNumber > 0 && (
+        <>
+          {decimalPlace <= 2 ? (
+            <BsStar fontSize="15px" className="mb-1" />
+          ) : decimalPlace > 2 && decimalPlace <= 7 ? (
+            <BsStarHalf fontSize="15px" className="mb-1" />
+          ) : (
+            <BsStarFill fontSize="15px" className="mb-1" />
+          )}
+
+          {[...Array(remainingNumber - 1)].map((_, i) => (
+            <BsStar fontSize="15px" className="mb-1" key={i} />
+          ))}
+        </>
+      )}
     </span>
   );
 };

@@ -47,7 +47,7 @@
   font-weight: bold;
 }
 
-.title:hover {
+.item-summary .title:hover {
   color: #5f5b5b;
   text-decoration: none !important;
 }

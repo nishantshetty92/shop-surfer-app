@@ -59,7 +59,7 @@
   text-decoration: none !important;
 }
 
-.title:hover {
+.category-carousel-item .title:hover {
   color: #5f5b5b !important;
 }
 
