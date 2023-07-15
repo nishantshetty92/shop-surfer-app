@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# ShopSurfer E-Commerce Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![ShopSurfer Home Page](https://shopsurfer.s3.ap-south-1.amazonaws.com/screenshots/shopsurfer.png)
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This is a personal e-commerce application that I developed to showcase my skills in web development and e-commerce functionality. The project is built using modern web technologies like React, Django REST Framework, JWT, etc. It allows users to login to their account, browse and view products, add them to cart and checkout to place an order.
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- User registration and authentication system with email verification to activate user account
+- Landing Page that shows 10 top rated products for top categories
+- Product catalog with filters, search bar, add to cart/remove and quantity update functionality
+- Product detail page with image, rating, specifications, add to cart/remove, quantity update and buy now functionality
+- Shopping cart to manage selected products
+- Checkout process with shipping address add/update functionality and order summary
+- Django Admin panel to manage products, orders, and user accounts
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Demo
 
-### `npm test`
+Please checkout the live application at [https://shopsurfer.netlify.app/](https://shopsurfer.netlify.app/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Screenshots
 
-### `npm run build`
+### Product Catalog
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![Product List Page](https://shopsurfer.s3.ap-south-1.amazonaws.com/screenshots/products.png)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Product Detail
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![Product Detail](https://shopsurfer.s3.ap-south-1.amazonaws.com/screenshots/productdetail.png)
 
-### `npm run eject`
+### Cart
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+![Cart Page](https://shopsurfer.s3.ap-south-1.amazonaws.com/screenshots/cart.png)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Checkout
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+![Checkout](https://shopsurfer.s3.ap-south-1.amazonaws.com/screenshots/checkout.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Order Confirmation
 
-## Learn More
+![Order Confirmation](https://shopsurfer.s3.ap-south-1.amazonaws.com/screenshots/confirmation.png)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Technologies Used
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- React
+- React Bootstrap
+- Django REST Framework
+- PostgreSQL (Database)
+- JWT Authentication System
+- AWS S3
 
-### Code Splitting
+## Conclusion
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+As this is a personal project, I will be constantly improving on this and adding new features.
 
-### Analyzing the Bundle Size
+Features in the pipeline:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Category Filtering in Product Catalog
+- Pagination in Product Catalog
+- Orders Page, Profile, Addresses, etc
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Any feedback and suggestions for improvements are really appreciated.
