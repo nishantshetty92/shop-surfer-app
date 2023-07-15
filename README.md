@@ -46,7 +46,7 @@ Please checkout the live application at [https://shopsurfer.netlify.app/](https:
 
 - React
 - React Bootstrap
-- Django REST Framework
+- Django REST Framework (Backend Project: https://github.com/nishantshetty92/shop_surfer_python)
 - PostgreSQL (Database)
 - JWT Authentication System
 - AWS S3
