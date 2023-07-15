@@ -4,6 +4,9 @@ import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
+  /* This hook wraps the valid accesstoken to every endpoint that needs it.
+  Also it refreshes expired accesstoken using the refresh token, this keeps the user logged in*/
+
   const refresh = useRefreshToken();
   // const { auth, setAuth } = useAuth();
   const auth = JSON.parse(localStorage.getItem("auth"));
