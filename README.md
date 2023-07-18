@@ -9,6 +9,7 @@ This is a personal e-commerce application that I developed to showcase my skills
 ## Features
 
 - User registration and authentication system with email verification to activate user account
+- Auto logout functionality when user login session expires, using JWT token authentication to track this
 - Landing Page that shows 10 top rated products for top categories
 - Product catalog with filters, search bar, add to cart/remove and quantity update functionality
 - Product detail page with image, rating, specifications, add to cart/remove, quantity update and buy now functionality
