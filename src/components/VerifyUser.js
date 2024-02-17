@@ -45,18 +45,19 @@ const VerifyUser = () => {
     setLoading(true);
     try {
       // This endpoint activates the registered user if sent token is verified & valid
-      const response = await axios.post("/user/verify/register/", { token });
+      const response = await axios.post("/auth/verify/register/", { token });
 
       setResponse(response);
       setVerificationStatus("success");
       setMessage(response?.data?.message);
     } catch (err) {
+      console.log(err);
       setVerificationStatus("error");
       if (!err?.response) {
         setMessage("No Server Response");
       } else {
         setResponse(err?.response);
-        setMessage(err.response?.data?.message);
+        setMessage(err.response?.data?.detail?.message);
       }
     } finally {
       setLoading(false);
@@ -70,7 +71,7 @@ const VerifyUser = () => {
       // Getting user email address from token sent in URL
       const decodedToken = decodeAccessToken(token);
       if (decodedToken?.email) {
-        const response = await axios.post("/user/resend/register/", {
+        const response = await axios.post("/auth/resend/register/", {
           email: decodedToken.email,
         });
         setAlertStatus("success");
@@ -81,7 +82,7 @@ const VerifyUser = () => {
       if (!err?.response) {
         setAlertMessage("No Server Response");
       } else {
-        setAlertMessage(err.response?.data?.message);
+        setAlertMessage(err.response?.data?.detail?.message);
       }
     } finally {
       setResendLoading(false);

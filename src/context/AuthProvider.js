@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
 
         const getCart = async () => {
           try {
-            const response = await axiosPrivate.get("/api/cart/");
+            const response = await axiosPrivate.get("/data/cart/");
 
             isMounted &&
               cartDispatch({
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
         const mergeCart = async () => {
           try {
             const response = await axiosPrivate.post(
-              "/api/cart/merge/",
+              "/data/cart/merge/",
               offlineCart
             );
 

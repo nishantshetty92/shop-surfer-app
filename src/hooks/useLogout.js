@@ -8,7 +8,7 @@ const useLogout = () => {
     // This endpoint deletes the refresh token for logged in user
     // setAuth({});
     try {
-      await axios("user/logout/", {
+      await axios("auth/logout/", {
         withCredentials: true,
       });
       // setUser({});

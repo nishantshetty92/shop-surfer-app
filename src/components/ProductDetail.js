@@ -33,7 +33,7 @@ const ProductDetail = () => {
     const getProduct = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/product/${slug}/`, {
+        const response = await axios.get(`/data/product/${slug}/`, {
           signal: controller.signal,
         });
         setLoading(false);

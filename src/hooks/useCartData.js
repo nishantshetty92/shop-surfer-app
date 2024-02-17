@@ -40,7 +40,7 @@ const useCartData = () => {
         ? { ...format_payload, quantity: data.addQty }
         : format_payload;
       const response = await axiosPrivate.post(
-        "/api/cart/add/",
+        "/data/cart/add/",
         format_payload
       );
       return response.data;
@@ -55,7 +55,7 @@ const useCartData = () => {
 
   const mergeCart = async (data) => {
     try {
-      const response = await axiosPrivate.post("/api/cart/merge/", data);
+      const response = await axiosPrivate.post("/data/cart/merge/", data);
       return response.data;
     } catch (error) {
       if (error?.response?.status === 401) {
@@ -74,7 +74,7 @@ const useCartData = () => {
       }
 
       const response = await axiosPrivate.patch(
-        "/api/cart/update/",
+        "/data/cart/update/",
         format_payload
       );
       return response.data;
@@ -89,7 +89,7 @@ const useCartData = () => {
   const deleteCartItem = async (data) => {
     try {
       const format_payload = { product_ids: data };
-      const response = await axiosPrivate.delete("/api/cart/delete/", {
+      const response = await axiosPrivate.delete("/data/cart/delete/", {
         data: format_payload,
       });
       return response.data;
@@ -104,7 +104,7 @@ const useCartData = () => {
 
   const getLatestCart = async () => {
     try {
-      const response = await axiosPrivate.get("/api/cart/");
+      const response = await axiosPrivate.get("/data/cart/");
       return response.data;
     } catch (error) {
       console.error("Error fetching cart data:", error);

@@ -21,7 +21,7 @@ const Home = () => {
     const getTopCategories = async () => {
       // This endpoint gets top 10 highest rated products for top 3 categories based on total purchases
       try {
-        const response = await axios.get("/api/top_categories/", {
+        const response = await axios.get("/data/top_categories/", {
           signal: controller.signal,
         });
         setLoading(false);

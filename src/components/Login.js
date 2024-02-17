@@ -9,7 +9,7 @@ import { GoogleLogin, useGoogleOneTapLogin } from "@react-oauth/google";
 import Spinner from "react-bootstrap/Spinner";
 import "./Login.css";
 
-const LOGIN_URL = "/user/login/";
+const LOGIN_URL = "/auth/login/";
 
 const Login = () => {
   const { setAuth, setUser, setLoginType } = useAuth();
@@ -105,7 +105,7 @@ const Login = () => {
       } else if (err.response?.status === 401) {
         setErrMsg("Unauthorized");
       } else if (err.response?.status === 403) {
-        setErrMsg(err.response?.data?.message);
+        setErrMsg(err.response?.data?.detail?.message);
       } else {
         setErrMsg("Login Failed");
       }
@@ -120,7 +120,7 @@ const Login = () => {
     const decodedCred = decodeAccessToken(credentialResponse?.credential);
     try {
       const response = await axios.post(
-        "/user/google/login/",
+        "/auth/google/login/",
         JSON.stringify(decodedCred),
         {
           headers: { "Content-Type": "application/json" },
@@ -153,7 +153,7 @@ const Login = () => {
       } else if (err.response?.status === 401) {
         setErrMsg("Unauthorized");
       } else if (err.response?.status === 409) {
-        setErrMsg(err.response?.data?.message);
+        setErrMsg(err.response?.data?.detail?.message);
       } else {
         setErrMsg("Login Failed");
       }

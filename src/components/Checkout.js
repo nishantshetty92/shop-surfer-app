@@ -135,7 +135,7 @@ const Checkout = () => {
 
       try {
         const orderResponse = await axiosPrivate.post(
-          "/api/order/place/",
+          "/data/order/place/",
           JSON.stringify(orderPayload)
         );
         console.log(JSON.stringify(orderResponse?.data));

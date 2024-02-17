@@ -30,7 +30,7 @@ const useAddressPicker = () => {
     let newAddress = payload;
     try {
       const response = await axiosPrivate.post(
-        "/api/address/add/",
+        "/data/address/add/",
         JSON.stringify(newAddress)
       );
       console.log(JSON.stringify(response?.data));
@@ -53,7 +53,7 @@ const useAddressPicker = () => {
     let updatedAddress = payload;
     try {
       const response = await axiosPrivate.patch(
-        "/api/address/edit/",
+        "/data/address/edit/",
         JSON.stringify(updatedAddress)
       );
       console.log(JSON.stringify(response?.data));
@@ -84,7 +84,7 @@ const useAddressPicker = () => {
 
   const getAddressList = async () => {
     try {
-      const response = await axiosPrivate.get("/api/address/");
+      const response = await axiosPrivate.get("/data/address/");
       console.log(JSON.stringify(response?.data));
       setAddressList(response?.data);
     } catch (err) {

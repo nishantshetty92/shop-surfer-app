@@ -23,7 +23,7 @@ const ProductList = () => {
     const getProducts = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/products/${slug}/`, {
+        const response = await axios.get(`/data/products/${slug}/`, {
           signal: controller.signal,
         });
         setLoading(false);

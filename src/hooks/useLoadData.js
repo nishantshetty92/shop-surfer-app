@@ -7,7 +7,7 @@ const useLoadData = () => {
 
   const getCart = async () => {
     try {
-      const response = await axiosPrivate.get("/api/cart/");
+      const response = await axiosPrivate.get("/data/cart/");
 
       cartDispatch({
         type: "UPDATE_CART",
@@ -21,7 +21,7 @@ const useLoadData = () => {
 
   const mergeCart = async () => {
     try {
-      const response = await axiosPrivate.post("/api/cart/merge/", cart);
+      const response = await axiosPrivate.post("/data/cart/merge/", cart);
 
       cartDispatch({
         type: "UPDATE_CART",

@@ -14,7 +14,7 @@ import "./Register.css";
 const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const PHONE_REGEX = /^[789]\d{9}$/;
-const REGISTER_URL = "/user/register/";
+const REGISTER_URL = "/auth/register/";
 
 const Register = () => {
   const { setAuth, setUser, setLoginType } = useAuth();
@@ -151,7 +151,7 @@ const Register = () => {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 409) {
         err.response?.data?.resend && setShowResend(true);
-        setErrMsg(err.response?.data?.message);
+        setErrMsg(err.response?.data?.detail?.message);
       } else {
         setErrMsg("Registration Failed");
       }
@@ -166,7 +166,7 @@ const Register = () => {
       setSuccessMsg("");
       setErrMsg("");
       if (formData?.email) {
-        const response = await axios.post("/user/resend/register/", {
+        const response = await axios.post("/auth/resend/register/", {
           email: formData.email,
         });
         setSuccessMsg(response?.data?.message);
@@ -175,7 +175,7 @@ const Register = () => {
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else {
-        setErrMsg(err.response?.data?.message);
+        setErrMsg(err.response?.data?.detail?.message);
       }
     } finally {
       setLoading(false);
@@ -188,7 +188,7 @@ const Register = () => {
     const decodedCred = decodeAccessToken(credentialResponse?.credential);
     try {
       const response = await axios.post(
-        "/user/google/login/",
+        "/auth/google/login/",
         JSON.stringify(decodedCred),
         {
           headers: { "Content-Type": "application/json" },
@@ -221,7 +221,7 @@ const Register = () => {
       } else if (err.response?.status === 401) {
         setErrMsg("Unauthorized");
       } else if (err.response?.status === 409) {
-        setErrMsg(err.response?.data?.message);
+        setErrMsg(err.response?.data?.detail?.message);
       } else {
         setErrMsg("Login Failed");
       }
