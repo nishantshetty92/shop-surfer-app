@@ -1,4 +1,4 @@
-/api/* http://ec2-65-2-128-166.ap-south-1.compute.amazonaws.com/:splat 200
+/api/* http://shopsurfer-api-lb-86738522.ap-south-1.elb.amazonaws.com/:splat 200
 
 /* /index.html 200
 
