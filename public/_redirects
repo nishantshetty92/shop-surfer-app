@@ -1,4 +1,4 @@
-/api/* http://shopsurfer-gateway-lb-1384335446.ap-south-1.elb.amazonaws.com/:splat 200
+/api/* http://shopsurfer-api-lb-86738522.ap-south-1.elb.amazonaws.com/:splat 200
 
 /* /index.html 200
 
